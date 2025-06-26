@@ -1,0 +1,34 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
+
+<h2>Vendor Details</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">Vendor Code</dt>
+            <dd class="col-sm-8">@Model.VendorCode</dd>
+
+            <dt class="col-sm-4">Vendor Name</dt>
+            <dd class="col-sm-8">@Model.VendorName</dd>
+
+            <dt class="col-sm-4">Vendor Type</dt>
+            <dd class="col-sm-8">@Model.VendorType</dd>
+
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8">@Model.Status</dd>
+
+            <dt class="col-sm-4">Contact Person</dt>
+            <dd class="col-sm-8">@Model.ContactPersonName</dd>
+
+            <dt class="col-sm-4">Phone</dt>
+            <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8">@Model.EmailAddress</dd>
+
+            <!-- Add other fields similarly -->
+        </dl>
+    </div>
+</div>
+
+<a asp-action="VendorList" class="btn btn-secondary">Back to List</a>

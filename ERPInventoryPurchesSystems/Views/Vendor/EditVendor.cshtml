@@ -1,0 +1,9 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
+
+<h2>Edit Vendor</h2>
+
+<form asp-action="EditVendor" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="VendorCode" />
+    @Html.Partial("VendorFormFields", Model)
+    <button type="submit" class="btn btn-primary mt-3">Update Vendor</button>
+</form>

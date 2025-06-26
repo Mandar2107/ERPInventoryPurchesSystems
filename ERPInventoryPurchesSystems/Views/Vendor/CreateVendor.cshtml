@@ -1,0 +1,134 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
+
+<h2>Create Vendor</h2>
+
+<form asp-action="CreateVendor" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <label asp-for="VendorCode"></label>
+            <input asp-for="VendorCode" class="form-control" />
+
+            <label asp-for="VendorName"></label>
+            <input asp-for="VendorName" class="form-control" />
+
+            <label asp-for="VendorType"></label>
+            <select asp-for="VendorType" class="form-control">
+                <option>Manufacturer</option>
+                <option>Distributor</option>
+                <option>Service Provider</option>
+            </select>
+
+            <label asp-for="Status"></label>
+            <select asp-for="Status" class="form-control">
+                <option>Active</option>
+                <option>Inactive</option>
+            </select>
+
+            <label asp-for="ContactPersonName"></label>
+            <input asp-for="ContactPersonName" class="form-control" />
+
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+
+            <label asp-for="EmailAddress"></label>
+            <input asp-for="EmailAddress" class="form-control" />
+
+            <label asp-for="FaxNumber"></label>
+            <input asp-for="FaxNumber" class="form-control" />
+
+            <label asp-for="Website"></label>
+            <input asp-for="Website" class="form-control" />
+
+            <label asp-for="BillingAddress"></label>
+            <textarea asp-for="BillingAddress" class="form-control"></textarea>
+
+            <label asp-for="ShippingAddress"></label>
+            <textarea asp-for="ShippingAddress" class="form-control"></textarea>
+
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" />
+
+            <label asp-for="State"></label>
+            <input asp-for="State" class="form-control" />
+
+            <label asp-for="Country"></label>
+            <input asp-for="Country" class="form-control" />
+
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Currency"></label>
+            <input asp-for="Currency" class="form-control" />
+
+            <label asp-for="PaymentTerms"></label>
+            <input asp-for="PaymentTerms" class="form-control" />
+
+            <label asp-for="CreditLimit"></label>
+            <input asp-for="CreditLimit" class="form-control" />
+
+            <label asp-for="BankAccountDetails"></label>
+            <textarea asp-for="BankAccountDetails" class="form-control"></textarea>
+
+            <label asp-for="TaxIdentificationNumber"></label>
+            <input asp-for="TaxIdentificationNumber" class="form-control" />
+
+            <label asp-for="PANNumber"></label>
+            <input asp-for="PANNumber" class="form-control" />
+
+            <label asp-for="GSTVATRegistration"></label>
+            <input asp-for="GSTVATRegistration" class="form-control" />
+
+            <label asp-for="MSMECertificate"></label>
+            <input asp-for="MSMECertificate" class="form-control" />
+
+            <label asp-for="ISOCertification"></label>
+            <input asp-for="ISOCertification" class="form-control" />
+
+            <label asp-for="ContractAgreement"></label>
+            <input asp-for="ContractAgreement" class="form-control" />
+
+            <label asp-for="BlacklistStatus"></label>
+            <select asp-for="BlacklistStatus" class="form-control">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+
+            <label asp-for="LastPurchaseDate"></label>
+            <input asp-for="LastPurchaseDate" type="date" class="form-control" />
+
+            <label asp-for="TotalSpend"></label>
+            <input asp-for="TotalSpend" class="form-control" />
+
+            <label asp-for="AverageLeadTime"></label>
+            <input asp-for="AverageLeadTime" class="form-control" />
+
+            <label asp-for="DeliveryReliabilityScore"></label>
+            <input asp-for="DeliveryReliabilityScore" class="form-control" />
+
+            <label asp-for="QualityRating"></label>
+            <input asp-for="QualityRating" class="form-control" />
+
+            <label asp-for="Remarks"></label>
+            <textarea asp-for="Remarks" class="form-control"></textarea>
+
+            <label asp-for="DocumentUploads"></label>
+            <input asp-for="DocumentUploads" type="file" class="form-control" />
+
+            <label asp-for="CreatedBy"></label>
+            <input asp-for="CreatedBy" class="form-control" />
+
+            <label asp-for="CreatedDate"></label>
+            <input asp-for="CreatedDate" type="date" class="form-control" />
+
+            <label asp-for="LastModifiedBy"></label>
+            <input asp-for="LastModifiedBy" class="form-control" />
+
+            <label asp-for="LastModifiedDate"></label>
+            <input asp-for="LastModifiedDate" type="date" class="form-control" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Save Vendor</button>
+</form>

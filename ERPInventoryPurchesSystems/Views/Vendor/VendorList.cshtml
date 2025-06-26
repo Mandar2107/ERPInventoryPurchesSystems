@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Vendor>
+
+<h2>Vendor List</h2>
+
+<a asp-action="CreateVendor" class="btn btn-primary">Add New Vendor</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Vendor Code</th>
+            <th>Vendor Name</th>
+            <th>Vendor Type</th>
+            <th>Status</th>
+            <th>Contact Person</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vendor in Model)
+        {
+            <tr>
+                <td>@vendor.VendorCode</td>
+                <td>@vendor.VendorName</td>
+                <td>@vendor.VendorType</td>
+                <td>@vendor.Status</td>
+                <td>@vendor.ContactPersonName</td>
+                <td>@vendor.PhoneNumber</td>
+                <td>@vendor.EmailAddress</td>
+                <td>
+                    <a asp-action="EditVendor" asp-route-id="@vendor.VendorCode">Edit</a> |
+                    <a asp-action="DetailsVendor" asp-route-id="@vendor.VendorCode">Details</a> |
+                    <a asp-action="DeleteVendor" asp-route-id="@vendor.VendorCode">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
