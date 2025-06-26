@@ -1,0 +1,233 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Item>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HSNSACCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UOM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModelSpecification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinimumStockLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaximumStockLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefaultWarehouseLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchTracking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialNumberTracking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StandardCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastPurchasePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellingPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaxRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountStructure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreferredVendor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorItemCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeadTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseUOM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesUOM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesTaxGroup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BarcodeQRCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MSDSComplianceDocs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomAttributes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModifiedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModifiedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HSNSACCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UOM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModelSpecification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReorderLevel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinimumStockLevel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaximumStockLevel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultWarehouseLocation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BatchTracking)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SerialNumberTracking)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StandardCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastPurchasePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellingPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountStructure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreferredVendor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorItemCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeadTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseUOM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesUOM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesTaxGroup)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BarcodeQRCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MSDSComplianceDocs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomAttributes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ItemCode">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ItemCode">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ItemCode">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

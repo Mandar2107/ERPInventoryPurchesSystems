@@ -19,14 +19,14 @@ namespace ERPInventoryPurchesSystems.Controllers
             return View(await _context.Items.ToListAsync());
         }
 
-        public IActionResult Create()
+        public IActionResult CreateItem()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Item item)
+        public async Task<IActionResult> CreateItem(Item item)
         {
             if (ModelState.IsValid)
             {
@@ -37,7 +37,7 @@ namespace ERPInventoryPurchesSystems.Controllers
             return View(item);
         }
 
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> EditItem(string id)
         {
             if (id == null) return NotFound();
 
@@ -49,7 +49,7 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Item item)
+        public async Task<IActionResult> EditItem(string id, Item item)
         {
            
 
@@ -72,7 +72,7 @@ namespace ERPInventoryPurchesSystems.Controllers
             return View(item);
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> DeleteItem(string id)
         {
             var item = await _context.Items.FindAsync(id);
             if (item == null) return NotFound();
@@ -81,7 +81,7 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmedItem(string id)
         {
             var item = await _context.Items.FindAsync(id);
             _context.Items.Remove(item);
@@ -89,7 +89,7 @@ namespace ERPInventoryPurchesSystems.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> DetailsItem(string id)
         {
             var item = await _context.Items.FindAsync(id);
             if (item == null) return NotFound();
