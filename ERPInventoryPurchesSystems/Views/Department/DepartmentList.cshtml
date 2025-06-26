@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Department>
+
+<h2>Department List</h2>
+
+<a asp-action="CreateDepartment" class="btn btn-primary">Add New Department</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Head</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dept in Model)
+        {
+            <tr>
+                <td>@dept.DepartmentCode</td>
+                <td>@dept.DepartmentName</td>
+                <td>@dept.DepartmentType</td>
+                <td>@dept.Status</td>
+                <td>@dept.DepartmentHead</td>
+                <td>@dept.Location</td>
+                <td>
+                    <a asp-action="EditDepartment" asp-route-id="@dept.DepartmentCode">Edit</a> |
+                    <a asp-action="DetailsDepartment" asp-route-id="@dept.DepartmentCode">Details</a> |
+                    <a asp-action="DeleteDepartment" asp-route-id="@dept.DepartmentCode">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

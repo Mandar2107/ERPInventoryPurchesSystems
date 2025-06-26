@@ -1,0 +1,58 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Department
+
+<h2>Department Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">Department Code</dt>
+    <dd class="col-sm-8">@Model.DepartmentCode</dd>
+
+    <dt class="col-sm-4">Department Name</dt>
+    <dd class="col-sm-8">@Model.DepartmentName</dd>
+
+    <dt class="col-sm-4">Department Type</dt>
+    <dd class="col-sm-8">@Model.DepartmentType</dd>
+
+    <dt class="col-sm-4">Parent Department</dt>
+    <dd class="col-sm-8">@Model.ParentDepartment</dd>
+
+    <dt class="col-sm-4">Location</dt>
+    <dd class="col-sm-8">@Model.Location</dd>
+
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+
+    <dt class="col-sm-4">Department Head</dt>
+    <dd class="col-sm-8">@Model.DepartmentHead</dd>
+
+    <dt class="col-sm-4">Email Address</dt>
+    <dd class="col-sm-8">@Model.EmailAddress</dd>
+
+    <dt class="col-sm-4">Phone Number</dt>
+    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+    <dt class="col-sm-4">Extension Number</dt>
+    <dd class="col-sm-8">@Model.ExtensionNumber</dd>
+
+    <dt class="col-sm-4">Primary Function</dt>
+    <dd class="col-sm-8">@Model.PrimaryFunction</dd>
+
+    <dt class="col-sm-4">Linked Modules</dt>
+    <dd class="col-sm-8">@Model.LinkedModules</dd>
+
+    <dt class="col-sm-4">Approval Authority Level</dt>
+    <dd class="col-sm-8">@Model.ApprovalAuthorityLevel</dd>
+
+    <dt class="col-sm-4">Created By</dt>
+    <dd class="col-sm-8">@Model.CreatedBy</dd>
+
+    <dt class="col-sm-4">Created Date</dt>
+    <dd class="col-sm-8">@Model.CreatedDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-4">Last Modified By</dt>
+    <dd class="col-sm-8">@Model.LastModifiedBy</dd>
+
+    <dt class="col-sm-4">Last Modified Date</dt>
+    <dd class="col-sm-8">@Model.LastModifiedDate.ToShortDateString()</dd>
+</dl>
+
+<a asp-action="DepartmentList" class="btn btn-secondary">Back to List</a>

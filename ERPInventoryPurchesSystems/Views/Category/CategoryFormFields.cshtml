@@ -1,0 +1,73 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Category
+
+<div class="row">
+    <div class="col-md-6">
+        <label asp-for="CategoryName"></label>
+        <input asp-for="CategoryName" class="form-control" />
+
+        <label asp-for="CategoryType"></label>
+        <input asp-for="CategoryType" class="form-control" />
+
+        <label asp-for="ParentCategory"></label>
+        <input asp-for="ParentCategory" class="form-control" />
+
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+
+        <label asp-for="BusinessUnit"></label>
+        <input asp-for="BusinessUnit" class="form-control" />
+
+        <label asp-for="Department"></label>
+        <input asp-for="Department" class="form-control" />
+
+        <label asp-for="UsageType"></label>
+        <input asp-for="UsageType" class="form-control" />
+
+        <label asp-for="TaxGroup"></label>
+        <input asp-for="TaxGroup" class="form-control" />
+
+        <label asp-for="DefaultUOM"></label>
+        <input asp-for="DefaultUOM" class="form-control" />
+
+        <label asp-for="StorageRequirements"></label>
+        <input asp-for="StorageRequirements" class="form-control" />
+
+        <label asp-for="InspectionRequired"></label>
+        <select asp-for="InspectionRequired" class="form-control">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EnableAnalytics"></label>
+        <select asp-for="EnableAnalytics" class="form-control">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+
+        <label asp-for="ReorderPolicy"></label>
+        <input asp-for="ReorderPolicy" class="form-control" />
+
+        <label asp-for="ApprovalWorkflow"></label>
+        <input asp-for="ApprovalWorkflow" class="form-control" />
+
+        <label asp-for="CreatedBy"></label>
+        <input asp-for="CreatedBy" class="form-control" />
+
+        <label asp-for="CreatedDate"></label>
+        <input asp-for="CreatedDate" type="date" class="form-control" />
+
+        <label asp-for="LastModifiedBy"></label>
+        <input asp-for="LastModifiedBy" class="form-control" />
+
+        <label asp-for="LastModifiedDate"></label>
+        <input asp-for="LastModifiedDate" type="date" class="form-control" />
+
+        <label asp-for="ChangeHistory"></label>
+        <textarea asp-for="ChangeHistory" class="form-control"></textarea>
+    </div>
+</div>

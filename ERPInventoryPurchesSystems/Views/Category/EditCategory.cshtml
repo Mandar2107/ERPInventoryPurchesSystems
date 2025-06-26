@@ -1,0 +1,9 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Category
+
+<h2>Edit Category</h2>
+
+<form asp-action="EditCategory" method="post">
+    <input type="hidden" asp-for="CategoryCode" />
+    @Html.Partial("CategoryFormFields", Model)
+    <button type="submit" class="btn btn-primary mt-3">Update Category</button>
+</form>

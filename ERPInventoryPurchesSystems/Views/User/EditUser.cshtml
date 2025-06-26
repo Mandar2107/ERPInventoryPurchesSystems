@@ -1,0 +1,111 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.User
+
+<h2>Edit User</h2>
+<form asp-action="EditUser" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="UserID"></label>
+        <input asp-for="UserID" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Designation"></label>
+        <input asp-for="Designation" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Department"></label>
+        <input asp-for="Department" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserRole"></label>
+        <select asp-for="UserRole" class="form-control">
+            <option>Admin</option>
+            <option>Approver</option>
+            <option>Viewer</option>
+            <option>Operator</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="AccessLevel"></label>
+        <input asp-for="AccessLevel" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LoginType"></label>
+        <select asp-for="LoginType" class="form-control">
+            <option>Internal</option>
+            <option>External</option>
+            <option>API</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="AuthenticationMethod"></label>
+        <select asp-for="AuthenticationMethod" class="form-control">
+            <option>Password</option>
+            <option>SSO</option>
+            <option>Biometric</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Language"></label>
+        <input asp-for="Language" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TimeZone"></label>
+        <input asp-for="TimeZone" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NotificationPreferences"></label>
+        <input asp-for="NotificationPreferences" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LastLoginDate"></label>
+        <input asp-for="LastLoginDate" class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PasswordExpiryDate"></label>
+        <input asp-for="PasswordExpiryDate" class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label asp-for="AccountLockStatus"></label>
+        <input asp-for="AccountLockStatus" class="form-control" type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label asp-for="AuditLogsEnabled"></label>
+        <input asp-for="AuditLogsEnabled" class="form-control" type="checkbox" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CreatedBy"></label>
+        <input asp-for="CreatedBy" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CreatedDate"></label>
+        <input asp-for="CreatedDate" class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LastModifiedBy"></label>
+        <input asp-for="LastModifiedBy" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LastModifiedDate"></label>
+        <input asp-for="LastModifiedDate" class="form-control" type="datetime-local" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

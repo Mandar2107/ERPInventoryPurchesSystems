@@ -1,0 +1,9 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Department
+
+<h2>Edit Department</h2>
+
+<form asp-action="EditDepartment" method="post">
+    <input type="hidden" asp-for="DepartmentCode" />
+    @Html.Partial("DepartmentFormFields", Model)
+    <button type="submit" class="btn btn-primary mt-3">Update Department</button>
+</form>

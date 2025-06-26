@@ -1,0 +1,28 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.User
+
+<h2>User Details</h2>
+<table class="table table-bordered">
+    <tr><th>User ID</th><td>@Model.UserID</td></tr>
+    <tr><th>Full Name</th><td>@Model.FullName</td></tr>
+    <tr><th>Email Address</th><td>@Model.EmailAddress</td></tr>
+    <tr><th>Phone Number</th><td>@Model.PhoneNumber</td></tr>
+    <tr><th>Designation</th><td>@Model.Designation</td></tr>
+    <tr><th>Department</th><td>@Model.Department</td></tr>
+    <tr><th>Status</th><td>@Model.Status</td></tr>
+    <tr><th>User Role</th><td>@Model.UserRole</td></tr>
+    <tr><th>Access Level</th><td>@Model.AccessLevel</td></tr>
+    <tr><th>Login Type</th><td>@Model.LoginType</td></tr>
+    <tr><th>Authentication Method</th><td>@Model.AuthenticationMethod</td></tr>
+    <tr><th>Language</th><td>@Model.Language</td></tr>
+    <tr><th>Time Zone</th><td>@Model.TimeZone</td></tr>
+    <tr><th>Notification Preferences</th><td>@Model.NotificationPreferences</td></tr>
+    <tr><th>Last Login Date</th><td>@Model.LastLoginDate.ToString("g")</td></tr>
+    <tr><th>Password Expiry Date</th><td>@Model.PasswordExpiryDate.ToString("g")</td></tr>
+    <tr><th>Account Lock Status</th><td>@(Model.AccountLockStatus ? "Locked" : "Unlocked")</td></tr>
+    <tr><th>Audit Logs Enabled</th><td>@(Model.AuditLogsEnabled ? "Yes" : "No")</td></tr>
+    <tr><th>Created By</th><td>@Model.CreatedBy</td></tr>
+    <tr><th>Created Date</th><td>@Model.CreatedDate.ToString("g")</td></tr>
+    <tr><th>Last Modified By</th><td>@Model.LastModifiedBy</td></tr>
+    <tr><th>Last Modified Date</th><td>@Model.LastModifiedDate.ToString("g")</td></tr>
+</table>
+<a asp-action="UserList" class="btn btn-secondary">Back to List</a>

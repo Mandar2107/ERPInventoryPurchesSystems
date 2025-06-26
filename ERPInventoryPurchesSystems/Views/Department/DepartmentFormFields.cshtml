@@ -1,0 +1,58 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Department
+
+<div class="row">
+    <div class="col-md-6">
+        <label asp-for="DepartmentName"></label>
+        <input asp-for="DepartmentName" class="form-control" />
+
+        <label asp-for="DepartmentType"></label>
+        <input asp-for="DepartmentType" class="form-control" />
+
+        <label asp-for="ParentDepartment"></label>
+        <input asp-for="ParentDepartment" class="form-control" />
+
+        <label asp-for="Location"></label>
+        <input asp-for="Location" class="form-control" />
+
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+
+        <label asp-for="DepartmentHead"></label>
+        <input asp-for="DepartmentHead" class="form-control" />
+
+        <label asp-for="EmailAddress"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+
+        <label asp-for="ExtensionNumber"></label>
+        <input asp-for="ExtensionNumber" class="form-control" />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PrimaryFunction"></label>
+        <input asp-for="PrimaryFunction" class="form-control" />
+
+        <label asp-for="LinkedModules"></label>
+        <input asp-for="LinkedModules" class="form-control" />
+
+        <label asp-for="ApprovalAuthorityLevel"></label>
+        <input asp-for="ApprovalAuthorityLevel" class="form-control" />
+
+        <label asp-for="CreatedBy"></label>
+        <input asp-for="CreatedBy" class="form-control" />
+
+        <label asp-for="CreatedDate"></label>
+        <input asp-for="CreatedDate" type="date" class="form-control" />
+
+        <label asp-for="LastModifiedBy"></label>
+        <input asp-for="LastModifiedBy" class="form-control" />
+
+        <label asp-for="LastModifiedDate"></label>
+        <input asp-for="LastModifiedDate" type="date" class="form-control" />
+    </div>
+</div>

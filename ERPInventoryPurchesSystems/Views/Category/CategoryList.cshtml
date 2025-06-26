@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Category>
+
+<h2>Category List</h2>
+
+<a asp-action="CreateCategory" class="btn btn-primary">Add New Category</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Category Code</th>
+            <th>Category Name</th>
+            <th>Category Type</th>
+            <th>Status</th>
+            <th>Department</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.CategoryCode</td>
+                <td>@category.CategoryName</td>
+                <td>@category.CategoryType</td>
+                <td>@category.Status</td>
+                <td>@category.Department</td>
+                <td>
+                    <a asp-action="EditCategory" asp-route-id="@category.CategoryCode">Edit</a> |
+                    <a asp-action="DetailsCategory" asp-route-id="@category.CategoryCode">Details</a> |
+                    <a asp-action="DeleteCategory" asp-route-id="@category.CategoryCode">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

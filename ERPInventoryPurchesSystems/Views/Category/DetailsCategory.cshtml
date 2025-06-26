@@ -1,0 +1,67 @@
+﻿@model ERPInventoryPurchesSystems.Models.Master.Category
+
+<h2>Category Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">Category Code</dt>
+    <dd class="col-sm-8">@Model.CategoryCode</dd>
+
+    <dt class="col-sm-4">Category Name</dt>
+    <dd class="col-sm-8">@Model.CategoryName</dd>
+
+    <dt class="col-sm-4">Category Type</dt>
+    <dd class="col-sm-8">@Model.CategoryType</dd>
+
+    <dt class="col-sm-4">Parent Category</dt>
+    <dd class="col-sm-8">@Model.ParentCategory</dd>
+
+    <dt class="col-sm-4">Status</dt>
+    <dd class="col-sm-8">@Model.Status</dd>
+
+    <dt class="col-sm-4">Business Unit</dt>
+    <dd class="col-sm-8">@Model.BusinessUnit</dd>
+
+    <dt class="col-sm-4">Department</dt>
+    <dd class="col-sm-8">@Model.Department</dd>
+
+    <dt class="col-sm-4">Usage Type</dt>
+    <dd class="col-sm-8">@Model.UsageType</dd>
+
+    <dt class="col-sm-4">Tax Group</dt>
+    <dd class="col-sm-8">@Model.TaxGroup</dd>
+
+    <dt class="col-sm-4">Default UOM</dt>
+    <dd class="col-sm-8">@Model.DefaultUOM</dd>
+
+    <dt class="col-sm-4">Storage Requirements</dt>
+    <dd class="col-sm-8">@Model.StorageRequirements</dd>
+
+    <dt class="col-sm-4">Inspection Required</dt>
+    <dd class="col-sm-8">@Model.InspectionRequired</dd>
+
+    <dt class="col-sm-4">Enable Analytics</dt>
+    <dd class="col-sm-8">@Model.EnableAnalytics</dd>
+
+    <dt class="col-sm-4">Reorder Policy</dt>
+    <dd class="col-sm-8">@Model.ReorderPolicy</dd>
+
+    <dt class="col-sm-4">Approval Workflow</dt>
+    <dd class="col-sm-8">@Model.ApprovalWorkflow</dd>
+
+    <dt class="col-sm-4">Created By</dt>
+    <dd class="col-sm-8">@Model.CreatedBy</dd>
+
+    <dt class="col-sm-4">Created Date</dt>
+    <dd class="col-sm-8">@Model.CreatedDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-4">Last Modified By</dt>
+    <dd class="col-sm-8">@Model.LastModifiedBy</dd>
+
+    <dt class="col-sm-4">Last Modified Date</dt>
+    <dd class="col-sm-8">@Model.LastModifiedDate.ToShortDateString()</dd>
+
+    <dt class="col-sm-4">Change History</dt>
+    <dd class="col-sm-8">@Model.ChangeHistory</dd>
+</dl>
+
+<a asp-action="CategoryList" class="btn btn-secondary">Back to List</a>
