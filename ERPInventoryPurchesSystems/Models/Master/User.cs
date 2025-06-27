@@ -1,6 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ERPInventoryPurchesSystems.Models.Master
 {
     public class User
@@ -24,7 +25,10 @@ namespace ERPInventoryPurchesSystems.Models.Master
         public string Designation { get; set; }
 
         [Display(Name = "Department")]
-        public string Department { get; set; } // Linked to Department Master
+        public string DepartmentCode { get; set; } // Foreign key
+
+        [ForeignKey("DepartmentCode")]
+        public Department Department { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; } // Active / Inactive
@@ -72,5 +76,4 @@ namespace ERPInventoryPurchesSystems.Models.Master
         [Display(Name = "Last Modified Date")]
         public DateTime LastModifiedDate { get; set; }
     }
-
 }

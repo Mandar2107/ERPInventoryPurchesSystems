@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-
 namespace ERPInventoryPurchesSystems.Models.Master
 {
     public class Department
@@ -16,16 +15,16 @@ namespace ERPInventoryPurchesSystems.Models.Master
         public string DepartmentName { get; set; }
 
         [Display(Name = "Department Type")]
-        public string DepartmentType { get; set; } // Operational, Support, Management
+        public string DepartmentType { get; set; }
 
         [Display(Name = "Parent Department")]
-        public string? ParentDepartment { get; set; }
+        public string ParentDepartment { get; set; }
 
         [Display(Name = "Location")]
         public string Location { get; set; }
 
         [Display(Name = "Status")]
-        public string Status { get; set; } // Active / Inactive
+        public string Status { get; set; }
 
         [Display(Name = "Department Head")]
         public string DepartmentHead { get; set; }
@@ -40,13 +39,13 @@ namespace ERPInventoryPurchesSystems.Models.Master
         public string ExtensionNumber { get; set; }
 
         [Display(Name = "Primary Function")]
-        public string PrimaryFunction { get; set; } // Procurement, Sales, Logistics
+        public string PrimaryFunction { get; set; }
 
         [Display(Name = "Linked Modules")]
-        public string LinkedModules { get; set; } // Purchase, Inventory, HR, etc.
+        public string LinkedModules { get; set; }
 
         [Display(Name = "Approval Authority Level")]
-        public string ApprovalAuthorityLevel { get; set; } // Level 1, Level 2
+        public string ApprovalAuthorityLevel { get; set; }
 
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; }
@@ -60,5 +59,4 @@ namespace ERPInventoryPurchesSystems.Models.Master
         [Display(Name = "Last Modified Date")]
         public DateTime LastModifiedDate { get; set; }
     }
-
 }

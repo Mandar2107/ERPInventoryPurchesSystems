@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ERPInventoryPurchesSystems.Controllers
 {
@@ -16,63 +17,42 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         public async Task<IActionResult> UserList()
         {
-            return View(await _context.Users.ToListAsync());
+            var users = await _context.Users.Include(u => u.Department).ToListAsync();
+            return View(users);
         }
 
         public IActionResult CreateUser()
         {
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
             return View();
         }
 
         [HttpPost]
-      
         public async Task<IActionResult> CreateUser(User user)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(UserList));
-            }
-            return View(user);
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(UserList));
         }
 
         public async Task<IActionResult> EditUser(string id)
         {
-            if (id == null) return NotFound();
-
             var user = await _context.Users.FindAsync(id);
             if (user == null) return NotFound();
 
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", user.DepartmentCode);
             return View(user);
         }
 
         [HttpPost]
-  
         public async Task<IActionResult> EditUser(string id, User user)
         {
             if (id != user.UserID) return BadRequest();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Users.Any(e => e.UserID == id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(UserList));
-            }
-
-            return View(user); // This should be inside the method, not outside
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(UserList));
         }
-
 
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -82,7 +62,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost, ActionName("DeleteUser")]
-
         public async Task<IActionResult> DeleteUserConfirmed(string id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -95,7 +74,7 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         public async Task<IActionResult> DetailsUser(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(u => u.Department).FirstOrDefaultAsync(u => u.UserID == id);
             if (user == null) return NotFound();
             return View(user);
         }
