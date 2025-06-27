@@ -31,9 +31,9 @@
                 <td>@item.ItemName</td>
                 <td>@item.ItemCategory</td>
                 <td>@item.ItemType</td>
-                <td>@item.UOM</td>
-                <td>@item.StandardCost</td>
-                <td>@item.SellingPrice</td>
+                <td>@item.PurchaseUOM</td> <!-- Assuming UOM is PurchaseUOM -->
+                <td>@item.StandardCost.ToString("C")</td>
+                <td>@item.SellingPrice.ToString("C")</td>
                 <td>@item.CreatedBy</td>
                 <td>@item.CreatedDate.ToString("g")</td>
                 <td>

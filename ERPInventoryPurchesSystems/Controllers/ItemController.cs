@@ -27,10 +27,9 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> CreateItem(Item item)
+        public async Task<IActionResult> CreateItemList(Item item)
         {
-            if (ModelState.IsValid)
-            {
+            
                 item.CreatedBy = User.Identity?.Name ?? "System";
                 item.CreatedDate = DateTime.UtcNow;
                 item.LastModifiedBy = item.CreatedBy;
@@ -39,8 +38,7 @@ namespace ERPInventoryPurchesSystems.Controllers
                 _context.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(item);
+      
         }
 
 
@@ -56,7 +54,7 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         [HttpPost]
        
-        public async Task<IActionResult> EditItem(string id, Item item)
+        public async Task<IActionResult> EditItemList(string id, Item item)
         {
             if (id != item.ItemCode) return NotFound();
 
