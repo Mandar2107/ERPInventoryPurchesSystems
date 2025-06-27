@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ERPInventoryPurchesSystems.Controllers
 {
@@ -16,33 +17,30 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         public async Task<IActionResult> CategoryList()
         {
-            return View(await _context.Categories.ToListAsync());
+            var categories = await _context.Categories.Include(c => c.Department).ToListAsync();
+            return View(categories);
         }
 
         public IActionResult CreateCategory()
         {
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateCategory(Category category)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CategoryList));
-            }
-            return View(category);
+            _context.Add(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(CategoryList));
         }
 
         public async Task<IActionResult> EditCategory(string id)
         {
-            if (id == null) return NotFound();
-
             var category = await _context.Categories.FindAsync(id);
             if (category == null) return NotFound();
 
+            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", category.DepartmentCode);
             return View(category);
         }
 
@@ -51,23 +49,9 @@ namespace ERPInventoryPurchesSystems.Controllers
         {
             if (id != category.CategoryCode) return BadRequest();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Categories.Any(e => e.CategoryCode == id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(CategoryList));
-            }
-            return View(category);
+            _context.Update(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(CategoryList));
         }
 
         public async Task<IActionResult> DeleteCategory(string id)
@@ -90,7 +74,7 @@ namespace ERPInventoryPurchesSystems.Controllers
 
         public async Task<IActionResult> DetailsCategory(string id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories.Include(c => c.Department).FirstOrDefaultAsync(c => c.CategoryCode == id);
             if (category == null) return NotFound();
             return View(category);
         }
