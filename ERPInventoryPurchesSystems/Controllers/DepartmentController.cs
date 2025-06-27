@@ -1,75 +1,79 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ERPInventoryPurchesSystems.Models.Master;
+﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ERPInventoryPurchesSystems.Controllers
+public class DepartmentController : Controller
 {
-    public class DepartmentController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public DepartmentController(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DepartmentController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public async Task<IActionResult> DepartmentList()
+    {
+        return View(await _context.Departments.ToListAsync());
+    }
 
-        public async Task<IActionResult> DepartmentList()
-        {
-            var departments = await _context.Departments.ToListAsync();
-            return View(departments);
-        }
+    public IActionResult CreateDepartment() => View();
 
-        public IActionResult CreateDepartment() => View();
+    [HttpPost]
+    public async Task<IActionResult> CreateDepartment(Department department)
+    {
+        if (!ModelState.IsValid) return View(department);
 
-        [HttpPost]
-        public async Task<IActionResult> CreateDepartment(Department department)
-        {
-            _context.Add(department);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(DepartmentList));
-        }
+        department.CreatedDate = DateTime.UtcNow;
+        department.LastModifiedDate = DateTime.UtcNow;
 
-        public async Task<IActionResult> EditDepartment(string id)
-        {
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null) return NotFound();
-            return View(department);
-        }
+        _context.Add(department);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(DepartmentList));
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> EditDepartment(string id, Department department)
-        {
-            if (id != department.DepartmentCode) return BadRequest();
+    public async Task<IActionResult> EditDepartment(string id)
+    {
+        var department = await _context.Departments.FindAsync(id);
+        if (department == null) return NotFound();
+        return View(department);
+    }
 
-            _context.Update(department);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(DepartmentList));
-        }
+    [HttpPost]
+    public async Task<IActionResult> EditDepartment(string id, Department department)
+    {
+        if (id != department.DepartmentCode) return BadRequest();
 
-        public async Task<IActionResult> DeleteDepartment(string id)
-        {
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null) return NotFound();
-            return View(department);
-        }
+        if (!ModelState.IsValid) return View(department);
 
-        [HttpPost, ActionName("DeleteDepartment")]
-        public async Task<IActionResult> DeleteDepartmentConfirmed(string id)
-        {
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null) return NotFound();
+        department.LastModifiedDate = DateTime.UtcNow;
 
-            _context.Departments.Remove(department);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(DepartmentList));
-        }
+        _context.Update(department);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(DepartmentList));
+    }
 
-        public async Task<IActionResult> DetailsDepartment(string id)
-        {
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null) return NotFound();
-            return View(department);
-        }
+    public async Task<IActionResult> DeleteDepartment(string id)
+    {
+        var department = await _context.Departments.FindAsync(id);
+        if (department == null) return NotFound();
+        return View(department);
+    }
+
+    [HttpPost, ActionName("DeleteDepartment")]
+    public async Task<IActionResult> DeleteDepartmentConfirmed(string id)
+    {
+        var department = await _context.Departments.FindAsync(id);
+        if (department == null) return NotFound();
+
+        _context.Departments.Remove(department);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(DepartmentList));
+    }
+
+    public async Task<IActionResult> DetailsDepartment(string id)
+    {
+        var department = await _context.Departments.FindAsync(id);
+        if (department == null) return NotFound();
+        return View(department);
     }
 }

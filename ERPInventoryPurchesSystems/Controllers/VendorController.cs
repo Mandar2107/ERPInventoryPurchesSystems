@@ -1,7 +1,6 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 public class VendorController : Controller
 {
@@ -25,38 +24,35 @@ public class VendorController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateVendor(Vendor vendor)
     {
-        if (ModelState.IsValid)
-        {
-            _context.Add(vendor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(VendorList));
-        }
-        return View(vendor);
+        if (!ModelState.IsValid) return View(vendor);
+
+        vendor.CreatedDate = DateTime.UtcNow;
+        vendor.LastModifiedDate = DateTime.UtcNow;
+
+        _context.Add(vendor);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(VendorList));
     }
 
     public async Task<IActionResult> EditVendor(string id)
     {
-        if (id == null) return NotFound();
-
         var vendor = await _context.Vendors.FindAsync(id);
         if (vendor == null) return NotFound();
-
         return View(vendor);
     }
 
     [HttpPost]
-
     public async Task<IActionResult> EditVendor(string id, Vendor vendor)
     {
         if (id != vendor.VendorCode) return BadRequest();
 
-        if (ModelState.IsValid)
-        {
-            _context.Update(vendor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(VendorList));
-        }
-        return View(vendor);
+        if (!ModelState.IsValid) return View(vendor);
+
+        vendor.LastModifiedDate = DateTime.UtcNow;
+
+        _context.Update(vendor);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(VendorList));
     }
 
     public async Task<IActionResult> DeleteVendor(string id)
@@ -67,10 +63,11 @@ public class VendorController : Controller
     }
 
     [HttpPost, ActionName("DeleteVendor")]
-
     public async Task<IActionResult> DeleteVendorConfirmed(string id)
     {
         var vendor = await _context.Vendors.FindAsync(id);
+        if (vendor == null) return NotFound();
+
         _context.Vendors.Remove(vendor);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(VendorList));

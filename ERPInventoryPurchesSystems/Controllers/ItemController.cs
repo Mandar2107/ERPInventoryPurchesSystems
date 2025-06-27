@@ -1,113 +1,90 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ERPInventoryPurchesSystems.Models.Master;
+﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ERPInventoryPurchesSystems.Controllers
+public class ItemController : Controller
 {
-    public class ItemController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public ItemController(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public ItemController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public async Task<IActionResult> ItemList()
+    {
+        return View(await _context.Items.ToListAsync());
+    }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Items.ToListAsync());
-        }
+    public IActionResult CreateItem()
+    {
+        return View();
+    }
 
-        public IActionResult CreateItem()
-        {
-            return View();
-        }
+    [HttpPost]
+    public async Task<IActionResult> CreateItem(Item item)
+    {
+        if (!ModelState.IsValid) return View(item);
 
+        item.CreatedBy = User.Identity?.Name ?? "System";
+        item.CreatedDate = DateTime.UtcNow;
+        item.LastModifiedBy = item.CreatedBy;
+        item.LastModifiedDate = item.CreatedDate;
 
-        [HttpPost]
+        _context.Add(item);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(ItemList));
+    }
 
-        public async Task<IActionResult> CreateItemList(Item item)
-        {
-            
-                item.CreatedBy = User.Identity?.Name ?? "System";
-                item.CreatedDate = DateTime.UtcNow;
-                item.LastModifiedBy = item.CreatedBy;
-                item.LastModifiedDate = item.CreatedDate;
+    public async Task<IActionResult> EditItem(string id)
+    {
+        var item = await _context.Items.FindAsync(id);
+        if (item == null) return NotFound();
+        return View(item);
+    }
 
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-      
-        }
+    [HttpPost]
+    public async Task<IActionResult> EditItem(string id, Item item)
+    {
+        if (id != item.ItemCode) return BadRequest();
 
+        if (!ModelState.IsValid) return View(item);
 
-        public async Task<IActionResult> EditItem(string id)
-        {
-            if (id == null) return NotFound();
+        var existingItem = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.ItemCode == id);
+        if (existingItem == null) return NotFound();
 
-            var item = await _context.Items.FindAsync(id);
-            if (item == null) return NotFound();
+        item.CreatedBy = existingItem.CreatedBy;
+        item.CreatedDate = existingItem.CreatedDate;
+        item.LastModifiedBy = User.Identity?.Name ?? "System";
+        item.LastModifiedDate = DateTime.UtcNow;
 
-            return View(item);
-        }
+        _context.Update(item);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(ItemList));
+    }
 
-        [HttpPost]
-       
-        public async Task<IActionResult> EditItemList(string id, Item item)
-        {
-            if (id != item.ItemCode) return NotFound();
+    public async Task<IActionResult> DeleteItem(string id)
+    {
+        var item = await _context.Items.FindAsync(id);
+        if (item == null) return NotFound();
+        return View(item);
+    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var existingItem = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.ItemCode == id);
-                    if (existingItem == null) return NotFound();
+    [HttpPost, ActionName("DeleteItem")]
+    public async Task<IActionResult> DeleteItemConfirmed(string id)
+    {
+        var item = await _context.Items.FindAsync(id);
+        if (item == null) return NotFound();
 
-                    item.CreatedBy = existingItem.CreatedBy;
-                    item.CreatedDate = existingItem.CreatedDate;
-                    item.LastModifiedBy = User.Identity?.Name ?? "System";
-                    item.LastModifiedDate = DateTime.UtcNow;
+        _context.Items.Remove(item);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(ItemList));
+    }
 
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Items.Any(e => e.ItemCode == id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
-
-
-        public async Task<IActionResult> DeleteItem(string id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item == null) return NotFound();
-            return View(item);
-        }
-
-        [HttpPost, ActionName("Delete")]
-  
-        public async Task<IActionResult> DeleteConfirmedItem(string id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> DetailsItem(string id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item == null) return NotFound();
-            return View(item);
-        }
+    public async Task<IActionResult> DetailsItem(string id)
+    {
+        var item = await _context.Items.FindAsync(id);
+        if (item == null) return NotFound();
+        return View(item);
     }
 }
