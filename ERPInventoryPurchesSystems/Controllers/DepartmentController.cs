@@ -78,7 +78,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost, ActionName("DeleteDepartment")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteDepartmentConfirmed(string id)
         {
             var department = await _context.Departments.FindAsync(id);

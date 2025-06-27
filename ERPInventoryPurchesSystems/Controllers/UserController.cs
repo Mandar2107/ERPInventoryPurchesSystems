@@ -25,7 +25,7 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+      
         public async Task<IActionResult> CreateUser(User user)
         {
             if (ModelState.IsValid)
@@ -48,7 +48,7 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+  
         public async Task<IActionResult> EditUser(string id, User user)
         {
             if (id != user.UserID) return BadRequest();
@@ -82,7 +82,7 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost, ActionName("DeleteUser")]
-        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> DeleteUserConfirmed(string id)
         {
             var user = await _context.Users.FindAsync(id);

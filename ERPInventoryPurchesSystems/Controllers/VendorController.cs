@@ -23,7 +23,6 @@ public class VendorController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateVendor(Vendor vendor)
     {
         if (ModelState.IsValid)
@@ -46,7 +45,7 @@ public class VendorController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> EditVendor(string id, Vendor vendor)
     {
         if (id != vendor.VendorCode) return BadRequest();
@@ -68,7 +67,7 @@ public class VendorController : Controller
     }
 
     [HttpPost, ActionName("DeleteVendor")]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> DeleteVendorConfirmed(string id)
     {
         var vendor = await _context.Vendors.FindAsync(id);
