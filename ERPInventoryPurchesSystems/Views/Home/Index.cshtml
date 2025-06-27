@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "ERP Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <h5 class="mt-3">Purchase Dept</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="/Item/Index">Item Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Vendor/Index">Vendor Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Category/Index">Category Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Department/Index">Department Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/User/UserList">User Master</a></li>
+                    <hr>
+                    <li class="nav-item"><a class="nav-link" href="/PurchaseRequisition/Index">Purchase Requisition</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ApprovalWorkflow/Index">Approval Workflow</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/RFQ/Index">Request for Quotation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/QuotationComparison/Index">Quotation Comparison</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/PurchaseOrder/Index">Purchase Order</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/GRN/Index">Goods Receipt Note</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/QualityInspection/Index">Quality Inspection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/InvoiceMatching/Index">Invoice Matching</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="pt-3 pb-2 mb-3 border-bottom">
+                <h2>Welcome to ERP Inventory Management Dashboard</h2>
+                <p>This dashboard provides access to all master and transactional modules for the Purchase Department.</p>
+                <ul>
+                    <li><strong>Master Forms:</strong> Manage items, vendors, categories, departments, and users.</li>
+                    <li><strong>Purchase Requisition:</strong> Create and track purchase requests.</li>
+                    <li><strong>Approval Workflow:</strong> Review and approve requisitions.</li>
+                    <li><strong>RFQ:</strong> Request quotations from vendors.</li>
+                    <li><strong>Quotation Comparison:</strong> Compare vendor quotes and select the best option.</li>
+                    <li><strong>Purchase Order:</strong> Generate and manage purchase orders.</li>
+                    <li><strong>GRN:</strong> Record goods receipt and verify deliveries.</li>
+                    <li><strong>Quality Inspection:</strong> Inspect received goods and document results.</li>
+                    <li><strong>Invoice Matching:</strong> Match invoices with PO and GRN for payment processing.</li>
+                </ul>
+            </div>
+        </main>
+    </div>
 </div>

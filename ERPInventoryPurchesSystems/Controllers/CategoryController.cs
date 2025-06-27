@@ -25,7 +25,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateCategory(Category category)
         {
             if (ModelState.IsValid)
@@ -48,7 +47,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditCategory(string id, Category category)
         {
             if (id != category.CategoryCode) return BadRequest();
@@ -80,7 +78,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost, ActionName("DeleteCategory")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteCategoryConfirmed(string id)
         {
             var category = await _context.Categories.FindAsync(id);

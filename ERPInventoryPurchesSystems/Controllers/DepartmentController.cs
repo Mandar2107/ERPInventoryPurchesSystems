@@ -25,7 +25,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDepartment(Department department)
         {
             if (ModelState.IsValid)
@@ -48,7 +47,6 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDepartment(string id, Department department)
         {
             if (id != department.DepartmentCode) return BadRequest();

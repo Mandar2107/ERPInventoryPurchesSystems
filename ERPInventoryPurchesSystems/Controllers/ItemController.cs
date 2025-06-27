@@ -24,18 +24,25 @@ namespace ERPInventoryPurchesSystems.Controllers
             return View();
         }
 
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> CreateItem(Item item)
         {
             if (ModelState.IsValid)
             {
+                item.CreatedBy = User.Identity?.Name ?? "System";
+                item.CreatedDate = DateTime.UtcNow;
+                item.LastModifiedBy = item.CreatedBy;
+                item.LastModifiedDate = item.CreatedDate;
+
                 _context.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(item);
         }
+
 
         public async Task<IActionResult> EditItem(string id)
         {
@@ -48,15 +55,23 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public async Task<IActionResult> EditItem(string id, Item item)
         {
-           
+            if (id != item.ItemCode) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var existingItem = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.ItemCode == id);
+                    if (existingItem == null) return NotFound();
+
+                    item.CreatedBy = existingItem.CreatedBy;
+                    item.CreatedDate = existingItem.CreatedDate;
+                    item.LastModifiedBy = User.Identity?.Name ?? "System";
+                    item.LastModifiedDate = DateTime.UtcNow;
+
                     _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
@@ -72,6 +87,7 @@ namespace ERPInventoryPurchesSystems.Controllers
             return View(item);
         }
 
+
         public async Task<IActionResult> DeleteItem(string id)
         {
             var item = await _context.Items.FindAsync(id);
@@ -80,7 +96,7 @@ namespace ERPInventoryPurchesSystems.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+  
         public async Task<IActionResult> DeleteConfirmedItem(string id)
         {
             var item = await _context.Items.FindAsync(id);
