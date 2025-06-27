@@ -1,6 +1,7 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class VendorController : Controller
 {
@@ -22,7 +23,7 @@ public class VendorController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateVendor(Vendor vendor)
+    public async Task<IActionResult> AfterCreateVendor(Vendor vendor)
     {
         if (!ModelState.IsValid) return View(vendor);
 
@@ -42,7 +43,7 @@ public class VendorController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditVendor(string id, Vendor vendor)
+    public async Task<IActionResult> AfterEditVendor(string id, Vendor vendor)
     {
         if (id != vendor.VendorCode) return BadRequest();
 

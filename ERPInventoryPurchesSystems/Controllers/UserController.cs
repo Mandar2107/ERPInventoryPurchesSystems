@@ -26,7 +26,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(User user)
+    public async Task<IActionResult> AfterCreateUser(User user)
     {
         if (!ModelState.IsValid)
         {
@@ -52,7 +52,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditUser(string id, User user)
+    public async Task<IActionResult> AfterEditUser(string id, User user)
     {
         if (id != user.UserID) return BadRequest();
 

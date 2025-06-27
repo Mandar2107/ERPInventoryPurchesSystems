@@ -43,7 +43,6 @@ namespace ERPInventoryPurchesSystems.Models.Master
 
         public ICollection<Vendor> Vendors { get; set; }
 
-        public ICollection<GLAccount> GLAccounts { get; set; }
 
         public bool EnableAnalytics { get; set; }
 

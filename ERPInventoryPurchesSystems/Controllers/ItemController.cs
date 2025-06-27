@@ -1,6 +1,7 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class ItemController : Controller
 {
@@ -22,7 +23,7 @@ public class ItemController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateItem(Item item)
+    public async Task<IActionResult> CreateItemList(Item item)
     {
         if (!ModelState.IsValid) return View(item);
 
@@ -44,7 +45,7 @@ public class ItemController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditItem(string id, Item item)
+    public async Task<IActionResult> EditItemList(string id, Item item)
     {
         if (id != item.ItemCode) return BadRequest();
 

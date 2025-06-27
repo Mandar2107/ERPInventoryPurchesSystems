@@ -12,46 +12,13 @@ namespace ERPInventoryPurchesSystems.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    CategoryCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ParentCategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BusinessUnit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UsageType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TaxGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DefaultUOM = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StorageRequirements = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InspectionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    AssociatedItems = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssociatedVendors = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssociatedGLAccounts = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EnableAnalytics = table.Column<bool>(type: "bit", nullable: false),
-                    ReorderPolicy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApprovalWorkflow = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ChangeHistory = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryCode);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
                     DepartmentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartmentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ParentDepartment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ParentDepartment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartmentHead = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -69,6 +36,80 @@ namespace ERPInventoryPurchesSystems.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.DepartmentCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ParentCategory = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessUnit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UsageType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaxGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultUOM = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StorageRequirements = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InspectionRequired = table.Column<bool>(type: "bit", nullable: false),
+                    EnableAnalytics = table.Column<bool>(type: "bit", nullable: false),
+                    ReorderPolicy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApprovalWorkflow = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChangeHistory = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryCode);
+                    table.ForeignKey(
+                        name: "FK_Categories_Departments_DepartmentCode",
+                        column: x => x.DepartmentCode,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentCode",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccessLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoginType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthenticationMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeZone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NotificationPreferences = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PasswordExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountLockStatus = table.Column<bool>(type: "bit", nullable: false),
+                    AuditLogsEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_Users_Departments_DepartmentCode",
+                        column: x => x.DepartmentCode,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentCode",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,43 +150,17 @@ namespace ERPInventoryPurchesSystems.Migrations
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryCode = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.ItemCode);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccessLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LoginType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AuthenticationMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimeZone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NotificationPreferences = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PasswordExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountLockStatus = table.Column<bool>(type: "bit", nullable: false),
-                    AuditLogsEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_Items_Categories_CategoryCode",
+                        column: x => x.CategoryCode,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryCode");
                 });
 
             migrationBuilder.CreateTable(
@@ -191,23 +206,43 @@ namespace ERPInventoryPurchesSystems.Migrations
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryCode = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vendors", x => x.VendorCode);
+                    table.ForeignKey(
+                        name: "FK_Vendors_Categories_CategoryCode",
+                        column: x => x.CategoryCode,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryCode");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_DepartmentCode",
+                table: "Categories",
+                column: "DepartmentCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_CategoryCode",
+                table: "Items",
+                column: "CategoryCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DepartmentCode",
+                table: "Users",
+                column: "DepartmentCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vendors_CategoryCode",
+                table: "Vendors",
+                column: "CategoryCode");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Departments");
-
             migrationBuilder.DropTable(
                 name: "Items");
 
@@ -216,6 +251,12 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vendors");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

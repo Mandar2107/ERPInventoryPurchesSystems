@@ -2,6 +2,7 @@
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class CategoryController : Controller
 {
@@ -25,7 +26,7 @@ public class CategoryController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory(Category category)
+    public async Task<IActionResult> AfterCreateCategory(Category category)
     {
         if (!ModelState.IsValid)
         {
@@ -51,7 +52,7 @@ public class CategoryController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditCategory(string id, Category category)
+    public async Task<IActionResult> AfterEditCategory(string id, Category category)
     {
         if (id != category.CategoryCode) return BadRequest();
 

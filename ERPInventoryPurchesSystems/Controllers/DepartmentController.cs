@@ -1,6 +1,7 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class DepartmentController : Controller
 {
@@ -19,7 +20,7 @@ public class DepartmentController : Controller
     public IActionResult CreateDepartment() => View();
 
     [HttpPost]
-    public async Task<IActionResult> CreateDepartment(Department department)
+    public async Task<IActionResult> AfterCreateDepartment(Department department)
     {
         if (!ModelState.IsValid) return View(department);
 
@@ -39,7 +40,7 @@ public class DepartmentController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditDepartment(string id, Department department)
+    public async Task<IActionResult> AfterEditDepartment(string id, Department department)
     {
         if (id != department.DepartmentCode) return BadRequest();
 

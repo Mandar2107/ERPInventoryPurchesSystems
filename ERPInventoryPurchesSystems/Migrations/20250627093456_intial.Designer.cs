@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250626094539_intial")]
+    [Migration("20250627093456_intial")]
     partial class intial
     {
         /// <inheritdoc />
@@ -32,18 +32,6 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.Property<bool>("ApprovalWorkflow")
                         .HasColumnType("bit");
-
-                    b.Property<string>("AssociatedGLAccounts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AssociatedItems")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AssociatedVendors")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessUnit")
                         .IsRequired()
@@ -72,9 +60,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Department")
+                    b.Property<string>("DepartmentCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("EnableAnalytics")
                         .HasColumnType("bit");
@@ -113,6 +101,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryCode");
+
+                    b.HasIndex("DepartmentCode");
 
                     b.ToTable("Categories");
                 });
@@ -169,6 +159,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentDepartment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -203,6 +194,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryCode")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -318,6 +312,8 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasKey("ItemCode");
 
+                    b.HasIndex("CategoryCode");
+
                     b.ToTable("Items");
                 });
 
@@ -347,9 +343,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Department")
+                    b.Property<string>("DepartmentCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Designation")
                         .IsRequired()
@@ -406,6 +402,8 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasKey("UserID");
 
+                    b.HasIndex("DepartmentCode");
+
                     b.ToTable("Users");
                 });
 
@@ -427,6 +425,9 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.Property<bool>("BlacklistStatus")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CategoryCode")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -563,7 +564,52 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasKey("VendorCode");
 
+                    b.HasIndex("CategoryCode");
+
                     b.ToTable("Vendors");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Category", b =>
+                {
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Item", b =>
+                {
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", null)
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryCode");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.User", b =>
+                {
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Vendor", b =>
+                {
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", null)
+                        .WithMany("Vendors")
+                        .HasForeignKey("CategoryCode");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Category", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("Vendors");
                 });
 #pragma warning restore 612, 618
         }
