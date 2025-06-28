@@ -13,6 +13,7 @@
 
             <label asp-for="VendorType"></label>
             <select asp-for="VendorType" class="form-control">
+                <option value="">-- Select --</option>
                 <option>Manufacturer</option>
                 <option>Distributor</option>
                 <option>Service Provider</option>
@@ -20,6 +21,7 @@
 
             <label asp-for="Status"></label>
             <select asp-for="Status" class="form-control">
+                <option value="">-- Select --</option>
                 <option>Active</option>
                 <option>Inactive</option>
             </select>
@@ -91,8 +93,8 @@
 
             <label asp-for="BlacklistStatus"></label>
             <select asp-for="BlacklistStatus" class="form-control">
-                <option>Yes</option>
-                <option>No</option>
+                <option value="false">No</option>
+                <option value="true">Yes</option>
             </select>
 
             <label asp-for="LastPurchaseDate"></label>
@@ -115,18 +117,6 @@
 
             <label asp-for="DocumentUploads"></label>
             <input asp-for="DocumentUploads" type="file" class="form-control" />
-
-            <label asp-for="CreatedBy"></label>
-            <input asp-for="CreatedBy" class="form-control" />
-
-            <label asp-for="CreatedDate"></label>
-            <input asp-for="CreatedDate" type="date" class="form-control" />
-
-            <label asp-for="LastModifiedBy"></label>
-            <input asp-for="LastModifiedBy" class="form-control" />
-
-            <label asp-for="LastModifiedDate"></label>
-            <input asp-for="LastModifiedDate" type="date" class="form-control" />
         </div>
     </div>
 

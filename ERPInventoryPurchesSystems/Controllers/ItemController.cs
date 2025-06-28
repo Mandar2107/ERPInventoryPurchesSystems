@@ -12,7 +12,7 @@ public class ItemController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> ItemList()
+    public async Task<IActionResult> Index()
     {
         return View(await _context.Items.ToListAsync());
     }
@@ -25,7 +25,7 @@ public class ItemController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateItemList(Item item)
     {
-        if (!ModelState.IsValid) return View(item);
+      
 
         item.CreatedBy = User.Identity?.Name ?? "System";
         item.CreatedDate = DateTime.UtcNow;
@@ -34,7 +34,7 @@ public class ItemController : Controller
 
         _context.Add(item);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(ItemList));
+        return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> EditItem(string id)
@@ -49,7 +49,7 @@ public class ItemController : Controller
     {
         if (id != item.ItemCode) return BadRequest();
 
-        if (!ModelState.IsValid) return View(item);
+    
 
         var existingItem = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.ItemCode == id);
         if (existingItem == null) return NotFound();
@@ -61,7 +61,7 @@ public class ItemController : Controller
 
         _context.Update(item);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(ItemList));
+        return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> DeleteItem(string id)
@@ -79,7 +79,7 @@ public class ItemController : Controller
 
         _context.Items.Remove(item);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(ItemList));
+        return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> DetailsItem(string id)

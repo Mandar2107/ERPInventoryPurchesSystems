@@ -2,27 +2,28 @@
     ViewData["Title"] = "ERP Dashboard";
 }
 
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-                <h5 class="mt-3">Purchase Dept</h5>
+            <div class="sidebar-sticky pt-3">
+                <h5 class="text-primary">Purchase Dept</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="/Item/Index">Item Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Vendor/Index">Vendor Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Category/Index">Category Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Department/Index">Department Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/User/UserList">User Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Item/Index"><i class="bi bi-box-seam"></i> Item Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Vendor/VendorList"><i class="bi bi-person-badge"></i> Vendor Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Category/CategoryList"><i class="bi bi-tags"></i> Category Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Department/DepartmentList"><i class="bi bi-building"></i> Department Master</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/User/UserList"><i class="bi bi-people"></i> User Master</a></li>
                     <hr>
-                    <li class="nav-item"><a class="nav-link" href="/PurchaseRequisition/Index">Purchase Requisition</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/ApprovalWorkflow/Index">Approval Workflow</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/RFQ/Index">Request for Quotation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/QuotationComparison/Index">Quotation Comparison</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/PurchaseOrder/Index">Purchase Order</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/GRN/Index">Goods Receipt Note</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/QualityInspection/Index">Quality Inspection</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/InvoiceMatching/Index">Invoice Matching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/PurchaseRequisition/Index"><i class="bi bi-journal-text"></i> Purchase Requisition</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ApprovalWorkflow/Index"><i class="bi bi-check2-circle"></i> Approval Workflow</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/RFQ/Index"><i class="bi bi-envelope-open"></i> Request for Quotation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/QuotationComparison/Index"><i class="bi bi-bar-chart-line"></i> Quotation Comparison</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/PurchaseOrder/Index"><i class="bi bi-cart-check"></i> Purchase Order</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/GRN/Index"><i class="bi bi-box-arrow-in-down"></i> Goods Receipt Note</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/QualityInspection/Index"><i class="bi bi-search"></i> Quality Inspection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/InvoiceMatching/Index"><i class="bi bi-receipt"></i> Invoice Matching</a></li>
                 </ul>
             </div>
         </nav>
@@ -30,10 +31,10 @@
         <!-- Main Content -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="pt-3 pb-2 mb-3 border-bottom">
-                <h2>Welcome to ERP Inventory Management Dashboard</h2>
+                <h2 class="text-success">Welcome to ERP Inventory Management Dashboard</h2>
                 <p>This dashboard provides access to all master and transactional modules for the Purchase Department.</p>
-                
-            </div>
+            </div>       
         </main>
     </div>
 </div>
+

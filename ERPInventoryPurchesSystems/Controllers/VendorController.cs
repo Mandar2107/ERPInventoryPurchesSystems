@@ -25,7 +25,10 @@ public class VendorController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterCreateVendor(Vendor vendor)
     {
-        if (!ModelState.IsValid) return View(vendor);
+        if (vendor == null)
+        {
+            return BadRequest("Vendor data is missing.");
+        }
 
         vendor.CreatedDate = DateTime.UtcNow;
         vendor.LastModifiedDate = DateTime.UtcNow;
@@ -45,10 +48,15 @@ public class VendorController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditVendor(string id, Vendor vendor)
     {
-        if (id != vendor.VendorCode) return BadRequest();
+        if (vendor == null || id != vendor.VendorCode)
+        {
+            return BadRequest("Invalid vendor data.");
+        }
 
-        if (!ModelState.IsValid) return View(vendor);
+        var existingVendor = await _context.Vendors.AsNoTracking().FirstOrDefaultAsync(v => v.VendorCode == id);
+        if (existingVendor == null) return NotFound();
 
+        vendor.CreatedDate = existingVendor.CreatedDate;
         vendor.LastModifiedDate = DateTime.UtcNow;
 
         _context.Update(vendor);

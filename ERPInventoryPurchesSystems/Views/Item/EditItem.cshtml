@@ -10,7 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="EditItemList">
+
+        <form asp-action="EditItemList" asp-route-id="@Model.ItemCode">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="ItemCode" />
