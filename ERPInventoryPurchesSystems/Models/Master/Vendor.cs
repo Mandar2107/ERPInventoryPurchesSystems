@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERPInventoryPurchesSystems.Models.Master
 {
@@ -78,7 +79,10 @@ namespace ERPInventoryPurchesSystems.Models.Master
 
         public string Remarks { get; set; }
 
-        public string DocumentUploads { get; set; }
+
+        [NotMapped]
+        public IFormFile DocumentUploads { get; set; }
+
 
         public string CreatedBy { get; set; }
 

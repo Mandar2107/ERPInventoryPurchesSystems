@@ -42,9 +42,7 @@ public class DepartmentController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditDepartment(string id, Department department)
     {
-        if (id != department.DepartmentCode) return BadRequest();
-
-        if (!ModelState.IsValid) return View(department);
+        
 
         department.LastModifiedDate = DateTime.UtcNow;
 
