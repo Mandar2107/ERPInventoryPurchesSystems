@@ -58,6 +58,13 @@
 
             <label asp-for="PostalCode"></label>
             <input asp-for="PostalCode" class="form-control" />
+
+          
+            <label for="CategoryCode" class="control-label">Category</label>
+            <select asp-for="CategoryCode" class="form-control" asp-items="ViewBag.Categories">
+                <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="CategoryCode" class="text-danger"></span>
         </div>
 
         <div class="col-md-6">

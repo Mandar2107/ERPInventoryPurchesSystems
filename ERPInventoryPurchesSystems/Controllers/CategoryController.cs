@@ -19,11 +19,13 @@ public class CategoryController : Controller
         return View(categories);
     }
 
-    public IActionResult CreateCategory()
-    {
-        ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
-        return View();
-    }
+    [HttpGet]
+  public IActionResult CreateCategory()
+{
+        var departments = _context.Departments.ToList();
+        ViewBag.Departments = new SelectList(departments, "DepartmentCode", "DepartmentName");
+    return View();
+}
 
     [HttpPost]
     public async Task<IActionResult> AfterCreateCategory(Category category)
@@ -42,6 +44,11 @@ public class CategoryController : Controller
         return RedirectToAction(nameof(CategoryList));
     }
 
+    public IActionResult TestDepartments()
+    {
+        var departments = _context.Departments.ToList();
+        return Content("Departments count: " + departments.Count  + departments.ToList());
+    }
     public async Task<IActionResult> EditCategory(string id)
     {
         var category = await _context.Categories.FindAsync(id);

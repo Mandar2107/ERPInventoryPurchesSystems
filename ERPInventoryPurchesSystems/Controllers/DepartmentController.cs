@@ -12,6 +12,12 @@ public class DepartmentController : Controller
         _context = context;
     }
 
+    public IActionResult TestDepartments()
+    {
+        var departments = _context.Departments.ToList();
+        return Content("Departments count: " + departments.Count);
+    }
+
     public async Task<IActionResult> DepartmentList()
     {
         return View(await _context.Departments.ToListAsync());

@@ -8,18 +8,16 @@ namespace ERPInventoryPurchesSystems.Models.Master
     public class Category
     {
         [Key]
-        [Required]
+        [Required(ErrorMessage = "Category code is required.")]
         public string CategoryCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Category name is required.")]
         public string CategoryName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Category type is required.")]
         public string CategoryType { get; set; }
 
-        public string? ParentCategory { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Status is required.")]
         public string Status { get; set; }
 
         public string BusinessUnit { get; set; }
@@ -43,6 +41,7 @@ namespace ERPInventoryPurchesSystems.Models.Master
 
         public ICollection<Vendor> Vendors { get; set; }
 
+        public string AssociatedGLAccounts { get; set; }
 
         public bool EnableAnalytics { get; set; }
 

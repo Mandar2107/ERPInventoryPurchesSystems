@@ -29,12 +29,13 @@
         <input asp-for="BusinessUnit" class="form-control" />
 
 
+     
+            <label for="DepartmentCode" class="control-label">Department Name</label>
+            <select asp-for="DepartmentCode" class="form-control" asp-items="ViewBag.Departments">
+                <option value="">-- Select Department --</option>
+            </select>
+            <span asp-validation-for="DepartmentCode" class="text-danger"></span>
 
-        <label asp-for="Department"></label>
-        <select asp-for="DepartmentCode" class="form-control" asp-items="ViewBag.Departments">
-            <option value="">-- Select Department --</option>
-        </select>
-        <span asp-validation-for="DepartmentCode" class="text-danger"></span>
 
 
         <label asp-for="UsageType"></label>

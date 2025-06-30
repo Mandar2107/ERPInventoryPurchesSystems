@@ -4,6 +4,7 @@ using ERPInventoryPurchesSystems.Utility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250630045933_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -593,11 +596,9 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Vendor", b =>
                 {
-                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", "Category")
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", null)
                         .WithMany("Vendors")
                         .HasForeignKey("CategoryCode");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Category", b =>
