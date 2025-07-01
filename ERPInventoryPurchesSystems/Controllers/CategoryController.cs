@@ -1,8 +1,11 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class CategoryController : Controller
 {
@@ -15,17 +18,20 @@ public class CategoryController : Controller
 
     public async Task<IActionResult> CategoryList()
     {
-        var categories = await _context.Categories.Include(c => c.Department).ToListAsync();
+        var categories = await _context.Categories
+            .Include(c => c.Department)
+            .ToListAsync();
+
         return View(categories);
     }
 
     [HttpGet]
-  public IActionResult CreateCategory()
-{
+    public IActionResult CreateCategory()
+    {
         var departments = _context.Departments.ToList();
         ViewBag.Departments = new SelectList(departments, "DepartmentCode", "DepartmentName");
-    return View();
-}
+        return View();
+    }
 
     [HttpPost]
     public async Task<IActionResult> AfterCreateCategory(Category category)
@@ -33,22 +39,18 @@ public class CategoryController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
-            return View(category);
+            return View("CreateCategory", category);
         }
 
         category.CreatedDate = DateTime.UtcNow;
         category.LastModifiedDate = DateTime.UtcNow;
 
-        _context.Add(category);
+        _context.Categories.Add(category);
         await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(CategoryList));
     }
 
-    public IActionResult TestDepartments()
-    {
-        var departments = _context.Departments.ToList();
-        return Content("Departments count: " + departments.Count  + departments.ToList());
-    }
     public async Task<IActionResult> EditCategory(string id)
     {
         var category = await _context.Categories.FindAsync(id);
@@ -66,13 +68,14 @@ public class CategoryController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", category.DepartmentCode);
-            return View(category);
+            return View("EditCategory", category);
         }
 
         category.LastModifiedDate = DateTime.UtcNow;
 
-        _context.Update(category);
+        _context.Categories.Update(category);
         await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(CategoryList));
     }
 
@@ -80,6 +83,7 @@ public class CategoryController : Controller
     {
         var category = await _context.Categories.FindAsync(id);
         if (category == null) return NotFound();
+
         return View(category);
     }
 
@@ -91,13 +95,24 @@ public class CategoryController : Controller
 
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(CategoryList));
     }
 
     public async Task<IActionResult> DetailsCategory(string id)
     {
-        var category = await _context.Categories.Include(c => c.Department).FirstOrDefaultAsync(c => c.CategoryCode == id);
+        var category = await _context.Categories
+            .Include(c => c.Department)
+            .FirstOrDefaultAsync(c => c.CategoryCode == id);
+
         if (category == null) return NotFound();
+
         return View(category);
+    }
+
+    public IActionResult TestDepartments()
+    {
+        var departments = _context.Departments.ToList();
+        return Content("Departments count: " + departments.Count);
     }
 }

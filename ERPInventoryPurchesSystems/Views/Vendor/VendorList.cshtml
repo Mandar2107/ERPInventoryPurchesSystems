@@ -2,9 +2,9 @@
 
 <h2>Vendor List</h2>
 
-<a asp-action="CreateVendor" class="btn btn-primary">Add New Vendor</a>
+<a asp-action="CreateVendor" class="btn btn-primary mb-3">Add New Vendor</a>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Vendor Code</th>
@@ -14,6 +14,7 @@
             <th>Contact Person</th>
             <th>Phone</th>
             <th>Email</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,10 +29,11 @@
                 <td>@vendor.ContactPersonName</td>
                 <td>@vendor.PhoneNumber</td>
                 <td>@vendor.EmailAddress</td>
+                <td>@vendor.Category?.CategoryName</td>
                 <td>
-                    <a asp-action="AfterEditVendor" asp-route-id="@vendor.VendorCode">Edit</a> |
-                    <a asp-action="DetailsVendor" asp-route-id="@vendor.VendorCode">Details</a> |
-                    <a asp-action="DeleteVendor" asp-route-id="@vendor.VendorCode">Delete</a>
+                    <a asp-action="EditVendor" asp-route-id="@vendor.VendorCode" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DetailsVendor" asp-route-id="@vendor.VendorCode" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="DeleteVendor" asp-route-id="@vendor.VendorCode" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

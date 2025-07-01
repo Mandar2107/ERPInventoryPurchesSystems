@@ -1,6 +1,14 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.User>
+@{
+    ViewData["Title"] = "User List";
+}
 
 <h2>User List</h2>
+
+<p>
+    <a asp-action="CreateUser" class="btn btn-primary">Create New User</a>
+</p>
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -8,57 +16,27 @@
             <th>Full Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Designation</th>
             <th>Department</th>
-            <th>Status</th>
             <th>User Role</th>
-            <th>Access Level</th>
-            <th>Login Type</th>
-            <th>Auth Method</th>
-            <th>Language</th>
-            <th>Time Zone</th>
-            <th>Notifications</th>
-            <th>Last Login</th>
-            <th>Password Expiry</th>
-            <th>Locked</th>
-            <th>Audit Logs</th>
-            <th>Created By</th>
-            <th>Created Date</th>
-            <th>Modified By</th>
-            <th>Modified Date</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@user.UserID</td>
-                <td>@user.FullName</td>
-                <td>@user.EmailAddress</td>
-                <td>@user.PhoneNumber</td>
-                <td>@user.Designation</td>
-                <td>@user.Department</td>
-                <td>@user.Status</td>
-                <td>@user.UserRole</td>
-                <td>@user.AccessLevel</td>
-                <td>@user.LoginType</td>
-                <td>@user.AuthenticationMethod</td>
-                <td>@user.Language</td>
-                <td>@user.TimeZone</td>
-                <td>@user.NotificationPreferences</td>
-                <td>@user.LastLoginDate.ToString("g")</td>
-                <td>@user.PasswordExpiryDate.ToString("g")</td>
-                <td>@(user.AccountLockStatus ? "Locked" : "Unlocked")</td>
-                <td>@(user.AuditLogsEnabled ? "Yes" : "No")</td>
-                <td>@user.CreatedBy</td>
-                <td>@user.CreatedDate.ToString("g")</td>
-                <td>@user.LastModifiedBy</td>
-                <td>@user.LastModifiedDate.ToString("g")</td>
+                <td>@item.UserID</td>
+                <td>@item.FullName</td>
+                <td>@item.EmailAddress</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Department?.DepartmentName</td>
+                <td>@item.UserRole</td>
+                <td>@item.Status</td>
                 <td>
-                    <a href="@Url.Action("AfterEditUser", new { id = user.UserID })">Edit</a> |
-                    <a href="@Url.Action("DetailsUser", new { id = user.UserID })">Details</a> |
-                    <a href="@Url.Action("DeleteUser", new { id = user.UserID })">Delete</a>
+                    <a asp-action="EditUser" asp-route-id="@item.UserID">Edit</a> |
+                    <a asp-action="DetailsUser" asp-route-id="@item.UserID">Details</a> |
+                    <a asp-action="DeleteUser" asp-route-id="@item.UserID">Delete</a>
                 </td>
             </tr>
         }

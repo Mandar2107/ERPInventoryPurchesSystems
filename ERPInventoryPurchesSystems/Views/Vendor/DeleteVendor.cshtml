@@ -1,16 +1,14 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
 
 <h2>Delete Vendor</h2>
-
 <p>Are you sure you want to delete this vendor?</p>
 
-<dl class="row">
-    <dt class="col-sm-4">Vendor Code</dt>
-    <dd class="col-sm-8">@Model.VendorCode</dd>
-
-    <dt class="col-sm-4">Vendor Name</dt>
-    <dd class="col-sm-8">@Model.VendorName</dd>
-</dl>
+<table class="table table-bordered">
+    <tr><th>Vendor Code</th><td>@Model.VendorCode</td></tr>
+    <tr><th>Vendor Name</th><td>@Model.VendorName</td></tr>
+    <tr><th>Vendor Type</th><td>@Model.VendorType</td></tr>
+    <tr><th>Status</th><td>@Model.Status</td></tr>
+</table>
 
 <form asp-action="DeleteVendorConfirmed" method="post">
     <input type="hidden" asp-for="VendorCode" />

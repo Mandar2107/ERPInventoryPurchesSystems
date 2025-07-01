@@ -30,6 +30,10 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<bool>("ApprovalWorkflow")
                         .HasColumnType("bit");
 
+                    b.Property<string>("AssociatedGLAccounts")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BusinessUnit")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -73,9 +77,6 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ParentCategory")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReorderPolicy")
                         .IsRequired()
@@ -155,10 +156,6 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ParentDepartment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -181,19 +178,12 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<string>("ItemCode")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BarcodeQRCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("BatchTracking")
                         .HasColumnType("bit");
 
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CategoryCode")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -221,9 +211,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ItemCategory")
+                    b.Property<string>("ItemCategoryCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ItemDescription")
                         .IsRequired()
@@ -245,6 +235,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("LastPurchasePrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("LeadTime")
@@ -264,9 +255,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreferredVendor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PreferredVendorCode")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PurchaseUOM")
                         .IsRequired()
@@ -279,25 +269,24 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SalesTaxGroup")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SalesUOM")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SellingPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("SerialNumberTracking")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("StandardCost")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TaxRate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("UOM")
                         .IsRequired()
@@ -309,7 +298,9 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasKey("ItemCode");
 
-                    b.HasIndex("CategoryCode");
+                    b.HasIndex("ItemCategoryCode");
+
+                    b.HasIndex("PreferredVendorCode");
 
                     b.ToTable("Items");
                 });
@@ -325,13 +316,6 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.Property<bool>("AccountLockStatus")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("AuditLogsEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AuthenticationMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -356,10 +340,6 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastLoginDate")
                         .HasColumnType("datetime2");
 
@@ -369,14 +349,6 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LoginType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NotificationPreferences")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PasswordExpiryDate")
                         .HasColumnType("datetime2");
@@ -389,17 +361,18 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TimeZone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserRole")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("VendorCode")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("UserID");
 
                     b.HasIndex("DepartmentCode");
+
+                    b.HasIndex("VendorCode");
 
                     b.ToTable("Users");
                 });
@@ -424,6 +397,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CategoryCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
@@ -450,6 +424,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("CreditLimit")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Currency")
@@ -485,10 +460,6 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<DateTime>("LastPurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LinkedERPItems")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MSMECertificate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -506,10 +477,6 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferredItems")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -537,6 +504,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalSpend")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("VendorItemCodes")
@@ -565,9 +533,9 @@ namespace ERPInventoryPurchesSystems.Migrations
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Category", b =>
                 {
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("DepartmentCode")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -575,27 +543,46 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Item", b =>
                 {
-                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", null)
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", "Category")
                         .WithMany("Items")
-                        .HasForeignKey("CategoryCode");
+                        .HasForeignKey("ItemCategoryCode")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Vendor", "PreferredVendor")
+                        .WithMany("Items")
+                        .HasForeignKey("PreferredVendorCode")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PreferredVendor");
                 });
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.User", b =>
                 {
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("DepartmentCode")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.Vendor", "VendorProfile")
+                        .WithMany()
+                        .HasForeignKey("VendorCode");
+
                     b.Navigation("Department");
+
+                    b.Navigation("VendorProfile");
                 });
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Vendor", b =>
                 {
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Category", "Category")
                         .WithMany("Vendors")
-                        .HasForeignKey("CategoryCode");
+                        .HasForeignKey("CategoryCode")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
@@ -605,6 +592,18 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Navigation("Items");
 
                     b.Navigation("Vendors");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Department", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("ERPInventoryPurchesSystems.Models.Master.Vendor", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

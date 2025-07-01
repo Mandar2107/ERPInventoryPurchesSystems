@@ -1,34 +1,24 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
 
 <h2>Vendor Details</h2>
-
-<div class="row">
-    <div class="col-md-6">
-        <dl class="row">
-            <dt class="col-sm-4">Vendor Code</dt>
-            <dd class="col-sm-8">@Model.VendorCode</dd>
-
-            <dt class="col-sm-4">Vendor Name</dt>
-            <dd class="col-sm-8">@Model.VendorName</dd>
-
-            <dt class="col-sm-4">Vendor Type</dt>
-            <dd class="col-sm-8">@Model.VendorType</dd>
-
-            <dt class="col-sm-4">Status</dt>
-            <dd class="col-sm-8">@Model.Status</dd>
-
-            <dt class="col-sm-4">Contact Person</dt>
-            <dd class="col-sm-8">@Model.ContactPersonName</dd>
-
-            <dt class="col-sm-4">Phone</dt>
-            <dd class="col-sm-8">@Model.PhoneNumber</dd>
-
-            <dt class="col-sm-4">Email</dt>
-            <dd class="col-sm-8">@Model.EmailAddress</dd>
-
-            <!-- Add other fields similarly -->
-        </dl>
-    </div>
-</div>
-
+<table class="table table-bordered">
+    <tr><th>Vendor Code</th><td>@Model.VendorCode</td></tr>
+    <tr><th>Vendor Name</th><td>@Model.VendorName</td></tr>
+    <tr><th>Vendor Type</th><td>@Model.VendorType</td></tr>
+    <tr><th>Status</th><td>@Model.Status</td></tr>
+    <tr><th>Contact Person</th><td>@Model.ContactPersonName</td></tr>
+    <tr><th>Phone</th><td>@Model.PhoneNumber</td></tr>
+    <tr><th>Email</th><td>@Model.EmailAddress</td></tr>
+    <tr><th>Category</th><td>@Model.Category?.CategoryName</td></tr>
+    <tr><th>Currency</th><td>@Model.Currency</td></tr>
+    <tr><th>Payment Terms</th><td>@Model.PaymentTerms</td></tr>
+    <tr><th>Credit Limit</th><td>@Model.CreditLimit</td></tr>
+    <tr><th>Bank Account</th><td>@Model.BankAccountDetails</td></tr>
+    <tr><th>PAN</th><td>@Model.PANNumber</td></tr>
+    <tr><th>GST/VAT</th><td>@Model.GSTVATRegistration</td></tr>
+    <tr><th>Blacklisted</th><td>@(Model.BlacklistStatus ? "Yes" : "No")</td></tr>
+    <tr><th>Last Purchase</th><td>@Model.LastPurchaseDate.ToString("dd-MM-yyyy")</td></tr>
+    <tr><th>Total Spend</th><td>@Model.TotalSpend</td></tr>
+    <tr><th>Remarks</th><td>@Model.Remarks</td></tr>
+</table>
 <a asp-action="VendorList" class="btn btn-secondary">Back to List</a>

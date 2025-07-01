@@ -1,26 +1,20 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Item>
-
 @{
-    ViewData["Title"] = "Item Master List";
+    ViewData["Title"] = "Item List";
 }
-
-<h2 class="mb-4">Item Master List</h2>
-
+<h2>Item List</h2>
 <p>
-    <a asp-action="CreateItem" class="btn btn-success">+ Add New Item</a>
+    <a asp-action="CreateItem" class="btn btn-primary">Create New Item</a>
 </p>
-
-<table class="table table-bordered table-striped">
+<table class="table table-bordered">
     <thead>
         <tr>
+            <th>Item Code</th>
             <th>Item Name</th>
             <th>Category</th>
-            <th>Type</th>
+            <th>Vendor</th>
             <th>UOM</th>
-            <th>Standard Cost</th>
             <th>Selling Price</th>
-            <th>Created By</th>
-            <th>Created Date</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,18 +22,16 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.ItemCode</td>
                 <td>@item.ItemName</td>
-                <td>@item.ItemCategory</td>
-                <td>@item.ItemType</td>
-                <td>@item.PurchaseUOM</td> <!-- Assuming UOM is PurchaseUOM -->
-                <td>@item.StandardCost.ToString("C")</td>
-                <td>@item.SellingPrice.ToString("C")</td>
-                <td>@item.CreatedBy</td>
-                <td>@item.CreatedDate.ToString("g")</td>
+                <td>@item.Category?.CategoryName</td>
+                <td>@item.PreferredVendor?.VendorName</td>
+                <td>@item.UOM</td>
+                <td>@item.SellingPrice</td>
                 <td>
-                    <a asp-action="EditItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="DetailsItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-info">Details</a>
-                    <a asp-action="DeleteItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-action="EditItem" asp-route-id="@item.ItemCode">Edit</a> |
+                    <a asp-action="DetailsItem" asp-route-id="@item.ItemCode">Details</a> |
+                    <a asp-action="DeleteItem" asp-route-id="@item.ItemCode">Delete</a>
                 </td>
             </tr>
         }

@@ -1,7 +1,12 @@
-﻿using ERPInventoryPurchesSystems.Models.Master;
+﻿
+using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class ItemController : Controller
 {
@@ -12,80 +17,115 @@ public class ItemController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> ItemList()
     {
-        return View(await _context.Items.ToListAsync());
+        var entities = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.PreferredVendor)
+            .ToListAsync();
+        return View(entities);
     }
 
+    [HttpGet]
     public IActionResult CreateItem()
     {
+        ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName");
+        ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateItemList(Item item)
+    public async Task<IActionResult> AfterCreateItem(Item entity)
     {
-      
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName");
+            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
+            return View("CreateItem", entity);
+        }
 
-        item.CreatedBy = User.Identity?.Name ?? "System";
-        item.CreatedDate = DateTime.UtcNow;
-        item.LastModifiedBy = item.CreatedBy;
-        item.LastModifiedDate = item.CreatedDate;
+        entity.CreatedDate = DateTime.UtcNow;
+        entity.LastModifiedDate = DateTime.UtcNow;
+        entity.CreatedBy = User.Identity.Name;
+        entity.LastModifiedBy = User.Identity.Name;
 
-        _context.Add(item);
+        _context.Items.Add(entity);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+
+        return RedirectToAction(nameof(DetailsItem), new { id = entity.ItemCode });
     }
 
     public async Task<IActionResult> EditItem(string id)
     {
-        var item = await _context.Items.FindAsync(id);
-        if (item == null) return NotFound();
-        return View(item);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.PreferredVendor)
+            .FirstOrDefaultAsync(i => i.ItemCode == id);
+        if (entity == null) return NotFound();
+
+        ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName", entity.ItemCategoryCode);
+        ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName", entity.PreferredVendorCode);
+        return View(entity);
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditItemList(string id, Item item)
+    public async Task<IActionResult> AfterEditItem(string id, Item entity)
     {
-        if (id != item.ItemCode) return BadRequest();
+        if (id != entity.ItemCode) return BadRequest();
 
-    
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName", entity.ItemCategoryCode);
+            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName", entity.PreferredVendorCode);
+            return View("EditItem", entity);
+        }
 
-        var existingItem = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.ItemCode == id);
-        if (existingItem == null) return NotFound();
+        entity.LastModifiedDate = DateTime.UtcNow;
+        entity.LastModifiedBy = User.Identity.Name;
 
-        item.CreatedBy = existingItem.CreatedBy;
-        item.CreatedDate = existingItem.CreatedDate;
-        item.LastModifiedBy = User.Identity?.Name ?? "System";
-        item.LastModifiedDate = DateTime.UtcNow;
-
-        _context.Update(item);
+        _context.Items.Update(entity);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+
+        return RedirectToAction(nameof(DetailsItem), new { id = entity.ItemCode });
     }
 
     public async Task<IActionResult> DeleteItem(string id)
     {
-        var item = await _context.Items.FindAsync(id);
-        if (item == null) return NotFound();
-        return View(item);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.PreferredVendor)
+            .FirstOrDefaultAsync(i => i.ItemCode == id);
+        if (entity == null) return NotFound();
+
+        return View(entity);
     }
 
     [HttpPost, ActionName("DeleteItem")]
     public async Task<IActionResult> DeleteItemConfirmed(string id)
     {
-        var item = await _context.Items.FindAsync(id);
-        if (item == null) return NotFound();
+        var entity = await _context.Items.FirstOrDefaultAsync(i => i.ItemCode == id);
+        if (entity == null) return NotFound();
 
-        _context.Items.Remove(item);
+        _context.Items.Remove(entity);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+
+        return RedirectToAction(nameof(ItemList));
     }
 
     public async Task<IActionResult> DetailsItem(string id)
     {
-        var item = await _context.Items.FindAsync(id);
-        if (item == null) return NotFound();
-        return View(item);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Items
+            .Include(i => i.Category)
+            .Include(i => i.PreferredVendor)
+            .FirstOrDefaultAsync(i => i.ItemCode == id);
+        if (entity == null) return NotFound();
+
+        return View(entity);
     }
 }

@@ -1,9 +1,82 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Category
-
+@{
+    ViewData["Title"] = "Edit Category";
+}
 <h2>Edit Category</h2>
-
 <form asp-action="AfterEditCategory" method="post">
     <input type="hidden" asp-for="CategoryCode" />
-    @Html.Partial("CategoryFormFields", Model)
-    <button type="submit" class="btn btn-primary mt-3">Update Category</button>
+    <div class="row">
+        <div class="col-md-6">
+            <label asp-for="CategoryName"></label>
+            <input asp-for="CategoryName" class="form-control" />
+            <label asp-for="CategoryType">Category Type</label>
+            <select asp-for="CategoryType" class="form-control">
+                <option>Item</option>
+                <option>Vendor</option>
+                <option>Service</option>
+                <option>Expense</option>
+            </select>
+            <label asp-for="Status"></label>
+            <select asp-for="Status" class="form-control">
+                <option>Active</option>
+                <option>Inactive</option>
+            </select>
+            <label asp-for="BusinessUnit">Business Unit</label>
+            <select asp-for="BusinessUnit" class="form-control">
+                <option>Manufacturing</option>
+                <option>Retail</option>
+                <option>Services</option>
+            </select>
+            <label asp-for="DepartmentCode">Department</label>
+            <select asp-for="DepartmentCode" class="form-control" asp-items="ViewBag.Departments">
+                <option value="">--Select Department--</option>
+            </select>
+            <label asp-for="UsageType"></label>
+            <input asp-for="UsageType" class="form-control" />
+            <label asp-for="TaxGroup"></label>
+            <input asp-for="TaxGroup" class="form-control" />
+            <label asp-for="DefaultUOM">Default UOM</label>
+            <select asp-for="DefaultUOM" class="form-control">
+                <option>Kg</option>
+                <option>Liters</option>
+                <option>Pieces</option>
+                <option>Boxes</option>
+            </select>
+            <label asp-for="StorageRequirements">Storage Requirements</label>
+            <select asp-for="StorageRequirements" class="form-control">
+                <option>Temperature-controlled</option>
+                <option>Hazardous</option>
+                <option>Standard</option>
+            </select>
+            <label asp-for="InspectionRequired"></label>
+            <select asp-for="InspectionRequired" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="EnableAnalytics"></label>
+            <select asp-for="EnableAnalytics" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <label asp-for="ReorderPolicy">Reorder Policy</label>
+            <select asp-for="ReorderPolicy" class="form-control">
+                <option>Centralized</option>
+                <option>Decentralized</option>
+            </select>
+            <label asp-for="ApprovalWorkflow">Approval Workflow</label>
+            <select asp-for="ApprovalWorkflow" class="form-control">
+                <option value="true">Required</option>
+                <option value="false">Not Required</option>
+            </select>
+            <label asp-for="ChangeHistory"></label>
+            <textarea asp-for="ChangeHistory" class="form-control"></textarea>
+            <input asp-for="CreatedBy" type="hidden" />
+            <input asp-for="CreatedDate" type="hidden" />
+            <input asp-for="LastModifiedBy" type="hidden" />
+            <input asp-for="LastModifiedDate" type="hidden" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
 </form>

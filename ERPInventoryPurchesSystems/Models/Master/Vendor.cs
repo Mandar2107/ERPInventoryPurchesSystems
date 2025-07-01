@@ -68,11 +68,6 @@ namespace ERPInventoryPurchesSystems.Models.Master
 
         public ICollection<Item> Items { get; set; }
 
-        public string? UserID { get; set; }
-
-        [ForeignKey("UserID")]
-        public User UserAccount { get; set; }
-
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
 

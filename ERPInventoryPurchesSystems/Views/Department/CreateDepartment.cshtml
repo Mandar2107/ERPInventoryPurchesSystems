@@ -1,8 +1,61 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Department
-
+@{
+    ViewData["Title"] = "Create Department";
+}
 <h2>Create Department</h2>
-
 <form asp-action="AfterCreateDepartment" method="post">
-    @Html.Partial("DepartmentFormFields", Model)
+    <div class="form-group">
+        <label asp-for="DepartmentCode"></label>
+        <input asp-for="DepartmentCode" class="form-control" />
+        <span asp-validation-for="DepartmentCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentName"></label>
+        <input asp-for="DepartmentName" class="form-control" />
+        <span asp-validation-for="DepartmentName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentType"></label>
+        <input asp-for="DepartmentType" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Location"></label>
+        <input asp-for="Location" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentHead"></label>
+        <input asp-for="DepartmentHead" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ExtensionNumber"></label>
+        <input asp-for="ExtensionNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PrimaryFunction"></label>
+        <input asp-for="PrimaryFunction" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LinkedModules"></label>
+        <input asp-for="LinkedModules" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ApprovalAuthorityLevel"></label>
+        <input asp-for="ApprovalAuthorityLevel" class="form-control" />
+    </div>
     <button type="submit" class="btn btn-success mt-3">Save Department</button>
 </form>

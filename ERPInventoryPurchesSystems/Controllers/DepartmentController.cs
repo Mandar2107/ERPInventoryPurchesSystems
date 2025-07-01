@@ -1,7 +1,12 @@
-﻿using ERPInventoryPurchesSystems.Models.Master;
+﻿
+using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class DepartmentController : Controller
 {
@@ -12,73 +17,97 @@ public class DepartmentController : Controller
         _context = context;
     }
 
-    public IActionResult TestDepartments()
-    {
-        var departments = _context.Departments.ToList();
-        return Content("Departments count: " + departments.Count);
-    }
-
     public async Task<IActionResult> DepartmentList()
     {
-        return View(await _context.Departments.ToListAsync());
+        var entities = await _context.Departments.ToListAsync();
+        return View(entities);
     }
 
-    public IActionResult CreateDepartment() => View();
+    [HttpGet]
+    public IActionResult CreateDepartment()
+    {
+        return View();
+    }
 
     [HttpPost]
-    public async Task<IActionResult> AfterCreateDepartment(Department department)
+    public async Task<IActionResult> AfterCreateDepartment(Department entity)
     {
-        if (!ModelState.IsValid) return View(department);
+        if (!ModelState.IsValid)
+        {
+            return View("CreateDepartment", entity);
+        }
 
-        department.CreatedDate = DateTime.UtcNow;
-        department.LastModifiedDate = DateTime.UtcNow;
+        entity.CreatedDate = DateTime.UtcNow;
+        entity.LastModifiedDate = DateTime.UtcNow;
+        entity.CreatedBy = User.Identity?.Name ?? "System";
+        entity.LastModifiedBy = User.Identity?.Name ?? "System";
 
-        _context.Add(department);
+        _context.Departments.Add(entity);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(DepartmentList));
+
+        return RedirectToAction(nameof(DetailsDepartment), new { id = entity.DepartmentCode });
     }
 
     public async Task<IActionResult> EditDepartment(string id)
     {
-        var department = await _context.Departments.FindAsync(id);
-        if (department == null) return NotFound();
-        return View(department);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentCode == id);
+        if (entity == null) return NotFound();
+
+        return View(entity);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AfterEditDepartment(string id, Department department)
+    public async Task<IActionResult> AfterEditDepartment(string id, Department entity)
     {
-        
+        if (id != entity.DepartmentCode) return BadRequest();
 
-        department.LastModifiedDate = DateTime.UtcNow;
+        if (!ModelState.IsValid)
+        {
+            return View("EditDepartment", entity);
+        }
 
-        _context.Update(department);
+        entity.LastModifiedDate = DateTime.UtcNow;
+        entity.LastModifiedBy = User.Identity?.Name ?? "System";
+
+        _context.Departments.Update(entity);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(DepartmentList));
+
+        return RedirectToAction(nameof(DetailsDepartment), new { id = entity.DepartmentCode });
     }
 
     public async Task<IActionResult> DeleteDepartment(string id)
     {
-        var department = await _context.Departments.FindAsync(id);
-        if (department == null) return NotFound();
-        return View(department);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentCode == id);
+        if (entity == null) return NotFound();
+
+        return View(entity);
     }
 
     [HttpPost, ActionName("DeleteDepartment")]
     public async Task<IActionResult> DeleteDepartmentConfirmed(string id)
     {
-        var department = await _context.Departments.FindAsync(id);
-        if (department == null) return NotFound();
+        if (string.IsNullOrEmpty(id)) return BadRequest();
 
-        _context.Departments.Remove(department);
+        var entity = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentCode == id);
+        if (entity == null) return NotFound();
+
+        _context.Departments.Remove(entity);
         await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(DepartmentList));
     }
 
     public async Task<IActionResult> DetailsDepartment(string id)
     {
-        var department = await _context.Departments.FindAsync(id);
-        if (department == null) return NotFound();
-        return View(department);
+        if (string.IsNullOrEmpty(id)) return BadRequest();
+
+        var entity = await _context.Departments.FirstOrDefaultAsync(e => e.DepartmentCode == id);
+        if (entity == null) return NotFound();
+
+        return View(entity);
     }
 }

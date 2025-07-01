@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.Master.Department>
-
+@{
+    ViewData["Title"] = "Department List";
+}
 <h2>Department List</h2>
-
-<a asp-action="CreateDepartment" class="btn btn-primary">Add New Department</a>
-
+<p>
+    <a asp-action="CreateDepartment" class="btn btn-primary">Create New Department</a>
+</p>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -12,24 +14,22 @@
             <th>Type</th>
             <th>Status</th>
             <th>Head</th>
-            <th>Location</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var dept in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@dept.DepartmentCode</td>
-                <td>@dept.DepartmentName</td>
-                <td>@dept.DepartmentType</td>
-                <td>@dept.Status</td>
-                <td>@dept.DepartmentHead</td>
-                <td>@dept.Location</td>
+                <td>@item.DepartmentCode</td>
+                <td>@item.DepartmentName</td>
+                <td>@item.DepartmentType</td>
+                <td>@item.Status</td>
+                <td>@item.DepartmentHead</td>
                 <td>
-                    <a asp-action="EditDepartment" asp-route-id="@dept.DepartmentCode">Edit</a> |
-                    <a asp-action="DetailsDepartment" asp-route-id="@dept.DepartmentCode">Details</a> |
-                    <a asp-action="DeleteDepartment" asp-route-id="@dept.DepartmentCode">Delete</a>
+                    <a asp-action="EditDepartment" asp-route-id="@item.DepartmentCode">Edit</a> |
+                    <a asp-action="DetailsDepartment" asp-route-id="@item.DepartmentCode">Details</a> |
+                    <a asp-action="DeleteDepartment" asp-route-id="@item.DepartmentCode">Delete</a>
                 </td>
             </tr>
         }

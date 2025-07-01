@@ -1,212 +1,47 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Item
-
 @{
     ViewData["Title"] = "Edit Item";
 }
+<h2>Edit Item</h2>
+<form asp-action="AfterEditItem" method="post">
+    <input type="hidden" asp-for="ItemCode" />
+    <div class="row">
+        <div class="col-md-6">
+            <label asp-for="ItemName"></label>
+            <input asp-for="ItemName" class="form-control" />
 
-<h1>Edit Item</h1>
+            <label asp-for="ItemCategoryCode">Category</label>
+            <select asp-for="ItemCategoryCode" class="form-control" asp-items="ViewBag.Categories">
+                <option value="">--Select Category--</option>
+            </select>
 
-<h4>Item</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
+            <label asp-for="PreferredVendorCode">Vendor</label>
+            <select asp-for="PreferredVendorCode" class="form-control" asp-items="ViewBag.Vendors">
+                <option value="">--Select Vendor--</option>
+            </select>
 
-        <form asp-action="EditItemList" asp-route-id="@Model.ItemCode">
+            <label asp-for="UOM"></label>
+            <input asp-for="UOM" class="form-control" />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label asp-for="SellingPrice"></label>
+            <input asp-for="SellingPrice" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ItemDescription"></label>
+            <textarea asp-for="ItemDescription" class="form-control"></textarea>
 
-            <input type="hidden" asp-for="ItemCode" />
+            <label asp-for="ItemType"></label>
+            <input asp-for="ItemType" class="form-control" />
 
-            <div class="form-group">
-                <label asp-for="ItemName"></label>
-                <input asp-for="ItemName" class="form-control" />
-                <span asp-validation-for="ItemName" class="text-danger"></span>
-            </div>
+            <label asp-for="HSNSACCode"></label>
+            <input asp-for="HSNSACCode" class="form-control" />
 
-            <div class="form-group">
-                <label asp-for="ItemDescription"></label>
-                <input asp-for="ItemDescription" class="form-control" />
-                <span asp-validation-for="ItemDescription" class="text-danger"></span>
-            </div>
+            <label asp-for="Brand"></label>
+            <input asp-for="Brand" class="form-control" />
 
-            <div class="form-group">
-                <label asp-for="ItemCategory"></label>
-                <input asp-for="ItemCategory" class="form-control" />
-                <span asp-validation-for="ItemCategory" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ItemType"></label>
-                <input asp-for="ItemType" class="form-control" />
-                <span asp-validation-for="ItemType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="HSNSACCode"></label>
-                <input asp-for="HSNSACCode" class="form-control" />
-                <span asp-validation-for="HSNSACCode" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="UOM"></label>
-                <input asp-for="UOM" class="form-control" />
-                <span asp-validation-for="UOM" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Brand"></label>
-                <input asp-for="Brand" class="form-control" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ModelSpecification"></label>
-                <input asp-for="ModelSpecification" class="form-control" />
-                <span asp-validation-for="ModelSpecification" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ReorderLevel"></label>
-                <input asp-for="ReorderLevel" class="form-control" />
-                <span asp-validation-for="ReorderLevel" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="MinimumStockLevel"></label>
-                <input asp-for="MinimumStockLevel" class="form-control" />
-                <span asp-validation-for="MinimumStockLevel" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="MaximumStockLevel"></label>
-                <input asp-for="MaximumStockLevel" class="form-control" />
-                <span asp-validation-for="MaximumStockLevel" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DefaultWarehouseLocation"></label>
-                <input asp-for="DefaultWarehouseLocation" class="form-control" />
-                <span asp-validation-for="DefaultWarehouseLocation" class="text-danger"></span>
-            </div>
-
-            <div class="form-group form-check">
-                <input class="form-check-input" asp-for="BatchTracking" />
-                <label class="form-check-label" asp-for="BatchTracking"></label>
-            </div>
-
-            <div class="form-group form-check">
-                <input class="form-check-input" asp-for="SerialNumberTracking" />
-                <label class="form-check-label" asp-for="SerialNumberTracking"></label>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="StandardCost"></label>
-                <input asp-for="StandardCost" class="form-control" />
-                <span asp-validation-for="StandardCost" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="LastPurchasePrice"></label>
-                <input asp-for="LastPurchasePrice" class="form-control" />
-                <span asp-validation-for="LastPurchasePrice" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SellingPrice"></label>
-                <input asp-for="SellingPrice" class="form-control" />
-                <span asp-validation-for="SellingPrice" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="TaxRate"></label>
-                <input asp-for="TaxRate" class="form-control" />
-                <span asp-validation-for="TaxRate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DiscountStructure"></label>
-                <input asp-for="DiscountStructure" class="form-control" />
-                <span asp-validation-for="DiscountStructure" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PreferredVendor"></label>
-                <input asp-for="PreferredVendor" class="form-control" />
-                <span asp-validation-for="PreferredVendor" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="VendorItemCode"></label>
-                <input asp-for="VendorItemCode" class="form-control" />
-                <span asp-validation-for="VendorItemCode" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="LeadTime"></label>
-                <input asp-for="LeadTime" class="form-control" />
-                <span asp-validation-for="LeadTime" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PurchaseUOM"></label>
-                <input asp-for="PurchaseUOM" class="form-control" />
-                <span asp-validation-for="PurchaseUOM" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SalesUOM"></label>
-                <input asp-for="SalesUOM" class="form-control" />
-                <span asp-validation-for="SalesUOM" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SalesDescription"></label>
-                <input asp-for="SalesDescription" class="form-control" />
-                <span asp-validation-for="SalesDescription" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SalesTaxGroup"></label>
-                <input asp-for="SalesTaxGroup" class="form-control" />
-                <span asp-validation-for="SalesTaxGroup" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="BarcodeQRCode"></label>
-                <input asp-for="BarcodeQRCode" class="form-control" />
-                <span asp-validation-for="BarcodeQRCode" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="MSDSComplianceDocs"></label>
-                <input asp-for="MSDSComplianceDocs" class="form-control" />
-                <span asp-validation-for="MSDSComplianceDocs" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CustomAttributes"></label>
-                <input asp-for="CustomAttributes" class="form-control" />
-                <span asp-validation-for="CustomAttributes" class="text-danger"></span>
-            </div>
-
-            <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsActive" />
-                <label class="form-check-label" asp-for="IsActive"></label>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <label asp-for="ModelSpecification"></label>
+            <input asp-for="ModelSpecification" class="form-control" />
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>
