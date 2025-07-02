@@ -94,8 +94,7 @@ namespace ERPInventoryPurchesSystems.Utility
             modelBuilder.Entity<Item>()
                 .Property(i => i.TaxRate)
                 .HasPrecision(5, 2);
-
-            
+        
             modelBuilder.Entity<Approval>()
                 .HasOne(a => a.PurchaseRequisition)
                 .WithMany()
