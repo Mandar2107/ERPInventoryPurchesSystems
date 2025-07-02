@@ -37,17 +37,17 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterCreateUser(User entity)
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
-            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
-            return View("CreateUser", entity);
-        }
+        //if (!ModelState.IsValid)
+        //{
+        //    ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
+        //    ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
+        //    return View("CreateUser", entity);
+        //}
 
         entity.CreatedDate = DateTime.UtcNow;
         entity.LastModifiedDate = DateTime.UtcNow;
-        entity.CreatedBy = User.Identity.Name;
-        entity.LastModifiedBy = User.Identity.Name;
+        entity.CreatedBy = entity.UserID;
+        entity.LastModifiedBy = entity.UserID;
 
         _context.Users.Add(entity);
         await _context.SaveChangesAsync();

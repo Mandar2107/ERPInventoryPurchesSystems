@@ -29,25 +29,22 @@ public class VendorController : Controller
         return View();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AfterCreateVendor(Vendor vendor)
-    {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName");
-            return View("CreateVendor", vendor);
-        }
 
+    [HttpPost]
+    public async Task<IActionResult> AfterCreateVendor([FromForm]  Vendor vendor)
+    {
         vendor.CreatedDate = DateTime.UtcNow;
         vendor.LastModifiedDate = DateTime.UtcNow;
-        vendor.CreatedBy = User.Identity.Name;
-        vendor.LastModifiedBy = User.Identity.Name;
+        vendor.CreatedBy = vendor.VendorName ?? "System";
+        vendor.LastModifiedBy = vendor.VendorName ?? "System";
+
 
         _context.Vendors.Add(vendor);
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(DetailsVendor), new { id = vendor.VendorCode });
     }
+
 
     public async Task<IActionResult> EditVendor(string id)
     {

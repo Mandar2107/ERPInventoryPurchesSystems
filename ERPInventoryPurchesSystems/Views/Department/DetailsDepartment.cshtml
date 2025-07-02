@@ -1,32 +1,28 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Department
+
 @{
     ViewData["Title"] = "Department Details";
 }
-<h2>Department Details</h2>
-<dl class="row">
-    <dt class="col-sm-4">Code</dt>
-    <dd class="col-sm-8">@Model.DepartmentCode</dd>
-    <dt class="col-sm-4">Name</dt>
-    <dd class="col-sm-8">@Model.DepartmentName</dd>
-    <dt class="col-sm-4">Type</dt>
-    <dd class="col-sm-8">@Model.DepartmentType</dd>
-    <dt class="col-sm-4">Location</dt>
-    <dd class="col-sm-8">@Model.Location</dd>
-    <dt class="col-sm-4">Status</dt>
-    <dd class="col-sm-8">@Model.Status</dd>
-    <dt class="col-sm-4">Head</dt>
-    <dd class="col-sm-8">@Model.DepartmentHead</dd>
-    <dt class="col-sm-4">Email</dt>
-    <dd class="col-sm-8">@Model.EmailAddress</dd>
-    <dt class="col-sm-4">Phone</dt>
-    <dd class="col-sm-8">@Model.PhoneNumber</dd>
-    <dt class="col-sm-4">Extension</dt>
-    <dd class="col-sm-8">@Model.ExtensionNumber</dd>
-    <dt class="col-sm-4">Primary Function</dt>
-    <dd class="col-sm-8">@Model.PrimaryFunction</dd>
-    <dt class="col-sm-4">Linked Modules</dt>
-    <dd class="col-sm-8">@Model.LinkedModules</dd>
-    <dt class="col-sm-4">Approval Level</dt>
-    <dd class="col-sm-8">@Model.ApprovalAuthorityLevel</dd>
-</dl>
 
+<h2 class="mb-4">Department Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr><th>Code</th><td>@Model.DepartmentCode</td></tr>
+                <tr><th>Name</th><td>@Model.DepartmentName</td></tr>
+                <tr><th>Type</th><td>@Model.DepartmentType</td></tr>
+                <tr><th>Location</th><td>@Model.Location</td></tr>
+                <tr><th>Status</th><td>@Model.Status</td></tr>
+                <tr><th>Head</th><td>@Model.DepartmentHead</td></tr>
+                <tr><th>Email</th><td>@Model.EmailAddress</td></tr>
+                <tr><th>Phone</th><td>@Model.PhoneNumber</td></tr>
+                <tr><th>Extension</th><td>@Model.ExtensionNumber</td></tr>
+                <tr><th>Primary Function</th><td>@Model.PrimaryFunction</td></tr>
+                <tr><th>Linked Modules</th><td>@Model.LinkedModules</td></tr>
+                <tr><th>Approval Level</th><td>@Model.ApprovalAuthorityLevel</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

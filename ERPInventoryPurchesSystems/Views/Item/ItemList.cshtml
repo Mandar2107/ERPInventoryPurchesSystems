@@ -6,7 +6,7 @@
 <p>
     <a asp-action="CreateItem" class="btn btn-primary">Create New Item</a>
 </p>
-<table class="table table-bordered">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Item Code</th>
@@ -29,9 +29,9 @@
                 <td>@item.UOM</td>
                 <td>@item.SellingPrice</td>
                 <td>
-                    <a asp-action="EditItem" asp-route-id="@item.ItemCode">Edit</a> |
-                    <a asp-action="DetailsItem" asp-route-id="@item.ItemCode">Details</a> |
-                    <a asp-action="DeleteItem" asp-route-id="@item.ItemCode">Delete</a>
+                    <a asp-action="EditItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-warning">Edit</a> 
+                    <a asp-action="DetailsItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-info">Details</a> 
+                    <a asp-action="DeleteItem" asp-route-id="@item.ItemCode" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

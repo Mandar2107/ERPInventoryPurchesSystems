@@ -1,37 +1,33 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Item
+
 @{
     ViewData["Title"] = "Item Details";
 }
-<h2>Item Details</h2>
+
+<h2 class="mb-4">Item Details</h2>
+
 <div class="row">
     <div class="col-md-6">
-        <dl class="row">
-            <dt class="col-sm-4">Item Code</dt>
-            <dd class="col-sm-8">@Model.ItemCode</dd>
-            <dt class="col-sm-4">Item Name</dt>
-            <dd class="col-sm-8">@Model.ItemName</dd>
-            <dt class="col-sm-4">Category</dt>
-            <dd class="col-sm-8">@Model.Category?.CategoryName</dd>
-            <dt class="col-sm-4">Vendor</dt>
-            <dd class="col-sm-8">@Model.PreferredVendor?.VendorName</dd>
-            <dt class="col-sm-4">UOM</dt>
-            <dd class="col-sm-8">@Model.UOM</dd>
-            <dt class="col-sm-4">Selling Price</dt>
-            <dd class="col-sm-8">@Model.SellingPrice</dd>
-        </dl>
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr><th>Item Code</th><td>@Model.ItemCode</td></tr>
+                <tr><th>Item Name</th><td>@Model.ItemName</td></tr>
+                <tr><th>Category</th><td>@Model.Category?.CategoryName</td></tr>
+                <tr><th>Vendor</th><td>@Model.PreferredVendor?.VendorName</td></tr>
+                <tr><th>UOM</th><td>@Model.UOM</td></tr>
+                <tr><th>Selling Price</th><td>@Model.SellingPrice</td></tr>
+            </tbody>
+        </table>
     </div>
     <div class="col-md-6">
-        <dl class="row">
-            <dt class="col-sm-4">Description</dt>
-            <dd class="col-sm-8">@Model.ItemDescription</dd>
-            <dt class="col-sm-4">Item Type</dt>
-            <dd class="col-sm-8">@Model.ItemType</dd>
-            <dt class="col-sm-4">HSN/SAC Code</dt>
-            <dd class="col-sm-8">@Model.HSNSACCode</dd>
-            <dt class="col-sm-4">Brand</dt>
-            <dd class="col-sm-8">@Model.Brand</dd>
-            <dt class="col-sm-4">Model Specification</dt>
-            <dd class="col-sm-8">@Model.ModelSpecification</dd>
-        </dl>
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr><th>Description</th><td>@Model.ItemDescription</td></tr>
+                <tr><th>Item Type</th><td>@Model.ItemType</td></tr>
+                <tr><th>HSN/SAC Code</th><td>@Model.HSNSACCode</td></tr>
+                <tr><th>Brand</th><td>@Model.Brand</td></tr>
+                <tr><th>Model Specification</th><td>@Model.ModelSpecification</td></tr>
+            </tbody>
+        </table>
     </div>
 </div>

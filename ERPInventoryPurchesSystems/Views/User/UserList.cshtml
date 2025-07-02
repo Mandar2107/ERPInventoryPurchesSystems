@@ -9,7 +9,7 @@
     <a asp-action="CreateUser" class="btn btn-primary">Create New User</a>
 </p>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>User ID</th>
@@ -34,9 +34,9 @@
                 <td>@item.UserRole</td>
                 <td>@item.Status</td>
                 <td>
-                    <a asp-action="EditUser" asp-route-id="@item.UserID">Edit</a> |
-                    <a asp-action="DetailsUser" asp-route-id="@item.UserID">Details</a> |
-                    <a asp-action="DeleteUser" asp-route-id="@item.UserID">Delete</a>
+                    <a asp-action="EditUser" asp-route-id="@item.UserID" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DetailsUser" asp-route-id="@item.UserID" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="DeleteUser" asp-route-id="@item.UserID" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

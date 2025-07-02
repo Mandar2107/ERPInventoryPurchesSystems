@@ -1,8 +1,11 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Item
+
 @{
     ViewData["Title"] = "Create Item";
 }
+
 <h2>Create Item</h2>
+
 <form asp-action="AfterCreateItem" method="post">
     <div class="row">
         <div class="col-md-6">
@@ -13,6 +16,9 @@
             <label asp-for="ItemName"></label>
             <input asp-for="ItemName" class="form-control" />
             <span asp-validation-for="ItemName" class="text-danger"></span>
+
+            <label asp-for="ItemDescription"></label>
+            <textarea asp-for="ItemDescription" class="form-control"></textarea>
 
             <label asp-for="ItemCategoryCode">Category</label>
             <select asp-for="ItemCategoryCode" class="form-control" asp-items="ViewBag.Categories">
@@ -27,17 +33,32 @@
             <span asp-validation-for="PreferredVendorCode" class="text-danger"></span>
 
             <label asp-for="UOM"></label>
-            <input asp-for="UOM" class="form-control" />
+            <select asp-for="UOM" class="form-control">
+                <option value="">-- Select UOM --</option>
+                <option value="Kg">Kg</option>
+                <option value="Pieces">Pieces</option>
+                <option value="Boxes">Boxes</option>
+            </select>
             <span asp-validation-for="UOM" class="text-danger"></span>
 
             <label asp-for="SellingPrice"></label>
             <input asp-for="SellingPrice" class="form-control" />
             <span asp-validation-for="SellingPrice" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="ItemDescription"></label>
-            <textarea asp-for="ItemDescription" class="form-control"></textarea>
 
+            <label asp-for="StandardCost"></label>
+            <input asp-for="StandardCost" class="form-control" />
+
+            <label asp-for="LastPurchasePrice"></label>
+            <input asp-for="LastPurchasePrice" class="form-control" />
+
+            <label asp-for="TaxRate"></label>
+            <input asp-for="TaxRate" class="form-control" />
+
+            <label asp-for="DiscountStructure"></label>
+            <input asp-for="DiscountStructure" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
             <label asp-for="ItemType"></label>
             <input asp-for="ItemType" class="form-control" />
 
@@ -49,7 +70,56 @@
 
             <label asp-for="ModelSpecification"></label>
             <input asp-for="ModelSpecification" class="form-control" />
+
+            <label asp-for="ReorderLevel"></label>
+            <input asp-for="ReorderLevel" class="form-control" />
+
+            <label asp-for="MinimumStockLevel"></label>
+            <input asp-for="MinimumStockLevel" class="form-control" />
+
+            <label asp-for="MaximumStockLevel"></label>
+            <input asp-for="MaximumStockLevel" class="form-control" />
+
+            <label asp-for="DefaultWarehouseLocation"></label>
+            <input asp-for="DefaultWarehouseLocation" class="form-control" />
+
+            <label asp-for="BatchTracking"></label>
+            <input asp-for="BatchTracking" type="checkbox" class="form-check-input" />
+
+            <label asp-for="SerialNumberTracking"></label>
+            <input asp-for="SerialNumberTracking" type="checkbox" class="form-check-input" />
+
+            <label asp-for="VendorItemCode"></label>
+            <input asp-for="VendorItemCode" class="form-control" />
+
+            <label asp-for="LeadTime"></label>
+            <input asp-for="LeadTime" class="form-control" />
+
+            <label asp-for="PurchaseUOM"></label>
+            <input asp-for="PurchaseUOM" class="form-control" />
+
+            <label asp-for="SalesUOM"></label>
+            <input asp-for="SalesUOM" class="form-control" />
+
+            <label asp-for="SalesDescription"></label>
+            <textarea asp-for="SalesDescription" class="form-control"></textarea>
+
+            <label asp-for="MSDSComplianceDocs"></label>
+            <input asp-for="MSDSComplianceDocs" class="form-control" />
+
+            <label asp-for="CustomAttributes"></label>
+            <textarea asp-for="CustomAttributes" class="form-control"></textarea>
+
+            <label asp-for="IsActive"></label>
+            <input asp-for="IsActive" type="checkbox" class="form-check-input" />
         </div>
     </div>
+
     <button type="submit" class="btn btn-success mt-3">Save Item</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

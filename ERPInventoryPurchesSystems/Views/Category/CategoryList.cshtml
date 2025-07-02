@@ -6,7 +6,7 @@
 <p>
     <a asp-action="CreateCategory" class="btn btn-primary">Create New Category</a>
 </p>
-<table class="table table-bordered">
+<table  class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Category Code</th>
@@ -27,9 +27,9 @@
                 <td>@item.Status</td>
                 <td>@item.Department?.DepartmentName</td>
                 <td>
-                    <a asp-action="EditCategory" asp-route-id="@item.CategoryCode">Edit</a> |
-                    <a asp-action="DetailsCategory" asp-route-id="@item.CategoryCode">Details</a> |
-                    <a asp-action="DeleteCategory" asp-route-id="@item.CategoryCode">Delete</a>
+                    <a asp-action="EditCategory" asp-route-id="@item.CategoryCode" class="btn btn-sm btn-warning">Edit</a> 
+                    <a asp-action="DetailsCategory" asp-route-id="@item.CategoryCode" class="btn btn-sm btn-info">Details</a> 
+                    <a asp-action="DeleteCategory" asp-route-id="@item.CategoryCode" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

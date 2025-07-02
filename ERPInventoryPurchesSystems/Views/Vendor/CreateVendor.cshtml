@@ -1,5 +1,9 @@
 ﻿@model ERPInventoryPurchesSystems.Models.Master.Vendor
 
+@{
+    ViewData["Title"] = "Create Vendor";
+}
+
 <h2>Create Vendor</h2>
 
 <form asp-action="AfterCreateVendor" method="post" enctype="multipart/form-data">
@@ -7,9 +11,11 @@
         <div class="col-md-6">
             <label asp-for="VendorCode"></label>
             <input asp-for="VendorCode" class="form-control" />
+            <span asp-validation-for="VendorCode" class="text-danger"></span>
 
             <label asp-for="VendorName"></label>
             <input asp-for="VendorName" class="form-control" />
+            <span asp-validation-for="VendorName" class="text-danger"></span>
 
             <label asp-for="VendorType"></label>
             <select asp-for="VendorType" class="form-control">
@@ -118,6 +124,11 @@
             <label asp-for="QualityRating"></label>
             <input asp-for="QualityRating" class="form-control" />
 
+            <label asp-for="VendorItemCodes"></label>
+            <input asp-for="VendorItemCodes" class="form-control" />
+            <small class="form-text text-muted">Enter vendor item codes separated by commas (e.g., VX-123, VX-456)</small>
+            <span asp-validation-for="VendorItemCodes" class="text-danger"></span>
+
             <label asp-for="Remarks"></label>
             <textarea asp-for="Remarks" class="form-control"></textarea>
 
@@ -128,3 +139,9 @@
 
     <button type="submit" class="btn btn-success mt-3">Save Vendor</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

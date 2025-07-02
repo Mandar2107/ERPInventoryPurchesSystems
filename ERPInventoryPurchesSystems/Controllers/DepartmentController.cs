@@ -32,11 +32,7 @@ public class DepartmentController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterCreateDepartment(Department entity)
     {
-        if (!ModelState.IsValid)
-        {
-            return View("CreateDepartment", entity);
-        }
-
+        
         entity.CreatedDate = DateTime.UtcNow;
         entity.LastModifiedDate = DateTime.UtcNow;
         entity.CreatedBy = User.Identity?.Name ?? "System";

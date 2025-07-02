@@ -34,16 +34,14 @@ public class CategoryController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AfterCreateCategory(Category category)
+    public async Task<IActionResult> AfterCreateCategory(Category category )
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
-            return View("CreateCategory", category);
-        }
+        
 
         category.CreatedDate = DateTime.UtcNow;
         category.LastModifiedDate = DateTime.UtcNow;
+        category.CreatedBy = "System";
+        category.LastModifiedBy = "System";
 
         _context.Categories.Add(category);
         await _context.SaveChangesAsync();
@@ -63,7 +61,7 @@ public class CategoryController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditCategory(string id, Category category)
     {
-        if (id != category.CategoryCode) return BadRequest();
+        
 
         if (!ModelState.IsValid)
         {
@@ -103,12 +101,14 @@ public class CategoryController : Controller
     {
         var category = await _context.Categories
             .Include(c => c.Department)
+            .Include(c => c.Items) 
             .FirstOrDefaultAsync(c => c.CategoryCode == id);
 
         if (category == null) return NotFound();
 
         return View(category);
     }
+
 
     public IActionResult TestDepartments()
     {

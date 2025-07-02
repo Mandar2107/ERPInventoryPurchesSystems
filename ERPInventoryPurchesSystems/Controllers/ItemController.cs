@@ -37,17 +37,12 @@ public class ItemController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterCreateItem(Item entity)
     {
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName");
-            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
-            return View("CreateItem", entity);
-        }
+       
 
         entity.CreatedDate = DateTime.UtcNow;
         entity.LastModifiedDate = DateTime.UtcNow;
-        entity.CreatedBy = User.Identity.Name;
-        entity.LastModifiedBy = User.Identity.Name;
+        entity.CreatedBy = "System";
+        entity.LastModifiedBy = "System";
 
         _context.Items.Add(entity);
         await _context.SaveChangesAsync();

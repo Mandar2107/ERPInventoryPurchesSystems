@@ -2,17 +2,21 @@
 @{
     ViewData["Title"] = "Create Category";
 }
+
 <h2>Create Category</h2>
+
 <form asp-action="AfterCreateCategory" method="post">
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-6">
+            @* Basic Info *@
             <div class="form-group">
-                <label asp-for="CategoryCode" class="control-label"></label>
+                <label asp-for="CategoryCode"></label>
                 <input asp-for="CategoryCode" class="form-control" />
                 <span asp-validation-for="CategoryCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
+                <label asp-for="CategoryName"></label>
                 <input asp-for="CategoryName" class="form-control" />
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
@@ -53,6 +57,16 @@
                 <span asp-validation-for="DepartmentCode" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="UsageType">Usage Type</label>
+                <input asp-for="UsageType" class="form-control" />
+                <span asp-validation-for="UsageType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxGroup">Tax Group</label>
+                <input asp-for="TaxGroup" class="form-control" />
+                <span asp-validation-for="TaxGroup" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="DefaultUOM">Default UOM</label>
                 <select asp-for="DefaultUOM" class="form-control">
                     <option value="">--Select UOM--</option>
@@ -73,8 +87,23 @@
                 </select>
                 <span asp-validation-for="StorageRequirements" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="InspectionRequired">Inspection Required</label>
+                <select asp-for="InspectionRequired" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="InspectionRequired" class="text-danger"></span>
+            </div>
         </div>
+
         <div class="col-md-6">
+            @* Additional Info *@
+            <div class="form-group">
+                <label asp-for="AssociatedGLAccounts">Associated GL Accounts</label>
+                <input asp-for="AssociatedGLAccounts" class="form-control" />
+                <span asp-validation-for="AssociatedGLAccounts" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="EnableAnalytics">Enable Analytics</label>
                 <select asp-for="EnableAnalytics" class="form-control">
@@ -107,5 +136,6 @@
             </div>
         </div>
     </div>
+
     <button type="submit" class="btn btn-success mt-3">Save Category</button>
 </form>
