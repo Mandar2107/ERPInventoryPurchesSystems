@@ -1,4 +1,7 @@
-﻿using ERPInventoryPurchesSystems.Models.Master;
+﻿
+using ERPInventoryPurchesSystems.Models.Master;
+using ERPInventoryPurchesSystems.Models.PR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace ERPInventoryPurchesSystems.Utility
@@ -10,12 +13,29 @@ namespace ERPInventoryPurchesSystems.Utility
         {
         }
 
-        // DbSets
+        // Master Module DbSets
         public DbSet<Category> Categories { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<User> Users { get; set; }
+
+        // Procurement Module DbSets
+        public DbSet<PurchesRequstiaon> PurchaseRequisitions { get; set; }
+        public DbSet<PRItem> PRItems { get; set; }
+        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<RequestForQuotation> RequestForQuotations { get; set; }
+        public DbSet<RFQItem> RFQItems { get; set; }
+        public DbSet<QuotationComparison> QuotationComparisons { get; set; }
+        public DbSet<QuotationComparisonItem> QuotationComparisonItems { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<POItem> POItems { get; set; }
+        public DbSet<GoodsReceiptNote> GoodsReceiptNotes { get; set; }
+        public DbSet<GRNItem> GRNItems { get; set; }
+        public DbSet<QualityInspection> QualityInspections { get; set; }
+        public DbSet<InspectionItem> InspectionItems { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -78,7 +98,30 @@ namespace ERPInventoryPurchesSystems.Utility
 
             modelBuilder.Entity<Item>()
                 .Property(i => i.TaxRate)
-                .HasPrecision(5, 2); 
+                .HasPrecision(5, 2);
+
+            // Decimal precision for POItem
+            modelBuilder.Entity<POItem>()
+                .Property(p => p.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<POItem>()
+                .Property(p => p.TotalPrice)
+                .HasPrecision(18, 2);
+
+            // Decimal precision for RFQItem
+            modelBuilder.Entity<RFQItem>()
+                .Property(r => r.QuotationAmount)
+                .HasPrecision(18, 2);
+
+            // Decimal precision for InvoiceItem
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(i => i.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(i => i.TotalAmount)
+                .HasPrecision(18, 2);
         }
     }
 }
