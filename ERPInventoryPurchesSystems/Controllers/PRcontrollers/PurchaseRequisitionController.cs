@@ -38,7 +38,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         [HttpPost]
         public async Task<IActionResult> Create(PurchesRequstiaon requisition)
         {
-            requisition.PRNumber = $"PR-{DateTime.Now:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 4).ToUpper()}";
+            requisition.PRNumber = GeneratePRNumber();
             requisition.CreatedDate = DateTime.Now;
 
             _context.PurchaseRequisitions.Add(requisition);
@@ -46,8 +46,15 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
 
             return RedirectToAction("PRList");
         }
+        private string GeneratePRNumber()
+        {
+            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var random = new Random().Next(1000, 9999); 
+            return $"PR-{timestamp}-{random}";
+        }
 
-       
+
+
     }
 
 
