@@ -98,7 +98,7 @@ namespace ERPInventoryPurchesSystems.Utility
             modelBuilder.Entity<Approval>()
                 .HasOne(a => a.PurchaseRequisition)
                 .WithMany()
-                .HasForeignKey(a => a.PRId)
+                .HasForeignKey(a => a.PurchaseRequisitionID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Approval>()

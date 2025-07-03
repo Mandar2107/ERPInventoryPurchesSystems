@@ -1,0 +1,96 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon
+
+@{
+    ViewData["Title"] = "Create Purchase Requisition";
+    var items = ViewBag.Items as SelectList;
+}
+
+<h2>Create Purchase Requisition</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="PRDate"></label>
+        <input asp-for="PRDate" class="form-control" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" class="form-control" asp-items="ViewBag.Departments"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubmittedByUserID">Submitted By</label>
+        <select asp-for="SubmittedByUserID" class="form-control" asp-items="ViewBag.Users"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+
+    <h4>Items</h4>
+    <table class="table" id="itemTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Required Date</th>
+                <th>Justification</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" onclick="addItemRow()">Add Item</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<!-- Hidden template row -->
+<div id="itemRowTemplate" style="display:none;">
+    <table>
+        <tr>
+            <td>
+                <select class="form-control item-select">
+                    @foreach (var item in items)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </td>
+            <td><input type="number" class="form-control quantity-input" /></td>
+            <td><input type="date" class="form-control date-input" /></td>
+            <td><input type="text" class="form-control justification-input" /></td>
+            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        let itemIndex = 0;
+
+        function addItemRow() {
+            const template = document.querySelector("#itemRowTemplate table").cloneNode(true);
+            const row = template.querySelector("tr");
+
+            row.querySelector(".item-select").setAttribute("name", `Items[${itemIndex}].ItemCode`);
+            row.querySelector(".quantity-input").setAttribute("name", `Items[${itemIndex}].Quantity`);
+            row.querySelector(".date-input").setAttribute("name", `Items[${itemIndex}].RequiredDate`);
+            row.querySelector(".justification-input").setAttribute("name", `Items[${itemIndex}].Justification`);
+
+            document.querySelector("#itemTable tbody").appendChild(row);
+            itemIndex++;
+        }
+
+        function removeRow(button) {
+            const row = button.closest("tr");
+            row.remove();
+        }
+    </script>
+}
