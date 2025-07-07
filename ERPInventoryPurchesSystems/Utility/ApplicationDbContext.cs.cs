@@ -106,6 +106,100 @@ namespace ERPInventoryPurchesSystems.Utility
                 .WithMany()
                 .HasForeignKey(a => a.DepartmentCode)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RFQItem>()
+    .Property(r => r.QuotationAmount)
+    .HasPrecision(18, 2);
+
+            modelBuilder.Entity<PurchaseOrder>()
+      .HasOne(po => po.PurchaseRequisition)
+      .WithMany()
+      .HasForeignKey(po => po.PRId)
+      .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QuotationComparison>()
+                .HasOne(q => q.PurchaseRequisition)
+                .WithMany()
+                .HasForeignKey(q => q.PRId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<GoodsReceiptNote>()
+                .HasOne(grn => grn.PurchaseOrder)
+                .WithMany()
+                .HasForeignKey(grn => grn.POId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Invoice>()
+                .HasOne(inv => inv.PurchaseOrder)
+                .WithMany()
+                .HasForeignKey(inv => inv.POId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Invoice>()
+                .HasOne(inv => inv.GRN)
+                .WithMany()
+                .HasForeignKey(inv => inv.GRNId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QualityInspection>()
+                .HasOne(qi => qi.GRN)
+                .WithMany()
+                .HasForeignKey(qi => qi.GRNId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.TotalInvoiceAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.TotalAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<POItem>()
+                .Property(p => p.TotalPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<POItem>()
+                .Property(p => p.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<QuotationComparisonItem>()
+                .Property(q => q.TotalPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<QuotationComparisonItem>()
+                .Property(q => q.UnitPrice)
+                .HasPrecision(18, 2);
+            modelBuilder.Entity<GoodsReceiptNote>()
+    .HasOne(grn => grn.VerifiedBy)
+    .WithMany()
+    .HasForeignKey(grn => grn.VerifiedByUserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<GoodsReceiptNote>()
+                .HasOne(grn => grn.ReceivedBy)
+                .WithMany()
+                .HasForeignKey(grn => grn.ReceivedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<QualityInspection>()
+    .HasOne(q => q.InspectedBy)
+    .WithMany()
+    .HasForeignKey(q => q.InspectedByUserId)
+    .OnDelete(DeleteBehavior.Restrict); // or NoAction
+
+            modelBuilder.Entity<QualityInspection>()
+                .HasOne(q => q.ActionTakenBy)
+                .WithMany()
+                .HasForeignKey(q => q.ActionTakenByUserId)
+                .OnDelete(DeleteBehavior.Restrict); // or NoAction
+
+
         }
     }
 }

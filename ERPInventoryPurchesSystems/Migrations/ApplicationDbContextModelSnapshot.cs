@@ -532,11 +532,11 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.PR.Approval", b =>
                 {
-                    b.Property<int>("ApprovalId")
+                    b.Property<int>("ApprovalID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalID"));
 
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
@@ -545,9 +545,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApproverName")
+                    b.Property<string>("ApproverUserID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comments")
                         .IsRequired()
@@ -557,14 +557,16 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PRId")
+                    b.Property<int>("PurchaseRequisitionID")
                         .HasColumnType("int");
 
-                    b.HasKey("ApprovalId");
+                    b.HasKey("ApprovalID");
+
+                    b.HasIndex("ApproverUserID");
 
                     b.HasIndex("DepartmentCode");
 
-                    b.HasIndex("PRId");
+                    b.HasIndex("PurchaseRequisitionID");
 
                     b.ToTable("Approvals");
                 });
@@ -766,6 +768,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalInvoiceAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("VendorCode")
@@ -816,9 +819,11 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("InvoiceItemId");
@@ -856,9 +861,11 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("POItemId");
@@ -872,11 +879,11 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.PR.PRItem", b =>
                 {
-                    b.Property<int>("PRItemId")
+                    b.Property<int>("PRItemID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PRItemId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PRItemID"));
 
                     b.Property<string>("ItemCode")
                         .IsRequired()
@@ -886,7 +893,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PRId")
+                    b.Property<int>("PurchaseRequisitionID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -895,11 +902,11 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<DateTime>("RequiredDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PRItemId");
+                    b.HasKey("PRItemID");
 
                     b.HasIndex("ItemCode");
 
-                    b.HasIndex("PRId");
+                    b.HasIndex("PurchaseRequisitionID");
 
                     b.ToTable("PRItems");
                 });
@@ -953,11 +960,18 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon", b =>
                 {
-                    b.Property<int>("PRId")
+                    b.Property<int>("PurchaseRequisitionID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PRId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseRequisitionID"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DepartmentCode")
                         .IsRequired()
@@ -974,15 +988,15 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubmittedByUserId")
+                    b.Property<string>("SubmittedByUserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PRId");
+                    b.HasKey("PurchaseRequisitionID");
 
                     b.HasIndex("DepartmentCode");
 
-                    b.HasIndex("SubmittedByUserId");
+                    b.HasIndex("SubmittedByUserID");
 
                     b.ToTable("PurchaseRequisitions");
                 });
@@ -1105,9 +1119,11 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("VendorCode")
@@ -1147,6 +1163,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("QuotationAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RFQId")
@@ -1248,6 +1265,12 @@ namespace ERPInventoryPurchesSystems.Migrations
 
             modelBuilder.Entity("ERPInventoryPurchesSystems.Models.PR.Approval", b =>
                 {
+                    b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentCode")
@@ -1256,9 +1279,11 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon", "PurchaseRequisition")
                         .WithMany()
-                        .HasForeignKey("PRId")
+                        .HasForeignKey("PurchaseRequisitionID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Approver");
 
                     b.Navigation("Department");
 
@@ -1295,13 +1320,13 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchaseOrder", "PurchaseOrder")
                         .WithMany()
                         .HasForeignKey("POId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "ReceivedBy")
                         .WithMany()
                         .HasForeignKey("ReceivedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Vendor", "Vendor")
@@ -1313,7 +1338,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "VerifiedBy")
                         .WithMany()
                         .HasForeignKey("VerifiedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -1357,13 +1382,13 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote", "GRN")
                         .WithMany()
                         .HasForeignKey("GRNId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchaseOrder", "PurchaseOrder")
                         .WithMany()
                         .HasForeignKey("POId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "ProcessedBy")
@@ -1437,7 +1462,7 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon", "PurchaseRequisition")
                         .WithMany("Items")
-                        .HasForeignKey("PRId")
+                        .HasForeignKey("PurchaseRequisitionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1457,7 +1482,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon", "PurchaseRequisition")
                         .WithMany()
                         .HasForeignKey("PRId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "RequestedBy")
@@ -1491,7 +1516,7 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "SubmittedBy")
                         .WithMany()
-                        .HasForeignKey("SubmittedByUserId")
+                        .HasForeignKey("SubmittedByUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1505,7 +1530,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "ActionTakenBy")
                         .WithMany()
                         .HasForeignKey("ActionTakenByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Department", "Department")
@@ -1517,13 +1542,13 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote", "GRN")
                         .WithMany()
                         .HasForeignKey("GRNId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.User", "InspectedBy")
                         .WithMany()
                         .HasForeignKey("InspectedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ActionTakenBy");
@@ -1546,7 +1571,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon", "PurchaseRequisition")
                         .WithMany()
                         .HasForeignKey("PRId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.PR.QuotationComparison", null)

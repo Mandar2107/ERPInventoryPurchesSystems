@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     /// <inheritdoc />
-    public partial class PRintsal : Migration
+    public partial class pr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,19 @@ namespace ERPInventoryPurchesSystems.Migrations
                 name: "PurchaseRequisitions",
                 columns: table => new
                 {
-                    PRId = table.Column<int>(type: "int", nullable: false)
+                    PurchaseRequisitionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PRNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PRDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DepartmentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubmittedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SubmittedByUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseRequisitions", x => x.PRId);
+                    table.PrimaryKey("PK_PurchaseRequisitions", x => x.PurchaseRequisitionID);
                     table.ForeignKey(
                         name: "FK_PurchaseRequisitions_Departments_DepartmentCode",
                         column: x => x.DepartmentCode,
@@ -33,8 +35,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                         principalColumn: "DepartmentCode",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PurchaseRequisitions_Users_SubmittedByUserId",
-                        column: x => x.SubmittedByUserId,
+                        name: "FK_PurchaseRequisitions_Users_SubmittedByUserID",
+                        column: x => x.SubmittedByUserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
@@ -44,10 +46,10 @@ namespace ERPInventoryPurchesSystems.Migrations
                 name: "Approvals",
                 columns: table => new
                 {
-                    ApprovalId = table.Column<int>(type: "int", nullable: false)
+                    ApprovalID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PRId = table.Column<int>(type: "int", nullable: false),
-                    ApproverName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PurchaseRequisitionID = table.Column<int>(type: "int", nullable: false),
+                    ApproverUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ApprovalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApprovalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -55,18 +57,24 @@ namespace ERPInventoryPurchesSystems.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Approvals", x => x.ApprovalId);
+                    table.PrimaryKey("PK_Approvals", x => x.ApprovalID);
                     table.ForeignKey(
                         name: "FK_Approvals_Departments_DepartmentCode",
                         column: x => x.DepartmentCode,
                         principalTable: "Departments",
                         principalColumn: "DepartmentCode",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Approvals_PurchaseRequisitions_PRId",
-                        column: x => x.PRId,
+                        name: "FK_Approvals_PurchaseRequisitions_PurchaseRequisitionID",
+                        column: x => x.PurchaseRequisitionID,
                         principalTable: "PurchaseRequisitions",
-                        principalColumn: "PRId",
+                        principalColumn: "PurchaseRequisitionID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Approvals_Users_ApproverUserID",
+                        column: x => x.ApproverUserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -74,9 +82,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                 name: "PRItems",
                 columns: table => new
                 {
-                    PRItemId = table.Column<int>(type: "int", nullable: false)
+                    PRItemID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PRId = table.Column<int>(type: "int", nullable: false),
+                    PurchaseRequisitionID = table.Column<int>(type: "int", nullable: false),
                     ItemCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     RequiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -84,7 +92,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PRItems", x => x.PRItemId);
+                    table.PrimaryKey("PK_PRItems", x => x.PRItemID);
                     table.ForeignKey(
                         name: "FK_PRItems_Items_ItemCode",
                         column: x => x.ItemCode,
@@ -92,10 +100,10 @@ namespace ERPInventoryPurchesSystems.Migrations
                         principalColumn: "ItemCode",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PRItems_PurchaseRequisitions_PRId",
-                        column: x => x.PRId,
+                        name: "FK_PRItems_PurchaseRequisitions_PurchaseRequisitionID",
+                        column: x => x.PurchaseRequisitionID,
                         principalTable: "PurchaseRequisitions",
-                        principalColumn: "PRId",
+                        principalColumn: "PurchaseRequisitionID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -126,8 +134,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                         name: "FK_PurchaseOrders_PurchaseRequisitions_PRId",
                         column: x => x.PRId,
                         principalTable: "PurchaseRequisitions",
-                        principalColumn: "PRId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PurchaseRequisitionID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PurchaseOrders_Users_RequestedByUserId",
                         column: x => x.RequestedByUserId,
@@ -167,8 +175,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                         name: "FK_QuotationComparisons_PurchaseRequisitions_PRId",
                         column: x => x.PRId,
                         principalTable: "PurchaseRequisitions",
-                        principalColumn: "PRId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PurchaseRequisitionID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QuotationComparisons_QuotationComparisons_QuotationComparisonComparisonId",
                         column: x => x.QuotationComparisonComparisonId,
@@ -198,7 +206,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         name: "FK_RequestForQuotations_PurchaseRequisitions_PRId",
                         column: x => x.PRId,
                         principalTable: "PurchaseRequisitions",
-                        principalColumn: "PRId",
+                        principalColumn: "PurchaseRequisitionID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RequestForQuotations_Vendors_VendorCode",
@@ -241,19 +249,19 @@ namespace ERPInventoryPurchesSystems.Migrations
                         column: x => x.POId,
                         principalTable: "PurchaseOrders",
                         principalColumn: "POId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GoodsReceiptNotes_Users_ReceivedByUserId",
                         column: x => x.ReceivedByUserId,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GoodsReceiptNotes_Users_VerifiedByUserId",
                         column: x => x.VerifiedByUserId,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GoodsReceiptNotes_Vendors_VendorCode",
                         column: x => x.VendorCode,
@@ -303,8 +311,8 @@ namespace ERPInventoryPurchesSystems.Migrations
                     VendorCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ItemCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuotedQuantity = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     DeliveryTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VendorRating = table.Column<int>(type: "int", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -405,7 +413,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                     POId = table.Column<int>(type: "int", nullable: false),
                     GRNId = table.Column<int>(type: "int", nullable: false),
                     DepartmentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TotalInvoiceAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalInvoiceAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaymentTerms = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -426,13 +434,13 @@ namespace ERPInventoryPurchesSystems.Migrations
                         column: x => x.GRNId,
                         principalTable: "GoodsReceiptNotes",
                         principalColumn: "GRNId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Invoices_PurchaseOrders_POId",
                         column: x => x.POId,
                         principalTable: "PurchaseOrders",
                         principalColumn: "POId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Invoices_Users_ProcessedByUserId",
                         column: x => x.ProcessedByUserId,
@@ -477,19 +485,19 @@ namespace ERPInventoryPurchesSystems.Migrations
                         column: x => x.GRNId,
                         principalTable: "GoodsReceiptNotes",
                         principalColumn: "GRNId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QualityInspections_Users_ActionTakenByUserId",
                         column: x => x.ActionTakenByUserId,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QualityInspections_Users_InspectedByUserId",
                         column: x => x.InspectedByUserId,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -556,14 +564,19 @@ namespace ERPInventoryPurchesSystems.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Approvals_ApproverUserID",
+                table: "Approvals",
+                column: "ApproverUserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Approvals_DepartmentCode",
                 table: "Approvals",
                 column: "DepartmentCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Approvals_PRId",
+                name: "IX_Approvals_PurchaseRequisitionID",
                 table: "Approvals",
-                column: "PRId");
+                column: "PurchaseRequisitionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GoodsReceiptNotes_DepartmentCode",
@@ -661,9 +674,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                 column: "ItemCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PRItems_PRId",
+                name: "IX_PRItems_PurchaseRequisitionID",
                 table: "PRItems",
-                column: "PRId");
+                column: "PurchaseRequisitionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_DepartmentCode",
@@ -691,9 +704,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                 column: "DepartmentCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseRequisitions_SubmittedByUserId",
+                name: "IX_PurchaseRequisitions_SubmittedByUserID",
                 table: "PurchaseRequisitions",
-                column: "SubmittedByUserId");
+                column: "SubmittedByUserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QualityInspections_ActionTakenByUserId",
