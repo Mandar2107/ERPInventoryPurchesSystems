@@ -1,0 +1,36 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.Approval
+
+@{
+    ViewData["Title"] = "Create Approval";
+}
+
+<h2>Create Approval</h2>
+
+<form asp-action="Create">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="PurchaseRequisitionID"></label>
+        <select asp-for="PurchaseRequisitionID" asp-items="ViewBag.PRList" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApproverUserID"></label>
+        <select asp-for="ApproverUserID" asp-items="ViewBag.UserList" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApprovalStatus"></label>
+        <select asp-for="ApprovalStatus" class="form-control">
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Comments"></label>
+        <textarea asp-for="Comments" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="ApprovalDate"></label>
+        <input asp-for="ApprovalDate" type="date" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

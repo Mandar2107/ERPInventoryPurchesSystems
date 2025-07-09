@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.RequestForQuotation>
+
+@{
+    ViewData["Title"] = "RFQ List";
+}
+
+<h2>RFQ List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <a asp-action="Create">Create Request </a>
+        <tr>
+            <th>PR Number</th>
+            <th>Vendor</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rfq in Model)
+        {
+            <tr>
+                <td>@rfq.PurchaseRequisition.PRNumber</td>
+                <td>@rfq.Vendor.VendorName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@rfq.RFQId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@rfq.RFQId">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

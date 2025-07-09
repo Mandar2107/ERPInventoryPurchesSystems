@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon>
+
+<h2>Purchase Requisitions</h2>
+<table class="table">
+    <thead>
+        <a asp-action="Create">Create A Request</a>
+        <tr>
+            <th>PR Number</th>
+            <th>Date</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Submitted By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pr in Model)
+        {
+            <tr>
+                <td>@pr.PRNumber</td>
+                <td>@pr.PRDate.ToShortDateString()</td>
+                <td>@pr.Department?.DepartmentName ?? "N/A"</td>
+                <td>@pr.Status</td>
+                <td>@pr.SubmittedBy?.FullName ?? "N/A"</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@pr.PurchaseRequisitionID">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@pr.PurchaseRequisitionID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@pr.PurchaseRequisitionID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,109 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
+@{
+    ViewData["Title"] = "Create Quotation ";
+    var vendors = ViewBag.Vendors as SelectList;
+    var items = ViewBag.Items as SelectList;
+}
+
+<h2>Create Quotation Comparison</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="PRId">PR</label>
+        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="RequestedByUserId">Requested By</label>
+        <select asp-for="RequestedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+
+    <h4>Vendor Quotations</h4>
+    <table class="table" id="quotationTable">
+        <thead>
+            <tr>
+                <th>Vendor</th>
+                <th>Item</th>
+                <th>Quoted Qty</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+                <th>Delivery Time</th>
+                <th>Rating</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" onclick="addQuotationRow()">Add Quotation</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<!-- Template Row -->
+<div id="quotationRowTemplate" style="display:none;">
+    <table>
+        <tr>
+            <td>
+                <select class="form-control vendor-select">
+                    @if (vendors != null)
+                    {
+                        foreach (var vendor in vendors)
+                        {
+                            <option value="@vendor.Value">@vendor.Text</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td>
+                <select class="form-control item-select">
+                    @if (items != null)
+                    {
+                        foreach (var item in items)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td><input type="number" class="form-control qty-input" /></td>
+            <td><input type="number" class="form-control unitprice-input" /></td>
+            <td><input type="number" class="form-control totalprice-input" /></td>
+            <td><input type="text" class="form-control delivery-input" /></td>
+            <td><input type="number" class="form-control rating-input" min="1" max="5" /></td>
+            <td><input type="text" class="form-control remarks-input" /></td>
+            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        let rowIndex = 0;
+        function addQuotationRow() {
+            const template = document.querySelector("#quotationRowTemplate table").cloneNode(true);
+            const row = template.querySelector("tr");
+
+            row.querySelector(".vendor-select").setAttribute("name", `Items[${rowIndex}].VendorCode`);
+            row.querySelector(".item-select").setAttribute("name", `Items[${rowIndex}].ItemCode`);
+            row.querySelector(".qty-input").setAttribute("name", `Items[${rowIndex}].QuotedQuantity`);
+            row.querySelector(".unitprice-input").setAttribute("name", `Items[${rowIndex}].UnitPrice`);
+            row.querySelector(".totalprice-input").setAttribute("name", `Items[${rowIndex}].TotalPrice`);
+            row.querySelector(".delivery-input").setAttribute("name", `Items[${rowIndex}].DeliveryTime`);
+            row.querySelector(".rating-input").setAttribute("name", `Items[${rowIndex}].VendorRating`);
+            row.querySelector(".remarks-input").setAttribute("name", `Items[${rowIndex}].Remarks`);
+
+            document.querySelector("#quotationTable tbody").appendChild(row);
+            rowIndex++;
+        }
+
+        function removeRow(button) {
+            const row = button.closest("tr");
+            row.remove();
+        }
+    </script>
+}

@@ -1,0 +1,109 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.PurchaseOrder
+@{
+    var items = ViewBag.Items as SelectList;
+}
+
+<h2>Create Purchase Order</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="PRId">PR</label>
+        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VendorCode">Vendor</label>
+        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VendorContact"></label>
+        <input asp-for="VendorContact" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="RequestedByUserId">Requested By</label>
+        <select asp-for="RequestedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+
+    <h4>Items</h4>
+    <table class="table" id="poItemsTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+                <th>Delivery Date</th>
+                <th>Delivery Terms</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" onclick="addPOItem()">Add Item</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div id="poItemTemplate" style="display:none;">
+    <table>
+        <tr>
+            <td>
+                <select class="form-control item-select">
+                    @foreach (var item in items)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </td>
+            <td><input type="number" class="form-control qty-input" /></td>
+            <td><input type="number" class="form-control unitprice-input" /></td>
+            <td><input type="number" class="form-control totalprice-input" /></td>
+            <td><input type="date" class="form-control date-input" /></td>
+            <td><input type="text" class="form-control terms-input" /></td>
+            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+        </tr>
+    </table>
+</div>
+@section Scripts {
+    <script>
+        let poIndex = 0;
+
+        function addPOItem() {
+            const template = document.querySelector("#poItemTemplate table").cloneNode(true);
+            const row = template.querySelector("tr");
+
+            row.querySelector(".item-select").setAttribute("name", `Items[${poIndex}].ItemCode`);
+            row.querySelector(".qty-input").setAttribute("name", `Items[${poIndex}].Quantity`);
+            row.querySelector(".unitprice-input").setAttribute("name", `Items[${poIndex}].UnitPrice`);
+            row.querySelector(".totalprice-input").setAttribute("name", `Items[${poIndex}].TotalPrice`);
+            row.querySelector(".date-input").setAttribute("name", `Items[${poIndex}].DeliveryDate`);
+            row.querySelector(".terms-input").setAttribute("name", `Items[${poIndex}].DeliveryTerms`);
+
+          
+            const qtyInput = row.querySelector(".qty-input");
+            const unitPriceInput = row.querySelector(".unitprice-input");
+            const totalPriceInput = row.querySelector(".totalprice-input");
+
+            function calculateTotal() {
+                const qty = parseFloat(qtyInput.value) || 0;
+                const unitPrice = parseFloat(unitPriceInput.value) || 0;
+                totalPriceInput.value = (qty * unitPrice).toFixed(2);
+            }
+
+            qtyInput.addEventListener("input", calculateTotal);
+            unitPriceInput.addEventListener("input", calculateTotal);
+
+            document.querySelector("#poItemsTable tbody").appendChild(row);
+            poIndex++;
+        }
+
+        function removeRow(button) {
+            const row = button.closest("tr");
+            row.remove();
+        }
+    </script>
+}

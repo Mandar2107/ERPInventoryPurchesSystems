@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon>
+
+@{
+    ViewData["Title"] = "Pending PRs";
+}
+
+<h2>Pending Purchase Requisitions</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>PR Number</th>
+            <th>Department</th>
+            <th>Submitted By</th>
+            <th>Required Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pr in Model)
+        {
+            <tr>
+                <td>@pr.PRNumber</td>
+                <td>@pr.Department?.DepartmentName</td>
+                <td>@pr.SubmittedBy?.FullName</td>
+                <td>@pr.Items.FirstOrDefault()?.RequiredDate.ToShortDateString()</td>
+                <td>
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="prId" value="@pr.PurchaseRequisitionID" />
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

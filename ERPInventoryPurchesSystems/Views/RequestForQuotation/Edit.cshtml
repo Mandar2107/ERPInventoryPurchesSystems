@@ -1,0 +1,34 @@
+﻿<h4>RFQ Items</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Delivery Date</th>
+            <th>Quotation Amount</th>
+            <th>Terms</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <tr>
+                <td>
+                    <input name="Items[@i].ItemCode" value="@Model.Items[i].ItemCode" class="form-control" />
+                </td>
+                <td>
+                    <input name="Items[@i].Quantity" value="@Model.Items[i].Quantity" type="number" class="form-control" />
+                </td>
+                <td>
+                    <input name="Items[@i].DeliveryDate" value="@Model.Items[i].DeliveryDate.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                </td>
+                <td>
+                    <input name="Items[@i].QuotationAmount" value="@Model.Items[i].QuotationAmount" type="number" step="0.01" class="form-control" />
+                </td>
+                <td>
+                    <input name="Items[@i].TermsAndConditions" value="@Model.Items[i].TermsAndConditions" class="form-control" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

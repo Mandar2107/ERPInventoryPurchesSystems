@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Vendor Reports";
+}
+
+<h2>Reports & Analytics - Vendor</h2>
+
+<form method="get">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Date Range</label>
+            <input type="date" name="startDate" class="form-control" />
+            <input type="date" name="endDate" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Item Category</label>
+            <select name="category" class="form-control">
+                <option value="">All</option>
+                @foreach (var category in ViewBag.Categories as List<string>)
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Status</label>
+            <select name="status" class="form-control">
+                <option value="">All</option>
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>Rejected</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<hr />
+
+<h4>Metrics</h4>
+<ul>
+    <li>Total RFQs Received: @ViewBag.TotalRFQs</li>
+    <li>POs Fulfilled: @ViewBag.FulfilledPOs</li>
+    <li>Total Invoiced: ₹@ViewBag.TotalInvoiced</li>
+    <li>Avg Delivery Time: @ViewBag.AvgDeliveryTime days</li>
+    <li>Invoice Match Rate: @ViewBag.MatchRate%</li>
+</ul>
+
+<hr />
+
+<h4>Charts</h4>
+<canvas id="monthlyPOChart" width="400" height="200"></canvas>
+
+@section Scripts {
+        https://cdn.jsdelivr.net/npm/chart.js
+    <script>
+        const ctx = document.getElementById('monthlyPOChart').getContext('2d');
+        const poChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.Months)),
+                datasets: [{
+                    label: 'POs Fulfilled',
+                    data: @Html.Raw(Json.Serialize(ViewBag.MonthlyPOs)),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }]
+            }
+        });
+    </script>
+}

@@ -32,5 +32,7 @@ namespace ERPInventoryPurchesSystems.Models.PR
         public int VendorRating { get; set; }
 
         public string Remarks { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

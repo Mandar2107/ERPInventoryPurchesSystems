@@ -1,0 +1,109 @@
+﻿@model ERPInventoryPurchesSystems.Models.Reporting.ReportViewModel
+
+@{
+    ViewData["Title"] = "Reporting & Analytics";
+}
+
+<h2>Reporting & Analytics</h2>
+
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <label>Date Range</label>
+        <input type="date" name="StartDate" class="form-control" />
+        <input type="date" name="EndDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Department</label>
+        <select name="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Vendor</label>
+        <select name="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Item Category</label>
+        <select name="ItemCategory" asp-items="ViewBag.Categories" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Status</label><br />
+        <input type="checkbox" name="StatusFilter" value="PR" /> PR
+        <input type="checkbox" name="StatusFilter" value="PO" /> PO
+        <input type="checkbox" name="StatusFilter" value="GRN" /> GRN
+        <input type="checkbox" name="StatusFilter" value="Invoice" /> Invoice
+        <input type="checkbox" name="StatusFilter" value="Payment" /> Payment
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+</form>
+
+<hr />
+
+<h3>Key Metrics</h3>
+<ul>
+    <li>Total Purchase Requisitions: @Model.TotalPRs</li>
+    <li>Approved POs: @Model.ApprovedPOs</li>
+    <li>Total Spend: ₹@Model.TotalSpend</li>
+    <li>Average Delivery Time: @Model.AverageDeliveryTime days</li>
+    <li>Vendor Performance Score: @Model.VendorPerformanceScore</li>
+    <li>Pending Invoices: @Model.PendingInvoices</li>
+</ul>
+
+<h3>Visual Analytics</h3>
+<div>
+    <canvas id="vendorSpendChart" width="400" height="200"></canvas>
+    <canvas id="monthlyTrendChart" width="400" height="200"></canvas>
+    <canvas id="categorySpendChart" width="400" height="200"></canvas>
+</div>
+
+@section Scripts {
+        https://cdn.jsdelivr.net/npm/chart.js
+    <script>
+        // Sample chart setup
+        const vendorSpendCtx = document.getElementById('vendorSpendChart').getContext('2d');
+        const vendorSpendChart = new Chart(vendorSpendCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.VendorNames)),
+                datasets: [{
+                    label: 'Spend by Vendor',
+                    data: @Html.Raw(Json.Serialize(Model.VendorSpend)),
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                }]
+            }
+        });
+
+        const monthlyTrendCtx = document.getElementById('monthlyTrendChart').getContext('2d');
+        const monthlyTrendChart = new Chart(monthlyTrendCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Months)),
+                datasets: [{
+                    label: 'Monthly Purchase Trends',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlySpend)),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    fill: false
+                }]
+            }
+        });
+
+        const categorySpendCtx = document.getElementById('categorySpendChart').getContext('2d');
+        const categorySpendChart = new Chart(categorySpendCtx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Categories)),
+                datasets: [{
+                    label: 'Category-wise Spend',
+                    data: @Html.Raw(Json.Serialize(Model.CategorySpend)),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                }]
+            }
+        });
+    </script>
+}
+
+<h3>Actions</h3>
+<p>
+    <a asp-action="ExportToExcel" class="btn btn-outline-secondary">Export to Excel</a>
+    <a asp-action="ExportToPdf" class="btn btn-outline-secondary">Export to PDF</a>
+    <a asp-action="ScheduleReport" class="btn btn-outline-secondary">Schedule Report</a>
+    <a asp-action="EmailSummary" class="btn btn-outline-secondary">Email Summary</a>
+</p>

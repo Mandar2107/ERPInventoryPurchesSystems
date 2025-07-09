@@ -1,0 +1,28 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.Approval
+
+@{
+    ViewData["Title"] = "Approval Details";
+}
+
+<h2>Approval Details</h2>
+
+<div class="form-group">
+    <label>PR Number:</label>
+    <p>@Model.PurchaseRequisition.PRNumber</p>
+</div>
+<div class="form-group">
+    <label>Approver:</label>
+    <p>@Model.Approver.FullName</p>
+</div>
+<div class="form-group">
+    <label>Status:</label>
+    <p>@Model.ApprovalStatus</p>
+</div>
+<div class="form-group">
+    <label>Comments:</label>
+    <p>@Model.Comments</p>
+</div>
+<div class="form-group">
+    <label>Approval Date:</label>
+    <p>@Model.ApprovalDate.ToShortDateString()</p>
+</div>

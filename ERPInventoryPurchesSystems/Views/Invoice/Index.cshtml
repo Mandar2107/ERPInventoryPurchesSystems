@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.Invoice>
+
+<h2>Invoices</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Invoice Number</th>
+            <th>Date</th>
+            <th>Vendor</th>
+            <th>PO Number</th>
+            <th>GRN Number</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <td>@invoice.InvoiceNumber</td>
+                <td>@invoice.InvoiceDate.ToShortDateString()</td>
+                <td>@invoice.Vendor?.VendorName ?? "N/A"</td>
+                <td>@invoice.PurchaseOrder?.PONumber ?? "N/A"</td>
+                <td>@invoice.GRN?.GRNNumber ?? "N/A"</td>
+                <td>@invoice.Department?.DepartmentName ?? "N/A"</td>
+                <td>@invoice.PaymentStatus</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@invoice.InvoiceId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@invoice.InvoiceId">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

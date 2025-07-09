@@ -15,8 +15,8 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             _context = context;
         }
 
-        // List all PRs
-        public async Task<IActionResult> Index()
+ 
+        public async Task<IActionResult> PRList()
         {
             var requisitions = await _context.PurchaseRequisitions
                 .Include(p => p.Department)
@@ -25,7 +25,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(requisitions);
         }
 
-        // Show Create Form
+        
         public IActionResult Create()
         {
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
@@ -34,12 +34,13 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View();
         }
 
-        // Handle Create POST
+       
         [HttpPost]
         public async Task<IActionResult> Create(PurchesRequstiaon requisition, List<PRItem> Items)
         {
             requisition.PRNumber = GeneratePRNumber();
             requisition.CreatedDate = DateTime.Now;
+            requisition.CreatedBy = "System";
             requisition.Status = "Pending";
 
             _context.PurchaseRequisitions.Add(requisition);
@@ -47,7 +48,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
 
             foreach (var item in Items)
             {
-                item.PRID = requisition.PRID;
+                item.PurchaseRequisitionID = requisition.PurchaseRequisitionID;
                 _context.PRItems.Add(item);
             }
 
@@ -61,9 +62,9 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             var pr = await _context.PurchaseRequisitions
                 .Include(p => p.Department)
                 .Include(p => p.SubmittedBy)
-                .Include(p => p.PRItems)
+                .Include(p => p.Items)
                 .ThenInclude(i => i.Item)
-                .FirstOrDefaultAsync(p => p.PRID == id);
+                .FirstOrDefaultAsync(p => p.PurchaseRequisitionID == id);
 
             return View(pr);
         }

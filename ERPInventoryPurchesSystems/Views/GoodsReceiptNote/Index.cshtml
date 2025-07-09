@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote>
+
+<h2>Goods Receipt Notes</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>GRN Number</th>
+            <th>Date</th>
+            <th>PO Number</th>
+            <th>Vendor</th>
+            <th>Received By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var grn in Model)
+        {
+            <tr>
+                <td>@grn.GRNNumber</td>
+                <td>@grn.GRNDate.ToShortDateString()</td>
+                <td>@grn.PurchaseOrder?.PONumber ?? "N/A"</td>
+                <td>@grn.Vendor?.VendorName ?? "N/A"</td>
+                <td>@grn.ReceivedBy?.FullName ?? "N/A"</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@grn.GRNId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@grn.GRNId">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

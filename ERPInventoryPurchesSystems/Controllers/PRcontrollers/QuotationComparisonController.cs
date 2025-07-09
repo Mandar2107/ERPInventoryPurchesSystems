@@ -25,6 +25,28 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(comparisons);
         }
 
+        [HttpPost]
+public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, string> SelectedVendor)
+{
+    foreach (var entry in SelectedVendor)
+    {
+        string itemCode = entry.Key;
+        string vendorCode = entry.Value;
+
+        var selectedItem = await _context.QuotationComparisonItems
+            .FirstOrDefaultAsync(i => i.ComparisonId == ComparisonId && i.ItemCode == itemCode && i.VendorCode == vendorCode);
+
+        if (selectedItem != null)
+        {
+            selectedItem.IsSelected = true;
+            _context.QuotationComparisonItems.Update(selectedItem);
+        }
+    }
+
+    await _context.SaveChangesAsync();
+    return RedirectToAction("Details", new { id = ComparisonId });
+}
+
         public IActionResult Create()
         {
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber");
@@ -39,11 +61,13 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         public async Task<IActionResult> Create(QuotationComparison comparison, List<QuotationComparisonItem> items)
         {
             comparison.DateOfComparison = DateTime.Now;
+          
             _context.QuotationComparisons.Add(comparison);
             await _context.SaveChangesAsync();
 
             foreach (var item in items)
             {
+                item.IsSelected = true;
                 item.ComparisonId = comparison.ComparisonId;
                 _context.QuotationComparisonItems.Add(item);
             }
@@ -59,7 +83,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
                 .Include(q => q.Department)
                 .Include(q => q.RequestedBy)
                 .Include(q => q.Items)
-                .ThenInclude(i => i.Items)
+                .ThenInclude(i => i.Item)
                 .FirstOrDefaultAsync(q => q.ComparisonId == id);
             return View(comparison);
         }

@@ -1,0 +1,63 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.QualityInspection
+
+<h2>Create Quality Inspection</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="GRNId">GRN</label>
+        <select asp-for="GRNId" asp-items="ViewBag.GRNs" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="InspectedByUserId">Inspected By</label>
+        <select asp-for="InspectedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+
+    <h4>Inspection Items</h4>
+    <table class="table" id="inspectionItemsTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Received Qty</th>
+                <th>Inspected Qty</th>
+                <th>Result</th>
+                <th>Defects</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" onclick="addInspectionItem()">Add Item</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    <script>
+        let inspIndex = 0;
+        function addInspectionItem() {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><select name="Items[${inspIndex}].ItemCode" class="form-control">
+                    ${Array.from(ViewBag.Items || []).map(i => `<option value="${i.Value}">${i.Text}</option>`).join("")}
+                </select></td>
+                <td><input name="Items[${inspIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
+                <td><input name="Items[${inspIndex}].InspectedQuantity" type="number" class="form-control" /></td>
+                <td><select name="Items[${inspIndex}].InspectionResult" class="form-control">
+                    <option value="Pass">Pass</option>
+                    <option value="Fail">Fail</option>
+                </select></td>
+                <td><input name="Items[${inspIndex}].DefectsFound" type="text" class="form-control" /></td>
+                <td><input name="Items[${inspIndex}].Remarks" type="text" class="form-control" /></td>
+                <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
+            `;
+            document.querySelector("#inspectionItemsTable tbody").appendChild(row);
+            inspIndex++;
+        }
+    </script>
+}

@@ -40,6 +40,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         public async Task<IActionResult> Create(PurchaseOrder order, List<POItem> items)
         {
             order.PODate = DateTime.Now;
+            order.PONumber = $"PO-{DateTime.Now:yyyyMMddHHmmss}";
             _context.PurchaseOrders.Add(order);
             await _context.SaveChangesAsync();
 

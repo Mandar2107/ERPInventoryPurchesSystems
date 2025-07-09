@@ -1,0 +1,70 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote
+@{
+    var items = ViewBag.Items as SelectList;
+}
+
+<h2>Create GRN</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="POId">PO</label>
+        <select asp-for="POId" asp-items="ViewBag.POs" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VendorCode">Vendor</label>
+        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ReceivedByUserId">Received By</label>
+        <select asp-for="ReceivedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+
+    <h4>Items</h4>
+    <table class="table" id="grnItemsTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Ordered Qty</th>
+                <th>Received Qty</th>
+                <th>Unit</th>
+                <th>Condition</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button type="button" class="btn btn-secondary" onclick="addGRNItem()">Add Item</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    <script>
+        let grnIndex = 0;
+        function addGRNItem() {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><select name="Items[${grnIndex}].ItemCode" class="form-control">
+                    ${Array.from(items || []).map(i => `<option value="${i.Value}">${i.Text}</option>`).join("")}
+                </select></td>
+                <td><input name="Items[${grnIndex}].OrderedQuantity" type="number" class="form-control" /></td>
+                <td><input name="Items[${grnIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
+                <td><input name="Items[${grnIndex}].Unit" type="text" class="form-control" /></td>
+                <td><select name="Items[${grnIndex}].Condition" class="form-control">
+                    <option value="Good">Good</option>
+                    <option value="Damaged">Damaged</option>
+                </select></td>
+                <td><input name="Items[${grnIndex}].Remarks" type="text" class="form-control" /></td>
+                <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
+            `;
+            document.querySelector("#grnItemsTable tbody").appendChild(row);
+            grnIndex++;
+        }
+    </script>
+}

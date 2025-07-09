@@ -1,0 +1,24 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon
+
+<h2>Edit Purchase Requisition</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PurchaseRequisitionID" />
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="SubmittedByUserID">Submitted By</label>
+        <select asp-for="SubmittedByUserID" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

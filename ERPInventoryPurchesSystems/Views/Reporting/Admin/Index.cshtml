@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Admin Reports";
+}
+
+<h2>Reports & Analytics - Admin</h2>
+
+<form method="get">
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Date Range</label>
+            <input type="date" name="startDate" class="form-control" />
+            <input type="date" name="endDate" class="form-control" />
+        </div>
+        <div class="form-group col-md-3">
+            <label>Department</label>
+            <select name="departmentCode" class="form-control">
+                <option value="">All</option>
+                <!-- Populate from ViewBag -->
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Vendor</label>
+            <select name="vendorCode" class="form-control">
+                <option value="">All</option>
+                <!-- Populate from ViewBag -->
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Item Category</label>
+            <select name="category" class="form-control">
+                <option value="">All</option>
+                <!-- Populate from ViewBag -->
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<hr />
+
+<h4>Metrics</h4>
+<ul>
+    <li>Total PRs: @ViewBag.TotalPRs</li>
+    <li>Approved POs: @ViewBag.ApprovedPOs</li>
+    <li>Total Spend: ₹@ViewBag.TotalSpend</li>
+    <li>Avg Delivery Time: @ViewBag.AvgDeliveryTime days</li>
+    <li>Vendor Score: @ViewBag.VendorScore</li>
+    <li>Pending Invoices: @ViewBag.PendingInvoices</li>
+</ul>
+
+<hr />
+
+<h4>Charts</h4>
+<canvas id="spendByVendorChart" width="400" height="200"></canvas>
+<canvas id="monthlyTrendsChart" width="400" height="200"></canvas>
+<canvas id="categorySpendChart" width="400" height="200"></canvas>
+
+@section Scripts {
+        https://cdn.jsdelivr.net/npm/chart.js
+    <script>
+        // Sample Chart.js setup
+        const ctx1 = document.getElementById('spendByVendorChart').getContext('2d');
+        const spendChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.VendorNames)),
+                datasets: [{
+                    label: 'Spend',
+                    data: @Html.Raw(Json.Serialize(ViewBag.VendorSpend)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                }]
+            }
+        });
+    </script>
+}

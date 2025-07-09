@@ -25,6 +25,46 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(approvals);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Approve(int prId)
+        {
+            var pr = await _context.PurchaseRequisitions.FindAsync(prId);
+            if (pr == null) return NotFound();
+
+            pr.Status = "Approved";
+            _context.PurchaseRequisitions.Update(pr);
+
+            var approval = new Approval
+            {
+                PurchaseRequisitionID = prId,
+                ApproverUserID = "1", 
+                ApprovalStatus = "Approved",
+                Comments = "Auto-approved from pending list",
+                ApprovalDate = DateTime.Now,
+                DepartmentCode = pr.DepartmentCode
+            };
+
+            _context.Approvals.Add(approval);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("PendingPRs");
+        }
+
+
+        public async Task<IActionResult> PendingPRs()
+        {
+            var pendingPRs = await _context.PurchaseRequisitions
+     .Where(pr => pr.Status == "Pending")
+     .Include(pr => pr.Department)
+     .Include(pr => pr.SubmittedBy)
+     .Include(pr => pr.Items) 
+         .ThenInclude(i => i.Item) 
+     .ToListAsync();
+
+
+            return View(pendingPRs);
+        }
+
         public IActionResult Create()
         {
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber");

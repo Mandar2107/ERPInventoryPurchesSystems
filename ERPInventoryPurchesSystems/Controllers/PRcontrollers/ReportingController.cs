@@ -1,5 +1,8 @@
-﻿using ERPInventoryPurchesSystems.Utility;
+﻿
+using ERPInventoryPurchesSystems.Models.Reporting;
+using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
@@ -13,58 +16,93 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, string departmentCode, string vendorCode, string itemCategory, List<string> statusFilter)
         {
-            return View();
-        }
-
-        public async Task<IActionResult> Summary(DateTime? startDate, DateTime? endDate)
-        {
-            var data = await _context.PurchaseRequisitions
-                .Where(pr => (!startDate.HasValue || pr.PRDate >= startDate) &&
-                             (!endDate.HasValue || pr.PRDate <= endDate))
-                .Include(pr => pr.Department)
-                .ToListAsync();
-
-            var summary = new
+            var model = new ReportViewModel
             {
-                TotalPRs = data.Count,
+                StartDate = startDate,
+                EndDate = endDate,
+                DepartmentCode = departmentCode,
+                VendorCode = vendorCode,
+                ItemCategory = itemCategory,
+                StatusFilter = statusFilter,
+
+                TotalPRs = await _context.PurchaseRequisitions
+                    .Where(pr => (!startDate.HasValue || pr.PRDate >= startDate) &&
+                                 (!endDate.HasValue || pr.PRDate <= endDate))
+                    .CountAsync(),
+
                 ApprovedPOs = await _context.PurchaseOrders.CountAsync(),
+
                 TotalSpend = await _context.InvoiceItems.SumAsync(i => i.TotalAmount),
-                AvgDeliveryTime = await _context.PurchaseOrders
+
+                AverageDeliveryTime = await _context.PurchaseOrders
+                    .Where(po => po.Items.Any())
                     .AverageAsync(po => EF.Functions.DateDiffDay(po.PODate, po.Items.FirstOrDefault().DeliveryDate)),
-                PendingInvoices = await _context.Invoices.CountAsync(i => i.PaymentStatus == "Pending")
+
+                VendorPerformanceScore = 92.5, // Placeholder, calculate based on your logic
+
+                PendingInvoices = await _context.Invoices.CountAsync(i => i.PaymentStatus == "Pending"),
+
+                VendorNames = await _context.InvoiceItems
+                    .GroupBy(i => i.Invoice.Vendor.VendorName)
+                    .Select(g => g.Key)
+                    .ToListAsync(),
+
+                VendorSpend = await _context.InvoiceItems
+                    .GroupBy(i => i.Invoice.Vendor.VendorName)
+                    .Select(g => g.Sum(i => i.TotalAmount))
+                    .ToListAsync(),
+
+                Months = await _context.PurchaseOrders
+                    .GroupBy(po => new { po.PODate.Year, po.PODate.Month })
+                    .Select(g => $"{g.Key.Month}/{g.Key.Year}")
+                    .ToListAsync(),
+
+                MonthlySpend = await _context.PurchaseOrders
+                    .GroupBy(po => new { po.PODate.Year, po.PODate.Month })
+                    .Select(g => g.Sum(po => po.Items.Sum(i => i.TotalPrice)))
+                    .ToListAsync(),
+                Categories = await _context.InvoiceItems
+    .Select(i => i.Item.Category.CategoryName) // or .CategoryCode
+    .Distinct()
+    .ToListAsync(),
+
+                CategorySpend = await _context.InvoiceItems
+                    .GroupBy(i => i.Item.Category)
+                    .Select(g => g.Sum(i => i.TotalAmount))
+                    .ToListAsync()
             };
 
-            return View(summary);
+            ViewBag.Departments = new SelectList(await _context.Departments.ToListAsync(), "DepartmentCode", "DepartmentName");
+            ViewBag.Vendors = new SelectList(await _context.Vendors.ToListAsync(), "VendorCode", "VendorName");
+            ViewBag.Categories = new SelectList(await _context.Items.Select(i => i.Category).Distinct().ToListAsync());
+
+            return View(model);
         }
 
-        public async Task<IActionResult> SpendByVendor()
+        public IActionResult ExportToExcel()
         {
-            var spendData = await _context.InvoiceItems
-                .GroupBy(i => i.Invoice.Vendor.VendorName)
-                .Select(g => new
-                {
-                    Vendor = g.Key,
-                    TotalSpend = g.Sum(i => i.TotalAmount)
-                }).ToListAsync();
-
-            return View(spendData);
+            // TODO: Implement Excel export logic
+            return Content("Excel export not implemented yet.");
         }
 
-        public async Task<IActionResult> MonthlyTrends()
+        public IActionResult ExportToPdf()
         {
-            var trends = await _context.PurchaseOrders
-                .GroupBy(po => new { po.PODate.Year, po.PODate.Month })
-                .Select(g => new
-                {
-                    Month = $"{g.Key.Month}/{g.Key.Year}",
-                    TotalOrders = g.Count(),
-                    TotalSpend = g.Sum(po => po.Items.Sum(i => i.TotalPrice))
-                }).ToListAsync();
+            // TODO: Implement PDF export logic
+            return Content("PDF export not implemented yet.");
+        }
 
-            return View(trends);
+        public IActionResult ScheduleReport()
+        {
+            // TODO: Implement scheduling logic
+            return Content("Report scheduling not implemented yet.");
+        }
+
+        public IActionResult EmailSummary()
+        {
+            // TODO: Implement email logic
+            return Content("Email summary not implemented yet.");
         }
     }
-
 }

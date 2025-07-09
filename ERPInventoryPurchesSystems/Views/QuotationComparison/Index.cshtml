@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.QuotationComparison>
+
+<h2>Quotation Comparisons</h2>
+<table class="table">
+    <thead>
+        <a asp-action="Create" >Create Quotation</a> 
+        <tr>
+            <th>PR Number</th>
+            <th>Department</th>
+            <th>Requested By</th>
+            <th>Date of Comparison</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comparison in Model)
+        {
+            <tr>
+                <td>@comparison.PurchaseRequisition?.PRNumber ?? "N/A"</td>
+                <td>@comparison.Department?.DepartmentName ?? "N/A"</td>
+                <td>@comparison.RequestedBy?.FullName ?? "N/A"</td>
+                <td>@comparison.DateOfComparison.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@comparison.ComparisonId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@comparison.ComparisonId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@comparison.ComparisonId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

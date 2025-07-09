@@ -1,6 +1,6 @@
 ﻿using ERPInventoryPurchesSystems.Models.Master;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERPInventoryPurchesSystems.Models.PR
 {
@@ -23,6 +23,6 @@ namespace ERPInventoryPurchesSystems.Models.PR
 
         public DateTime DateOfComparison { get; set; }
 
-        public ICollection<QuotationComparison> Items { get; set; }
+        public ICollection<QuotationComparisonItem> Items { get; set; }
     }
 }

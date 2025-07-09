@@ -1,0 +1,38 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon
+
+<h2>PR Details</h2>
+<p><strong>PR Number:</strong> @Model.PRNumber</p>
+<p><strong>Date:</strong> @Model.PRDate.ToShortDateString()</p>
+<p><strong>Department:</strong> @Model.Department?.DepartmentName ?? "N/A"</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Submitted By:</strong> @Model.SubmittedBy?.FullName ?? "N/A"</p>
+
+<h3>Items</h3>
+@if (Model.Items != null && Model.Items.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Required Date</th>
+                <th>Justification</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Item?.ItemName ?? "N/A"</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.RequiredDate.ToShortDateString()</td>
+                    <td>@item.Justification</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No items found.</p>
+}

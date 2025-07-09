@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.Approval>
+
+@{
+    ViewData["Title"] = "Approval List";
+}
+
+<h2>Approval List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <a asp-action="Edit" >Create A approval</a>
+        <a asp-action="PendingPRs">pending A approval</a>
+        <tr>
+            <th>PR Number</th>
+            <th>Approver</th>
+            <th>Status</th>
+            <th>Comments</th>
+            <th>Approval Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var approval in Model)
+        {
+            <tr>
+                <td>@approval.PurchaseRequisition.PRNumber</td>
+                <td>@approval.Approver.FullName</td>
+                <td>@approval.ApprovalStatus</td>
+                <td>@approval.Comments</td>
+                <td>@approval.ApprovalDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@approval.ApprovalID">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@approval.ApprovalID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

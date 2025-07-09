@@ -1,0 +1,46 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
+
+<h2>Select Vendor for Each Item</h2>
+
+<form asp-action="Selection" method="post">
+    <input type="hidden" name="ComparisonId" value="@Model.ComparisonId" />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Vendor</th>
+                <th>Quoted Qty</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+                <th>Delivery Time</th>
+                <th>Rating</th>
+                <th>Remarks</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var itemGroup in Model.Items.GroupBy(i => i.ItemCode))
+            {
+                foreach (var quote in itemGroup)
+                {
+                    <tr>
+                        <td>@quote.Item.ItemName</td>
+                        <td>@quote.Vendor.VendorName</td>
+                        <td>@quote.QuotedQuantity</td>
+                        <td>@quote.UnitPrice</td>
+                        <td>@quote.TotalPrice</td>
+                        <td>@quote.DeliveryTime</td>
+                        <td>@quote.VendorRating</td>
+                        <td>@quote.Remarks</td>
+                        <td>
+                            <input type="radio" name="SelectedVendor[@quote.ItemCode]" value="@quote.VendorCode" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Confirm Selection</button>
+</form>
