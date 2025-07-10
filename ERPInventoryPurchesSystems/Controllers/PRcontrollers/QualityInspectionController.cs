@@ -30,7 +30,12 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             ViewBag.GRNs = new SelectList(_context.GoodsReceiptNotes, "GRNId", "GRNNumber");
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
-            ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
+
+           
+            ViewBag.Items = _context.Items
+                .Select(i => new SelectListItem { Value = i.ItemCode, Text = i.ItemName })
+                .ToList();
+
             return View();
         }
 
@@ -38,6 +43,14 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         public async Task<IActionResult> Create(QualityInspection inspection, List<InspectionItem> items)
         {
             inspection.InspectionDate = DateTime.Now;
+
+            
+            inspection.ActionTakenByUserId = inspection.InspectedByUserId;
+
+
+            inspection.InspectionMethod = "Visual";
+
+
             _context.QualityInspections.Add(inspection);
             await _context.SaveChangesAsync();
 

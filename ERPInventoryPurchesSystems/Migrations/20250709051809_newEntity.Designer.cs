@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709050607_new")]
-    partial class @new
+    [Migration("20250709051809_newEntity")]
+    partial class newEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

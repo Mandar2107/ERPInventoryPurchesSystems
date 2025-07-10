@@ -1,46 +1,45 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
 
+@{
+    ViewData["Title"] = "Quotation Details";
+}
+
 <h2>Quotation Comparison Details</h2>
 
-<p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber ?? "N/A"</p>
-<p><strong>Department:</strong> @Model.Department?.DepartmentName ?? "N/A"</p>
-<p><strong>Requested By:</strong> @Model.RequestedBy?.FullName ?? "N/A"</p>
-<p><strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()</p>
+<div>
+    <p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber</p>
+    <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
+    <p><strong>Requested By:</strong> @Model.RequestedBy?.FullName</p>
+    <p><strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()</p>
+</div>
 
-<h3>Vendor Quotations</h3>
-@if (Model.Items != null && Model.Items.Any())
-{
-    <table class="table table-bordered">
-        <thead>
+<h4>Selected Vendor Quotations</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Vendor</th>
+            <th>Quoted Qty</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+            <th>Delivery Time</th>
+            <th>Rating</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items.Where(i => i.IsSelected))
+        {
             <tr>
-                <th>Vendor</th>
-                <th>Item</th>
-                <th>Quoted Qty</th>
-                <th>Unit Price</th>
-                <th>Total Price</th>
-                <th>Delivery Time</th>
-                <th>Rating</th>
-                <th>Remarks</th>
+                <td>@item.Item.ItemName</td>
+                <td>@item.Vendor.VendorName</td>
+                <td>@item.QuotedQuantity</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.TotalPrice</td>
+                <td>@item.DeliveryTime</td>
+                <td>@item.VendorRating</td>
+                <td>@item.Remarks</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>@item.Vendor?.VendorName ?? "N/A"</td>
-                    <td>@item.Item?.ItemName ?? "N/A"</td>
-                    <td>@item.QuotedQuantity</td>
-                    <td>@item.UnitPrice</td>
-                    <td>@item.TotalPrice</td>
-                    <td>@item.DeliveryTime</td>
-                    <td>@item.VendorRating</td>
-                    <td>@item.Remarks</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No quotations available.</p>
-}
+        }
+    </tbody>
+</table>

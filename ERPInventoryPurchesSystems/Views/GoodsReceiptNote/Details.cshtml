@@ -1,0 +1,51 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote
+
+@{
+    ViewData["Title"] = "GRN Details";
+}
+
+<h2>GRN Details</h2>
+
+<div>
+    <strong>GRN Number:</strong> @Model.GRNNumber<br />
+    <strong>Date:</strong> @Model.GRNDate.ToShortDateString()<br />
+    <strong>Vendor:</strong> @Model.Vendor?.VendorName<br />
+    <strong>PO Number:</strong> @Model.PurchaseOrder?.PONumber<br />
+    <strong>Received By:</strong> @Model.ReceivedBy?.FullName<br />
+    <strong>Department:</strong> @Model.Department?.DepartmentName<br />
+    <strong>Transporter:</strong> @Model.TransporterName<br />
+    <strong>Vehicle Number:</strong> @Model.VehicleNumber<br />
+    <strong>Verified By:</strong> @Model.VerifiedBy?.FullName<br />
+    <strong>Verification Date:</strong> @Model.VerificationDate.ToShortDateString()<br />
+</div>
+
+<h4>Items</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Ordered Qty</th>
+            <th>Received Qty</th>
+            <th>Unit</th>
+            <th>Condition</th>
+            <th>Inspection Status</th>
+            <th>Remarks</th>
+            <th>Current Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Item?.ItemName</td>
+                <td>@item.OrderedQuantity</td>
+                <td>@item.ReceivedQuantity</td>
+                <td>@item.Unit</td>
+                <td>@item.Condition</td>
+      
+                <td>@item.Remarks</td>
+                <td>@item.Item?.QuantityInHand</td>
+            </tr>
+        }
+    </tbody>
+</table>

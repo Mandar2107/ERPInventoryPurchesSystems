@@ -262,6 +262,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("QuantityInHand")
+                        .HasColumnType("int");
+
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("int");
 

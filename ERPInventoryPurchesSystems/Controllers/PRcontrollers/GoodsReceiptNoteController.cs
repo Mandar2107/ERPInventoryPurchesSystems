@@ -1,4 +1,5 @@
-﻿using ERPInventoryPurchesSystems.Models.PR;
+﻿
+using ERPInventoryPurchesSystems.Models.PR;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,23 +36,60 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Create(GoodsReceiptNote grn, List<GRNItem> items)
         {
             grn.GRNDate = DateTime.Now;
-            _context.GoodsReceiptNotes.Add(grn);
-            await _context.SaveChangesAsync();
+            grn.GRNNumber = "GRN-" + DateTime.Now.Ticks;
+            grn.DeliveryNoteNumber = "DN-" + DateTime.Now.Ticks;
 
-            foreach (var item in items)
+            var validItemCodes = await _context.Items.Select(i => i.ItemCode).ToListAsync();
+            var invalidItems = items.Where(i => string.IsNullOrEmpty(i.ItemCode) || !validItemCodes.Contains(i.ItemCode)).ToList();
+
+            if (invalidItems.Any())
             {
-                item.GRNId = grn.GRNId;
-                _context.GRNItems.Add(item);
+                ModelState.AddModelError("", "One or more selected items are invalid.");
+
+                ViewBag.POs = new SelectList(_context.PurchaseOrders, "POId", "PONumber");
+                ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
+                ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
+                ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
+                ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
+
+                return View(grn);
             }
 
-            await _context.SaveChangesAsync();
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                _context.GoodsReceiptNotes.Add(grn);
+                await _context.SaveChangesAsync();
+
+                foreach (var item in items)
+                {
+                    item.GRNId = grn.GRNId;
+                    _context.GRNItems.Add(item);
+
+                    var stockItem = await _context.Items.FirstOrDefaultAsync(i => i.ItemCode == item.ItemCode);
+                    if (stockItem != null)
+                    {
+                        stockItem.QuantityInHand += item.ReceivedQuantity;
+                        _context.Items.Update(stockItem);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
             return RedirectToAction("Index");
         }
+
 
         public async Task<IActionResult> Details(int id)
         {
@@ -99,5 +137,4 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return RedirectToAction("Index");
         }
     }
-
 }

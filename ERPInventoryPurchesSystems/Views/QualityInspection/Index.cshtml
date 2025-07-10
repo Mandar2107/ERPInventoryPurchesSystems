@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.QualityInspection>
+
 @{
+    ViewData["Title"] = "Quality Inspections";
 }
+
+<h2>Quality Inspections</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Quality Inspection</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>GRN Number</th>
+            <th>Department</th>
+            <th>Inspected By</th>
+            <th>Inspection Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inspection in Model)
+        {
+            <tr>
+                <td>@inspection.GRN.GRNNumber</td>
+                <td>@inspection.Department.DepartmentName</td>
+                <td>@inspection.InspectedBy.FullName</td>
+                <td>@inspection.InspectionDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@inspection.InspectionId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@inspection.InspectionId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@inspection.InspectionId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

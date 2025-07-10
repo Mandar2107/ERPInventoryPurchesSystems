@@ -1,0 +1,136 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote
+
+@{
+    ViewData["Title"] = "Edit GRN";
+    var itemsWithStock = ViewBag.ItemsWithStock as List<dynamic>;
+    var itemsJson = Newtonsoft.Json.JsonConvert.SerializeObject(itemsWithStock);
+    var itemCodes = Newtonsoft.Json.JsonConvert.SerializeObject(itemsWithStock.Select(i => i.ItemCode));
+}
+
+<h2>Edit GRN</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="GRNId" />
+
+    <!-- GRN Header Fields -->
+    <div class="form-group">
+        <label asp-for="POId">PO</label>
+        <select asp-for="POId" asp-items="ViewBag.POs" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VendorCode">Vendor</label>
+        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ReceivedByUserId">Received By</label>
+        <select asp-for="ReceivedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DepartmentCode">Department</label>
+        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DeliveryNoteNumber">Delivery Note Number</label>
+        <input asp-for="DeliveryNoteNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TransporterName">Transporter Name</label>
+        <input asp-for="TransporterName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="VehicleNumber">Vehicle Number</label>
+        <input asp-for="VehicleNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="InspectionStatus">Inspection Status</label>
+        <select asp-for="InspectionStatus" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Passed">Passed</option>
+            <option value="Failed">Failed</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VerifiedByUserId">Verified By</label>
+        <select asp-for="VerifiedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VerificationDate">Verification Date</label>
+        <input asp-for="VerificationDate" type="date" class="form-control" />
+    </div>
+
+    <h4>Items</h4>
+    <table class="table" id="grnItemsTable">
+        <thead>
+            <tr>
+                <th>Item Code</th>
+                <th>Ordered Qty</th>
+                <th>Received Qty</th>
+                <th>Unit</th>
+                <th>Condition</th>
+                <th>Inspection Status</th>
+                <th>Remarks</th>
+                <th>Stock</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                var item = Model.Items.ElementAt(i);
+                <tr>
+                    <td>
+                        <input name="items[@i].ItemCode" value="@item.ItemCode" class="form-control item-autocomplete" data-index="@i" />
+                    </td>
+                    <td><input name="items[@i].OrderedQuantity" value="@item.OrderedQuantity" type="number" class="form-control" /></td>
+                    <td><input name="items[@i].ReceivedQuantity" value="@item.ReceivedQuantity" type="number" class="form-control" /></td>
+                    <td><input name="items[@i].Unit" value="@item.Unit" type="text" class="form-control" /></td>
+                    <td>
+                        <select name="items[@i].Condition" class="form-control">
+                            <option value="Good">Good</option>
+                            <option value="Damaged">Damaged</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="items[@i].InspectionStatus" class="form-control">
+                            <option value="Pending">Pending</option>
+                            <option value="Passed">Passed</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </td>
+                    <td><input name="items[@i].Remarks" value="@item.Remarks" type="text" class="form-control" /></td>
+                    <td><span id="stockDisplay-@i">Stock: -</span></td>
+                    <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.jscdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css
+
+    <script>
+        const itemStockData = @Html.Raw(itemsJson);
+        const itemCodes = @Html.Raw(itemCodes);
+
+        document.querySelectorAll('.item-autocomplete').forEach(input => {
+            const index = input.dataset.index;
+            new Awesomplete(input, { list: itemCodes });
+
+            input.addEventListener("change", function () {
+                const selectedCode = input.value;
+                const item = itemStockData.find(i => i.ItemCode === selectedCode);
+                const display = document.getElementById(`stockDisplay-${index}`);
+                display.textContent = item ? `Stock: ${item.QuantityInHand}` : "Stock: -";
+            });
+
+            // Trigger stock display on load
+            const selectedCode = input.value;
+            const item = itemStockData.find(i => i.ItemCode === selectedCode);
+            const display = document.getElementById(`stockDisplay-${index}`);
+            display.textContent = item ? `Stock: ${item.QuantityInHand}` : "Stock: -";
+        });
+    </script>
+}

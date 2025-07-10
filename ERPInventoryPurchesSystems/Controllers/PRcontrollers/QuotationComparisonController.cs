@@ -25,6 +25,21 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(comparisons);
         }
 
+
+        public async Task<IActionResult> Index1(int id)
+        {
+
+            var comparison = await _context.QuotationComparisons
+             .Include(q => q.Items)
+             .ThenInclude(i => i.Item)
+             .Include(q => q.Items)
+             .ThenInclude(i => i.Vendor)
+             .FirstOrDefaultAsync(q => q.ComparisonId == id);
+
+            return View("Index1", comparison);
+
+        }
+
         [HttpPost]
 public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, string> SelectedVendor)
 {
@@ -83,10 +98,14 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
                 .Include(q => q.Department)
                 .Include(q => q.RequestedBy)
                 .Include(q => q.Items)
-                .ThenInclude(i => i.Item)
+                    .ThenInclude(i => i.Item)
+                .Include(q => q.Items)
+                    .ThenInclude(i => i.Vendor)
                 .FirstOrDefaultAsync(q => q.ComparisonId == id);
+
             return View(comparison);
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

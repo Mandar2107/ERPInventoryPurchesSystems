@@ -3,6 +3,7 @@
 <h2>Goods Receipt Notes</h2>
 <table class="table">
     <thead>
+        <a asp-action="Create">Create GRN</a>
         <tr>
             <th>GRN Number</th>
             <th>Date</th>
@@ -18,9 +19,9 @@
             <tr>
                 <td>@grn.GRNNumber</td>
                 <td>@grn.GRNDate.ToShortDateString()</td>
-                <td>@grn.PurchaseOrder?.PONumber ?? "N/A"</td>
-                <td>@grn.Vendor?.VendorName ?? "N/A"</td>
-                <td>@grn.ReceivedBy?.FullName ?? "N/A"</td>
+                <td>@grn.PurchaseOrder?.PONumber </td>
+                <td>@grn.Vendor?.VendorName  </td>
+                <td>@grn.ReceivedBy?.FullName </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@grn.GRNId">Details</a> |
                     <a asp-action="Edit" asp-route-id="@grn.GRNId">Edit</a>

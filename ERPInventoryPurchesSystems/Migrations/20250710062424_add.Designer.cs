@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709051035_addnew1")]
-    partial class addnew1
+    [Migration("20250710062424_add")]
+    partial class add
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,6 +264,9 @@ namespace ERPInventoryPurchesSystems.Migrations
                     b.Property<string>("PurchaseUOM")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuantityInHand")
+                        .HasColumnType("int");
 
                     b.Property<int>("ReorderLevel")
                         .HasColumnType("int");

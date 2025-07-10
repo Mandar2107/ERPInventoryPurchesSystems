@@ -36,6 +36,8 @@ namespace ERPInventoryPurchesSystems.Models.Master
         public int MinimumStockLevel { get; set; }
 
         public int MaximumStockLevel { get; set; }
+        public int QuantityInHand { get; set; } 
+
 
         public string DefaultWarehouseLocation { get; set; }
 

@@ -1,6 +1,9 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote
+
 @{
-    var items = ViewBag.Items as SelectList;
+    ViewData["Title"] = "Create GRN";
+    var itemsWithStock = ViewBag.ItemsWithStock as List<dynamic>;
+    var itemsJson = Newtonsoft.Json.JsonConvert.SerializeObject(itemsWithStock);
 }
 
 <h2>Create GRN</h2>
@@ -9,10 +12,12 @@
     <div class="form-group">
         <label asp-for="POId">PO</label>
         <select asp-for="POId" asp-items="ViewBag.POs" class="form-control"></select>
+        <span asp-validation-for="POId" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="VendorCode">Vendor</label>
         <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+        <span asp-validation-for="VendorCode" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="ReceivedByUserId">Received By</label>
@@ -21,6 +26,34 @@
     <div class="form-group">
         <label asp-for="DepartmentCode">Department</label>
         <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DeliveryNoteNumber">Delivery Note Number</label>
+        <input asp-for="DeliveryNoteNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TransporterName">Transporter Name</label>
+        <input asp-for="TransporterName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="VehicleNumber">Vehicle Number</label>
+        <input asp-for="VehicleNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="InspectionStatus">Inspection Status</label>
+        <select asp-for="InspectionStatus" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Passed">Passed</option>
+            <option value="Failed">Failed</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VerifiedByUserId">Verified By</label>
+        <select asp-for="VerifiedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="VerificationDate">Verification Date</label>
+        <input asp-for="VerificationDate" type="date" class="form-control" />
     </div>
 
     <h4>Items</h4>
@@ -32,7 +65,9 @@
                 <th>Received Qty</th>
                 <th>Unit</th>
                 <th>Condition</th>
+                <th>Inspection Status</th>
                 <th>Remarks</th>
+                <th>Stock</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -47,24 +82,58 @@
 @section Scripts {
     <script>
         let grnIndex = 0;
+        const itemStockData = @Html.Raw(itemsJson);
+
         function addGRNItem() {
             const row = document.createElement("tr");
+
+            const options = itemStockData.map(item =>
+                `<option value="${item.ItemCode}">${item.ItemName}</option>`
+            ).join("");
+
             row.innerHTML = `
-                <td><select name="Items[${grnIndex}].ItemCode" class="form-control">
-                    ${Array.from(items || []).map(i => `<option value="${i.Value}">${i.Text}</option>`).join("")}
-                </select></td>
-                <td><input name="Items[${grnIndex}].OrderedQuantity" type="number" class="form-control" /></td>
-                <td><input name="Items[${grnIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
-                <td><input name="Items[${grnIndex}].Unit" type="text" class="form-control" /></td>
-                <td><select name="Items[${grnIndex}].Condition" class="form-control">
-                    <option value="Good">Good</option>
-                    <option value="Damaged">Damaged</option>
-                </select></td>
-                <td><input name="Items[${grnIndex}].Remarks" type="text" class="form-control" /></td>
+                <td>
+                    <select name="items[${grnIndex}].ItemCode" class="form-control" onchange="updateStockDisplay(this, ${grnIndex})">
+                        ${options}
+                    </select>
+                </td>
+                <td><input name="items[${grnIndex}].OrderedQuantity" type="number" class="form-control" /></td>
+                <td><input name="items[${grnIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
+                <td><input name="items[${grnIndex}].Unit" type="text" class="form-control" /></td>
+                <td>
+                    <select name="items[${grnIndex}].Condition" class="form-control">
+                        <option value="Good">Good</option>
+                        <option value="Damaged">Damaged</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="items[${grnIndex}].InspectionStatus" class="form-control">
+                        <option value="Pending">Pending</option>
+                        <option value="Passed">Passed</option>
+                        <option value="Failed">Failed</option>
+                    </select>
+                </td>
+                <td><input name="items[${grnIndex}].Remarks" type="text" class="form-control" /></td>
+                <td><span id="stockDisplay-${grnIndex}">Stock: -</span></td>
                 <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
             `;
             document.querySelector("#grnItemsTable tbody").appendChild(row);
             grnIndex++;
         }
+
+        function updateStockDisplay(selectElement, index) {
+            const selectedCode = selectElement.value;
+            const item = itemStockData.find(i => i.ItemCode === selectedCode);
+            const display = document.getElementById(`stockDisplay-${index}`);
+            display.textContent = item ? `Stock: ${item.QuantityInHand}` : "Stock: -";
+        }
+
+        window.onload = function () {
+            addGRNItem(); 
+        };
     </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

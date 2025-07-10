@@ -1,5 +1,7 @@
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ builder.Services.AddControllersWithViews();
 // Add DbContext registration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
 

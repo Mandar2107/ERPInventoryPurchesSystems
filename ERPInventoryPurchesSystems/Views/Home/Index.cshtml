@@ -4,66 +4,79 @@
 
 <div class="container-fluid">
     <div class="row">
+        <!-- Sidebar -->
         <nav class="col-md-2 d-md-block bg-light sidebar shadow-sm">
             <div class="position-sticky pt-3">
                 <h5 class="text-primary text-center mb-4">Purchase Dept</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="/Item/ItemList"><i class="bi bi-box-seam me-2"></i>Item Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Vendor/VendorList"><i class="bi bi-person-badge me-2"></i>Vendor Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Category/CategoryList"><i class="bi bi-tags me-2"></i>Category Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Department/DepartmentList"><i class="bi bi-building me-2"></i>Department Master</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/User/UserList"><i class="bi bi-people me-2"></i>User Master</a></li>
+                <ul class="nav flex-column
+                    <li class="nav-item"><a class="nav-link" href="/Item/ItemList"><i class="bi bi-box-seam me-2"></i>Item </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Vendor/VendorList"><i class="bi bi-person-badge me-2"></i>Vendor </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Category/CategoryList"><i class="bi bi-tags me-2"></i>Category </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Department/DepartmentList"><i class="bi bi-building me-2"></i>Department </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/User/UserList"><i class="bi bi-people me-2"></i>User </a></li>
                     <hr />
                     <li class="nav-item"><a class="nav-link" href="/PurchaseRequisition/PRList"><i class="bi bi-journal-text me-2"></i>Purchase Requisition</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Approval/Index"><i class="bi bi-check2-circle me-2"></i>Approval Workflow</a></li>
                     <li class="nav-item"><a class="nav-link" href="/RequestForQuotation/Index"><i class="bi bi-envelope-open me-2"></i>Request for Quotation</a></li>
                     <li class="nav-item"><a class="nav-link" href="/QuotationComparison/Index"><i class="bi bi-bar-chart-line me-2"></i>Quotation Comparison</a></li>
                     <li class="nav-item"><a class="nav-link" href="/PurchaseOrder/Index"><i class="bi bi-cart-check me-2"></i>Purchase Order</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/GRN/Index"><i class="bi bi-box-arrow-in-down me-2"></i>Goods Receipt Note</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/GoodsReceiptNote/Index"><i class="bi bi-box-arrow-in-down me-2"></i>Goods Receipt Note</a></li>
                     <li class="nav-item"><a class="nav-link" href="/QualityInspection/Index"><i class="bi bi-search me-2"></i>Quality Inspection</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/InvoiceMatching/Index"><i class="bi bi-receipt me-2"></i>Invoice Matching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Invoice/Index"><i class="bi bi-receipt me-2"></i>Invoice Matching</a></li>
                 </ul>
             </div>
         </nav>
+
         <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h2 class="text-success">Welcome to ERP Inventory Management Dashboard</h2>
             </div>
+
             <div class="alert alert-info">
                 This dashboard provides access to all master and transactional modules for the Purchase Department.
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-white bg-primary mb-3">
-                        <div class="card-body">
-                            "Total Requisitions</h5>
-                            <p class="card-text">123</p>
+
+           
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <a href="/PurchaseRequisition/PRList" class="text-decoration-none">
+                        <div class="card text-white bg-primary h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Requisitions</h5>
+                                <p class="card-text fs-4">123</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <div class="card text-white bg-success mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Approved POs</h5>
-                            <p class="card-text">87</p>
+                <div class="col-md-3">
+                    <a href="/PurchaseOrder/Index" class="text-decoration-none">
+                        <div class="card text-white bg-success h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Approved POs</h5>
+                                <p class="card-text fs-4">87</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <div class="card text-white bg-warning mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Pending Invoices</h5>
-                            <p class="card-text">16</p>
+                <div class="col-md-3">
+                    <a href="/Invoice/Index" class="text-decoration-none">
+                        <div class="card text-white bg-warning h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Invoices</h5>
+                                <p class="card-text fs-4">16</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <div class="card text-white bg-warning mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">FeedBack</h5>
-                            <p class="card-text">16</p>
+                <div class="col-md-3">
+                    <a href="/Feedback/Index" class="text-decoration-none">
+                        <div class="card text-white bg-info h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Feedback</h5>
+                                <p class="card-text fs-4">16</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </main>

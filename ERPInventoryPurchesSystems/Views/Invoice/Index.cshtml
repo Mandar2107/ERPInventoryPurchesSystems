@@ -1,8 +1,15 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.Invoice>
 
-<h2>Invoices</h2>
-<table class="table">
-    <thead>
+@{
+    ViewBag.Title = "Invoice List";
+}
+
+<h2>Invoice List</h2>
+
+<table class="table table-bordered table-striped">
+    <a asp-action="Create" class="btn btn-success">Create New Invoice</a>
+
+    <thead class="thead-dark">
         <tr>
             <th>Invoice Number</th>
             <th>Date</th>
@@ -10,7 +17,9 @@
             <th>PO Number</th>
             <th>GRN Number</th>
             <th>Department</th>
-            <th>Status</th>
+            <th>Total Amount</th>
+            <th>Payment Status</th>
+            <th>Processed By</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -20,16 +29,20 @@
             <tr>
                 <td>@invoice.InvoiceNumber</td>
                 <td>@invoice.InvoiceDate.ToShortDateString()</td>
-                <td>@invoice.Vendor?.VendorName ?? "N/A"</td>
-                <td>@invoice.PurchaseOrder?.PONumber ?? "N/A"</td>
-                <td>@invoice.GRN?.GRNNumber ?? "N/A"</td>
-                <td>@invoice.Department?.DepartmentName ?? "N/A"</td>
+                <td>@invoice.Vendor?.VendorName </td>
+                <td>@invoice.PurchaseOrder?.PONumber </td>
+                <td>@invoice.GRN?.GRNNumber </td>
+                <td>@invoice.Department?.DepartmentName </td>
+                <td>₹@invoice.TotalInvoiceAmount.ToString("N2")</td>
                 <td>@invoice.PaymentStatus</td>
+                <td>@invoice.ProcessedBy?.FullName </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@invoice.InvoiceId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@invoice.InvoiceId">Edit</a>
+                    <a asp-action="Details" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DownloadPdf" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-primary">Download PDF</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+

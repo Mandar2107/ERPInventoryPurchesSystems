@@ -3,6 +3,8 @@ using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
+using Rotativa.AspNetCore;
 
 namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
 {
@@ -42,18 +44,25 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         public async Task<IActionResult> Create(Invoice invoice, List<InvoiceItem> items)
         {
             invoice.InvoiceDate = DateTime.Now;
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
+            invoice.TotalInvoiceAmount = items.Sum(i => i.TotalAmount);
 
+       
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync(); 
+
+           
             foreach (var item in items)
             {
-                item.InvoiceId = invoice.InvoiceId;
+                item.InvoiceId = invoice.InvoiceId; 
+                item.MatchStatus = "Matched";       
                 _context.InvoiceItems.Add(item);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+
 
         public async Task<IActionResult> Details(int id)
         {
@@ -68,6 +77,28 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
                 .FirstOrDefaultAsync(i => i.InvoiceId == id);
             return View(invoice);
         }
+
+        public IActionResult DownloadPdf(int id)
+        {
+            var invoice = _context.Invoices
+                .Include(i => i.Vendor)
+                .Include(i => i.PurchaseOrder)
+                .Include(i => i.GRN)
+                .Include(i => i.Department)
+                .Include(i => i.ProcessedBy)
+                .Include(i => i.Items)
+                .ThenInclude(it => it.Item)
+                .FirstOrDefault(i => i.InvoiceId == id);
+
+            if (invoice == null)
+                return NotFound();
+
+            var document = new InvoicePdfDocument(invoice);
+            var pdfBytes = document.GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", $"Invoice_{invoice.InvoiceNumber}.pdf");
+        }
+
 
         public async Task<IActionResult> Edit(int id)
         {
