@@ -1,0 +1,50 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.QualityInspection
+
+@{
+    ViewData["Title"] = "Quality Inspection Details";
+}
+
+<h2 class="mb-4">Quality Inspection Details</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>GRN Number:</strong> @Model.GRN?.GRNNumber</p>
+        <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
+        <p><strong>Inspected By:</strong> @Model.InspectedBy?.FullName</p>
+        <p><strong>Inspection Date:</strong> @Model.InspectionDate.ToShortDateString()</p>
+        <p><strong>Inspection Method:</strong> @Model.InspectionMethod</p>
+        <p><strong>Reference Standards:</strong> @Model.ReferenceStandards</p>
+        <p><strong>Corrective Action Required:</strong> @(Model.CorrectiveActionRequired ? "Yes" : "No")</p>
+        <p><strong>Action Taken By:</strong> @Model.ActionTakenBy?.FullName</p>
+        <p><strong>Follow-Up Date:</strong> @Model.FollowUpDate.ToShortDateString()</p>
+    </div>
+</div>
+
+<h4>Inspection Items</h4>
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Item</th>
+            <th>Received Qty</th>
+            <th>Inspected Qty</th>
+            <th>Result</th>
+            <th>Defects</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Item?.ItemName</td>
+                <td>@item.ReceivedQuantity</td>
+                <td>@item.InspectedQuantity</td>
+                <td>@item.InspectionResult</td>
+                <td>@item.DefectsFound</td>
+                <td>@item.Remarks</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>

@@ -1,12 +1,12 @@
 ﻿
 using ERPInventoryPurchesSystems.Models.Master;
 using ERPInventoryPurchesSystems.Models.PR;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERPInventoryPurchesSystems.Utility
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

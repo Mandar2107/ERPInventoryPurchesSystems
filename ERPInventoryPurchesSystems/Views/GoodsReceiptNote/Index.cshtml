@@ -1,9 +1,19 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote>
 
-<h2>Goods Receipt Notes</h2>
-<table class="table">
-    <thead>
-        <a asp-action="Create">Create GRN</a>
+@{
+    ViewData["Title"] = "Goods Receipt Notes";
+}
+
+<h2 class="mb-4">Goods Receipt Notes</h2>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Create GRN
+    </a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>GRN Number</th>
             <th>Date</th>
@@ -19,12 +29,15 @@
             <tr>
                 <td>@grn.GRNNumber</td>
                 <td>@grn.GRNDate.ToShortDateString()</td>
-                <td>@grn.PurchaseOrder?.PONumber </td>
-                <td>@grn.Vendor?.VendorName  </td>
-                <td>@grn.ReceivedBy?.FullName </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@grn.GRNId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@grn.GRNId">Edit</a>
+                <td>@grn.PurchaseOrder?.PONumber</td>
+                <td>@grn.Vendor?.VendorName</td>
+                <td>@grn.ReceivedBy?.FullName</td>
+                <td class="d-flex gap-1">
+                    <a asp-action="Details" asp-route-id="@grn.GRNId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@grn.GRNId" class="btn btn-warning btn-sm">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@grn.GRNId" method="post" onsubmit="return confirm('Are you sure you want to delete this GRN?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         }

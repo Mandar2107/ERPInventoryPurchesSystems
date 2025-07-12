@@ -1,21 +1,22 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
-
 @{
     ViewData["Title"] = "Quotation Details";
 }
 
-<h2>Quotation Comparison Details</h2>
+<h2 class="mb-4">Quotation Comparison Details</h2>
 
-<div>
-    <p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber</p>
-    <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
-    <p><strong>Requested By:</strong> @Model.RequestedBy?.FullName</p>
-    <p><strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()</p>
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber</p>
+        <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
+        <p><strong>Requested By:</strong> @Model.RequestedBy?.FullName</p>
+        <p><strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()</p>
+    </div>
 </div>
 
 <h4>Selected Vendor Quotations</h4>
 <table class="table table-bordered">
-    <thead>
+    <thead class="table-dark">
         <tr>
             <th>Item</th>
             <th>Vendor</th>

@@ -4,52 +4,52 @@
     ViewData["Title"] = "Create Quality Inspection";
 }
 
-<h2>Create Quality Inspection</h2>
+<h2 class="mb-4">Create Quality Inspection</h2>
 
 <form asp-action="Create" method="post">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="GRNId">GRN</label>
         <select asp-for="GRNId" asp-items="ViewBag.GRNs" class="form-control"></select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="InspectedByUserId">Inspected By</label>
         <select asp-for="InspectedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="DepartmentCode">Department</label>
         <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="InspectionMethod">Inspection Method</label>
         <input asp-for="InspectionMethod" class="form-control" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="ReferenceStandards">Reference Standards</label>
         <input asp-for="ReferenceStandards" class="form-control" />
     </div>
 
-    <div class="form-group form-check">
+    <div class="form-check mb-3">
         <input asp-for="CorrectiveActionRequired" class="form-check-input" type="checkbox" />
         <label asp-for="CorrectiveActionRequired" class="form-check-label">Corrective Action Required</label>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="ActionTakenByUserId">Action Taken By</label>
         <select asp-for="ActionTakenByUserId" asp-items="ViewBag.Users" class="form-control"></select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-4">
         <label asp-for="FollowUpDate">Follow-Up Date</label>
         <input asp-for="FollowUpDate" type="date" class="form-control" />
     </div>
 
     <h4>Inspection Items</h4>
-    <table class="table" id="inspectionItemsTable">
-        <thead>
+    <table class="table table-bordered" id="inspectionItemsTable">
+        <thead class="table-light">
             <tr>
                 <th>Item</th>
                 <th>Received Qty</th>
@@ -63,8 +63,8 @@
         <tbody></tbody>
     </table>
 
-    <button type="button" class="btn btn-secondary" onclick="addInspectionItem()">Add Item</button>
-    <br /><br />
+    <button type="button" class="btn btn-secondary mb-3" onclick="addInspectionItem()">Add Item</button>
+    <br />
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
@@ -88,15 +88,15 @@
 
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td><select name="Items[${inspIndex}].ItemCode" class="form-control">
-                    ${itemOptions}
-                </select></td>
+                <td><select name="Items[${inspIndex}].ItemCode" class="form-control">${itemOptions}</select></td>
                 <td><input name="Items[${inspIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
                 <td><input name="Items[${inspIndex}].InspectedQuantity" type="number" class="form-control" /></td>
-                <td><select name="Items[${inspIndex}].InspectionResult" class="form-control">
-                    <option value="Pass">Pass</option>
-                    <option value="Fail">Fail</option>
-                </select></td>
+                <td>
+                    <select name="Items[${inspIndex}].InspectionResult" class="form-control">
+                        <option value="Pass">Pass</option>
+                        <option value="Fail">Fail</option>
+                    </select>
+                </td>
                 <td><input name="Items[${inspIndex}].DefectsFound" type="text" class="form-control" /></td>
                 <td><input name="Items[${inspIndex}].Remarks" type="text" class="form-control" /></td>
                 <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>

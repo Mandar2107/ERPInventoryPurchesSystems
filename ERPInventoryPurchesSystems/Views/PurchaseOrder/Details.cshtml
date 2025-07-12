@@ -1,0 +1,19 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.PurchaseOrder
+
+@{
+    ViewData["Title"] = "Purchase Order Details";
+}
+
+<h2>Purchase Order Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>PO Number:</strong> @Model.PONumber</p>
+        <p><strong>Date:</strong> @Model.PODate.ToShortDateString()</p>
+        <p><strong>Vendor:</strong> @Model.Vendor?.VendorName </p>
+        <p><strong>Department:</strong> @Model.Department?.DepartmentName </p>
+        <p><strong>Requested By:</strong> @Model.RequestedBy?.FullName </p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>

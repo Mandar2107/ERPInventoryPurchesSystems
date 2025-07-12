@@ -1,16 +1,15 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
-
 @{
     ViewData["Title"] = "Compare Quotations";
 }
 
-<h2>Select Vendor for Each Item</h2>
+<h2 class="mb-4">Select Vendor for Each Item</h2>
 
 <form asp-action="Selection" method="post">
     <input type="hidden" name="ComparisonId" value="@Model.ComparisonId" />
 
     <table class="table table-bordered">
-        <thead>
+        <thead class="table-dark">
             <tr>
                 <th>Item</th>
                 <th>Vendor</th>

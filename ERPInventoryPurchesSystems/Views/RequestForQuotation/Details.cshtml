@@ -1,23 +1,20 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.RequestForQuotation
-
 @{
     ViewData["Title"] = "RFQ Details";
 }
 
-<h2>RFQ Details</h2>
+<h2 class="mb-4">RFQ Details</h2>
 
-<div class="form-group">
-    <label>PR Number:</label>
-    <p>@Model.PurchaseRequisition.PRNumber</p>
-</div>
-<div class="form-group">
-    <label>Vendor:</label>
-    <p>@Model.Vendor.VendorName</p>
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber ?? "-"</p>
+        <p><strong>Vendor:</strong> @Model.Vendor?.VendorName ?? "-"</p>
+    </div>
 </div>
 
 <h4>RFQ Items</h4>
 <table class="table table-bordered">
-    <thead>
+    <thead class="table-dark">
         <tr>
             <th>Item</th>
             <th>Quantity</th>
@@ -30,7 +27,7 @@
         @foreach (var item in Model.Items)
         {
             <tr>
-                <td>@item.Item.ItemName</td>
+                <td>@item.Item?.ItemName ?? "-"</td>
                 <td>@item.Quantity</td>
                 <td>@item.DeliveryDate.ToShortDateString()</td>
                 <td>@item.QuotationAmount</td>
@@ -39,3 +36,10 @@
         }
     </tbody>
 </table>
+
+<!-- Back Button -->
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>

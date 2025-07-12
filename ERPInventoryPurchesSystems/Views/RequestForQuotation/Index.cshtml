@@ -4,11 +4,16 @@
     ViewData["Title"] = "RFQ List";
 }
 
-<h2>RFQ List</h2>
+<h2 class="mb-4">RFQ List</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <a asp-action="Create">Create Request </a>
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Create Request
+    </a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>PR Number</th>
             <th>Vendor</th>
@@ -19,11 +24,11 @@
         @foreach (var rfq in Model)
         {
             <tr>
-                <td>@rfq.PurchaseRequisition.PRNumber</td>
-                <td>@rfq.Vendor.VendorName</td>
+                <td>@rfq.PurchaseRequisition?.PRNumber </td>
+                <td>@rfq.Vendor?.VendorName"</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@rfq.RFQId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@rfq.RFQId">Edit</a>
+                    <a asp-action="Details" asp-route-id="@rfq.RFQId" class="btn btn-info btn-sm me-1">Details</a>
+                    <a asp-action="Edit" asp-route-id="@rfq.RFQId" class="btn btn-warning btn-sm">Edit</a>
                 </td>
             </tr>
         }

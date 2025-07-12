@@ -1,10 +1,14 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.QuotationComparison>
+@{
+    ViewData["Title"] = "Quotation Comparisons";
+}
 
-<h2>Quotation Comparisons</h2>
-<a asp-action="Create" class="btn btn-success">Create Quotation</a>
+<h2 class="mb-4">Quotation Comparisons</h2>
 
-<table class="table">
-    <thead>
+<a asp-action="Create" class="btn btn-success mb-3">Create Quotation</a>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>PR Number</th>
             <th>Department</th>
@@ -22,10 +26,10 @@
                 <td>@comparison.RequestedBy?.FullName</td>
                 <td>@comparison.DateOfComparison.ToShortDateString()</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@comparison.ComparisonId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@comparison.ComparisonId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@comparison.ComparisonId">Delete</a> |
-                    <a asp-action="Index1" asp-route-id="@comparison.ComparisonId">Compare</a>
+                    <a asp-action="Details" asp-route-id="@comparison.ComparisonId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@comparison.ComparisonId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@comparison.ComparisonId" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Index1" asp-route-id="@comparison.ComparisonId" class="btn btn-secondary btn-sm">Compare</a>
                 </td>
             </tr>
         }

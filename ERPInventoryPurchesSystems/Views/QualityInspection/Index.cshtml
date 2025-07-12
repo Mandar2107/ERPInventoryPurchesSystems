@@ -4,14 +4,16 @@
     ViewData["Title"] = "Quality Inspections";
 }
 
-<h2>Quality Inspections</h2>
+<h2 class="mb-4">Quality Inspections</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add Quality Inspection</a>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Add Quality Inspection
+    </a>
 </p>
 
 <table class="table table-bordered table-striped">
-    <thead>
+    <thead class="table-dark">
         <tr>
             <th>GRN Number</th>
             <th>Department</th>
@@ -24,14 +26,16 @@
         @foreach (var inspection in Model)
         {
             <tr>
-                <td>@inspection.GRN.GRNNumber</td>
-                <td>@inspection.Department.DepartmentName</td>
-                <td>@inspection.InspectedBy.FullName</td>
+                <td>@inspection.GRN?.GRNNumber</td>
+                <td>@inspection.Department?.DepartmentName</td>
+                <td>@inspection.InspectedBy?.FullName</td>
                 <td>@inspection.InspectionDate.ToShortDateString()</td>
-                <td>
+                <td class="d-flex gap-1">
                     <a asp-action="Details" asp-route-id="@inspection.InspectionId" class="btn btn-info btn-sm">Details</a>
                     <a asp-action="Edit" asp-route-id="@inspection.InspectionId" class="btn btn-warning btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@inspection.InspectionId" class="btn btn-danger btn-sm">Delete</a>
+                    <form asp-action="Delete" asp-route-id="@inspection.InspectionId" method="post" onsubmit="return confirm('Are you sure you want to delete this inspection?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         }

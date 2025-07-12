@@ -4,31 +4,32 @@
     ViewData["Title"] = "GRN Details";
 }
 
-<h2>GRN Details</h2>
+<h2 class="mb-4">GRN Details</h2>
 
-<div>
-    <strong>GRN Number:</strong> @Model.GRNNumber<br />
-    <strong>Date:</strong> @Model.GRNDate.ToShortDateString()<br />
-    <strong>Vendor:</strong> @Model.Vendor?.VendorName<br />
-    <strong>PO Number:</strong> @Model.PurchaseOrder?.PONumber<br />
-    <strong>Received By:</strong> @Model.ReceivedBy?.FullName<br />
-    <strong>Department:</strong> @Model.Department?.DepartmentName<br />
-    <strong>Transporter:</strong> @Model.TransporterName<br />
-    <strong>Vehicle Number:</strong> @Model.VehicleNumber<br />
-    <strong>Verified By:</strong> @Model.VerifiedBy?.FullName<br />
-    <strong>Verification Date:</strong> @Model.VerificationDate.ToShortDateString()<br />
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>GRN Number:</strong> @Model.GRNNumber</p>
+        <p><strong>Date:</strong> @Model.GRNDate.ToShortDateString()</p>
+        <p><strong>Vendor:</strong> @Model.Vendor?.VendorName</p>
+        <p><strong>PO Number:</strong> @Model.PurchaseOrder?.PONumber</p>
+        <p><strong>Received By:</strong> @Model.ReceivedBy?.FullName</p>
+        <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
+        <p><strong>Transporter:</strong> @Model.TransporterName</p>
+        <p><strong>Vehicle Number:</strong> @Model.VehicleNumber</p>
+        <p><strong>Verified By:</strong> @Model.VerifiedBy?.FullName</p>
+        <p><strong>Verification Date:</strong> @Model.VerificationDate.ToShortDateString()</p>
+    </div>
 </div>
 
 <h4>Items</h4>
-<table class="table">
-    <thead>
+<table class="table table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>Item</th>
             <th>Ordered Qty</th>
             <th>Received Qty</th>
             <th>Unit</th>
             <th>Condition</th>
-            <th>Inspection Status</th>
             <th>Remarks</th>
             <th>Current Stock</th>
         </tr>
@@ -42,7 +43,6 @@
                 <td>@item.ReceivedQuantity</td>
                 <td>@item.Unit</td>
                 <td>@item.Condition</td>
-      
                 <td>@item.Remarks</td>
                 <td>@item.Item?.QuantityInHand</td>
             </tr>

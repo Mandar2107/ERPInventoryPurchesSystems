@@ -1,9 +1,15 @@
 ﻿@model IEnumerable<ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon>
 
-<h2>Purchase Requisitions</h2>
-<table class="table">
-    <thead>
-        <a asp-action="Create">Create A Request</a>
+<h2 class="mb-4">Purchase Requisitions</h2>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Create A Request
+    </a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>PR Number</th>
             <th>Date</th>
@@ -19,13 +25,19 @@
             <tr>
                 <td>@pr.PRNumber</td>
                 <td>@pr.PRDate.ToShortDateString()</td>
-                <td>@pr.Department?.DepartmentName ?? "N/A"</td>
+                <td>@pr.Department?.DepartmentName </td>
                 <td>@pr.Status</td>
-                <td>@pr.SubmittedBy?.FullName ?? "N/A"</td>
+                <td>@pr.SubmittedBy?.FullName </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@pr.PurchaseRequisitionID">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@pr.PurchaseRequisitionID">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@pr.PurchaseRequisitionID">Delete</a>
+                    <a asp-action="Details" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-info btn-sm me-1">
+                        Details
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-warning btn-sm me-1">
+                        Edit
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
                 </td>
             </tr>
         }

@@ -1,0 +1,55 @@
+﻿@model ERPInventoryPurchesSystems.Models.PR.Invoice
+
+@{
+    ViewData["Title"] = "Invoice Details";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3">Invoice - @Model.InvoiceNumber</h2>
+
+    <div class="mb-3">
+        <p><strong>Date:</strong> @Model.InvoiceDate.ToShortDateString()</p>
+        <p><strong>Vendor:</strong> @Model.Vendor?.VendorName </p>
+        <p><strong>PO Number:</strong> @Model.PurchaseOrder?.PONumber </p>
+        <p><strong>GRN Number:</strong> @Model.GRN?.GRNNumber </p>
+        <p><strong>Department:</strong> @Model.Department?.DepartmentName </p>
+    </div>
+
+    <h4>Invoice Items</h4>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Item</th>
+                <th>PO Qty</th>
+                <th>GRN Qty</th>
+                <th>Invoice Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Item?.ItemName </td>
+                    <td>@item.POQuantity</td>
+                    <td>@item.GRNQuantity</td>
+                    <td>@item.InvoicedQuantity</td>
+                    <td>₹@item.UnitPrice.ToString("N2")</td>
+                    <td>₹@item.TotalAmount.ToString("N2")</td>
+                    <td>@item.MatchStatus </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <p><strong>Total Invoice Amount:</strong> ₹@Model.TotalInvoiceAmount.ToString("N2")</p>
+        <p><strong>Payment Terms:</strong> @Model.PaymentTerms </p>
+        <p><strong>Payment Method:</strong> @Model.PaymentMethod </p>
+        <p><strong>Payment Status:</strong> @Model.PaymentStatus </p>
+        <p><strong>Payment Date:</strong> @Model.PaymentDate.ToShortDateString()</p>
+        <p><strong>Processed By:</strong> @Model.ProcessedBy?.FullName </p>
+    </div>
+</div>
