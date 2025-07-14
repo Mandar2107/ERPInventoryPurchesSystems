@@ -191,14 +191,13 @@ namespace ERPInventoryPurchesSystems.Utility
     .HasOne(q => q.InspectedBy)
     .WithMany()
     .HasForeignKey(q => q.InspectedByUserId)
-    .OnDelete(DeleteBehavior.Restrict); // or NoAction
+    .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<QualityInspection>()
                 .HasOne(q => q.ActionTakenBy)
                 .WithMany()
                 .HasForeignKey(q => q.ActionTakenByUserId)
-                .OnDelete(DeleteBehavior.Restrict); // or NoAction
-
+                .OnDelete(DeleteBehavior.Restrict); 
 
         }
     }

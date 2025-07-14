@@ -10,22 +10,18 @@ namespace ERPInventoryPurchesSystems.Utility
             string adminRole = "Admin";
             string userRole = "User";
 
-            // Admin credentials
             string adminEmail = "admin@erp.com";
             string adminPassword = "Admin@123";
 
-            // Regular user credentials
             string userEmail = "mandar@erp.com";
             string userPassword = "Mandar@123";
 
-            // Create roles if they don't exist
             if (!await roleManager.RoleExistsAsync(adminRole))
                 await roleManager.CreateAsync(new IdentityRole(adminRole));
 
             if (!await roleManager.RoleExistsAsync(userRole))
                 await roleManager.CreateAsync(new IdentityRole(userRole));
 
-            // Create Admin user
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
@@ -34,7 +30,7 @@ namespace ERPInventoryPurchesSystems.Utility
                     UserName = adminEmail,
                     Email = adminEmail,
                     FullName = "System Admin",
-                    DepartmentCode = "DEP001", // Ensure this exists
+                    DepartmentCode = "DEP001", 
                     UserRole = adminRole,
                     EmailConfirmed = true
                 };
@@ -44,7 +40,7 @@ namespace ERPInventoryPurchesSystems.Utility
                     await userManager.AddToRoleAsync(user, adminRole);
             }
 
-            // Create Regular User
+
             var regularUser = await userManager.FindByEmailAsync(userEmail);
             if (regularUser == null)
             {
