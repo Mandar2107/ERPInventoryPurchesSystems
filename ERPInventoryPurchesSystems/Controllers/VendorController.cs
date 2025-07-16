@@ -60,16 +60,15 @@ public class VendorController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditVendor(string id, Vendor vendor)
     {
-        if (id != vendor.VendorCode) return BadRequest();
 
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName", vendor.CategoryCode);
-            return View("EditVendor", vendor);
-        }
-
+        vendor.CreatedDate = DateTime.UtcNow;
         vendor.LastModifiedDate = DateTime.UtcNow;
-        vendor.LastModifiedBy = User.Identity.Name;
+        vendor.CreatedBy = vendor.VendorName ?? "System";
+        vendor.LastModifiedBy = vendor.VendorName ?? "System";
+
+
+
+  
 
         _context.Vendors.Update(vendor);
         await _context.SaveChangesAsync();
@@ -79,7 +78,7 @@ public class VendorController : Controller
 
     public async Task<IActionResult> DeleteVendor(string id)
     {
-        if (string.IsNullOrEmpty(id)) return BadRequest();
+   
 
         var vendor = await _context.Vendors.FindAsync(id);
         if (vendor == null) return NotFound();
@@ -87,7 +86,7 @@ public class VendorController : Controller
         return View(vendor);
     }
 
-    [HttpPost, ActionName("DeleteVendor")]
+    [HttpPost]
     public async Task<IActionResult> DeleteVendorConfirmed(string id)
     {
         var vendor = await _context.Vendors.FindAsync(id);
@@ -101,7 +100,7 @@ public class VendorController : Controller
 
     public async Task<IActionResult> DetailsVendor(string id)
     {
-        if (string.IsNullOrEmpty(id)) return BadRequest();
+      
 
         var vendor = await _context.Vendors
             .Include(v => v.Category)

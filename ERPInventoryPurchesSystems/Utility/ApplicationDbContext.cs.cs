@@ -33,11 +33,24 @@ namespace ERPInventoryPurchesSystems.Utility
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
+        public DbSet<ItemVendor> ItemVendors { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-          
+            modelBuilder.Entity<ItemVendor>()
+                    .HasOne(iv => iv.Item)
+                    .WithMany(i => i.ItemVendors)
+                    .HasForeignKey(iv => iv.ItemCode);
+
+            modelBuilder.Entity<ItemVendor>()
+                .HasOne(iv => iv.Vendor)
+                .WithMany(v => v.ItemVendors)
+                .HasForeignKey(iv => iv.VendorCode);
+
+
+
             modelBuilder.Entity<Department>()
                 .HasMany(d => d.Users)
                 .WithOne(u => u.Department)

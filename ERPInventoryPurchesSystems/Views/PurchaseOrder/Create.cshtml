@@ -4,33 +4,25 @@
     var items = ViewBag.Items as SelectList;
 }
 
-}
 <h2 class="mb-4">Create Purchase Order</h2>
 
 <form asp-action="Create" method="post">
     <div class="form-group mb-3">
-        <label asp-for="PRId">PR</label>
+        <label asp-for="PRId">Purchase Requisition</label>
         <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
     </div>
 
+    <input type="hidden" name="VendorCode" id="VendorCode" />
     <div class="form-group mb-3">
-        <label asp-for="VendorCode">Vendor</label>
-        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+        <label>Vendor Contact</label>
+        <input type="text" name="VendorContact" id="VendorContact" class="form-control" readonly />
     </div>
 
+    <input type="hidden" name="DepartmentCode" id="DepartmentCode" />
+    <input type="hidden" name="RequestedByUserId" id="RequestedByUserId" />
     <div class="form-group mb-3">
-        <label asp-for="VendorContact">Vendor Contact</label>
-        <input asp-for="VendorContact" class="form-control" />
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="DepartmentCode">Department</label>
-        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
-    </div>
-
-    <div class="form-group mb-4">
-        <label asp-for="RequestedByUserId">Requested By</label>
-        <select asp-for="RequestedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
+        <label>Requested By</label>
+        <input type="text" id="RequestedByName" class="form-control" readonly />
     </div>
 
     <h4>Items</h4>
@@ -52,6 +44,7 @@
     <button type="button" class="btn btn-secondary mb-3" onclick="addPOItem()">Add Item</button>
     <br />
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
 </form>
 
 <!-- Template Row -->
@@ -80,7 +73,7 @@
     <script>
         let poIndex = 0;
 
-        function addPOItem() {
+        function addPOItem(itemData = null) {
             const template = document.querySelector("#poItemTemplate table").cloneNode(true);
             const row = template.querySelector("tr");
 
@@ -90,6 +83,13 @@
             row.querySelector(".totalprice-input").setAttribute("name", `Items[${poIndex}].TotalPrice`);
             row.querySelector(".date-input").setAttribute("name", `Items[${poIndex}].DeliveryDate`);
             row.querySelector(".terms-input").setAttribute("name", `Items[${poIndex}].DeliveryTerms`);
+
+            if (itemData) {
+                row.querySelector(".item-select").value = itemData.itemCode;
+                row.querySelector(".qty-input").value = itemData.quantity;
+                row.querySelector(".unitprice-input").value = itemData.unitPrice;
+                row.querySelector(".totalprice-input").value = (itemData.quantity * itemData.unitPrice).toFixed(2);
+            }
 
             const qtyInput = row.querySelector(".qty-input");
             const unitPriceInput = row.querySelector(".unitprice-input");
@@ -112,5 +112,25 @@
             const row = button.closest("tr");
             row.remove();
         }
+
+        document.querySelector('[name="PRId"]').addEventListener('change', function () {
+            const prId = this.value;
+            fetch(`/PurchaseOrder/GetPRDetails?prId=${prId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('#VendorCode').value = data.vendorCode || "";
+                    document.querySelector('#VendorContact').value = data.vendorContact || "";
+                    document.querySelector('#DepartmentCode').value = data.departmentCode || "";
+                    document.querySelector('#RequestedByUserId').value = data.requestedByUserId || "";
+                    document.querySelector('#RequestedByName').value = data.requestedByName || "";
+
+                    document.querySelector("#poItemsTable tbody").innerHTML = "";
+                    poIndex = 0;
+
+                    data.items.forEach(item => {
+                        addPOItem(item);
+                    });
+                });
+        });
     </script>
 }

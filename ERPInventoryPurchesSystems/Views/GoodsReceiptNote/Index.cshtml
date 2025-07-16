@@ -35,8 +35,9 @@
                 <td class="d-flex gap-1">
                     <a asp-action="Details" asp-route-id="@grn.GRNId" class="btn btn-info btn-sm">Details</a>
                     <a asp-action="Edit" asp-route-id="@grn.GRNId" class="btn btn-warning btn-sm">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@grn.GRNId" method="post" onsubmit="return confirm('Are you sure you want to delete this GRN?');">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    <form asp-action="DeleteConfirmed" method="post" onsubmit="return confirm('Are you sure you want to delete this requisition?');">
+                        <input type="hidden" name="id" value="@grn.GRNId" />
+                        <button type="submit" class="btn btn-danger btn-sm me-1">Delete</button>
                     </form>
                 </td>
             </tr>

@@ -73,5 +73,7 @@ namespace ERPInventoryPurchesSystems.Models.Master
 
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public ICollection<ItemVendor> ItemVendors { get; set; }
+
     }
 }

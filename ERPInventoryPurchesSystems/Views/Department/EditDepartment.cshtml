@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Edit Department";
 }
+<button onclick="window.history.back();" class="btn btn-secondary">Back</button>
 <h2>Edit Department</h2>
 <form asp-action="AfterEditDepartment" method="post">
     <input type="hidden" asp-for="DepartmentCode" />

@@ -4,33 +4,59 @@
     ViewData["Title"] = "Pending PRs";
 }
 
-<h2>Pending Purchase Requisitions</h2>
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">Pending Purchase Requisitions</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>PR Number</th>
-            <th>Department</th>
-            <th>Submitted By</th>
-            <th>Required Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var pr in Model)
-        {
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
-                <td>@pr.PRNumber</td>
-                <td>@pr.Department?.DepartmentName</td>
-                <td>@pr.SubmittedBy?.FullName</td>
-                <td>@pr.Items.FirstOrDefault()?.RequiredDate.ToShortDateString()</td>
-                <td>
-                    <form asp-action="Approve" method="post">
-                        <input type="hidden" name="prId" value="@pr.PurchaseRequisitionID" />
-                        <button type="submit" class="btn btn-success">Approve</button>
-                    </form>
-                </td>
+                <th>PR Number</th>
+                <th>Department</th>
+                <th>Submitted By</th>
+                <th>Required Date</th>
+                <th>Items</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var pr in Model)
+            {
+                <tr>
+                    <td>@pr.PRNumber</td>
+                    <td>@pr.Department?.DepartmentName</td>
+                    <td>@pr.SubmittedBy?.FullName</td>
+                    <td>@pr.Items.FirstOrDefault()?.RequiredDate.ToShortDateString()</td>
+                    <td>
+                        <table class="table table-sm table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Required Date</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in pr.Items)
+                                {
+                                    <tr>
+                                        <td>@item.Item?.ItemName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.RequiredDate.ToShortDateString()</td>
+                                       
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <form asp-action="Approve" method="post">
+                            <input type="hidden" name="prId" value="@pr.PurchaseRequisitionID" />
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

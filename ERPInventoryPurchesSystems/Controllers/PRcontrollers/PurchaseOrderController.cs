@@ -84,6 +84,39 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetPRDetails(int prId)
+        {
+            var pr = await _context.PurchaseRequisitions
+                .Include(p => p.Department)
+                .Include(p => p.SubmittedBy)
+                .Include(p => p.Items)
+                    .ThenInclude(i => i.Item)
+                        .ThenInclude(it => it.PreferredVendor)
+                .FirstOrDefaultAsync(p => p.PurchaseRequisitionID == prId);
+
+            if (pr == null)
+                return NotFound();
+
+            var preferredVendor = pr.Items.FirstOrDefault()?.Item?.PreferredVendor;
+
+            var result = new
+            {
+                vendorCode = preferredVendor?.VendorCode,
+                vendorContact = preferredVendor?.ContactPersonName,
+                departmentCode = pr.DepartmentCode,
+                requestedByUserId = pr.SubmittedByUserID,
+                items = pr.Items.Select(i => new {
+                    itemCode = i.ItemCode,
+                    itemName = i.Item.ItemName,
+                    quantity = i.Quantity,
+                    unitPrice = i.Item.LastPurchasePrice
+                })
+            };
+
+            return Json(result);
+        }
+
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -91,7 +124,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(order);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var order = await _context.PurchaseOrders.FindAsync(id);

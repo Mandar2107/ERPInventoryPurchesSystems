@@ -27,7 +27,7 @@
         @foreach (var item in Model.Items)
         {
             <tr>
-                <td>@item.Item?.ItemName ?? "-"</td>
+                <td>@item.Item?.ItemName </td>
                 <td>@item.Quantity</td>
                 <td>@item.DeliveryDate.ToShortDateString()</td>
                 <td>@item.QuotationAmount</td>

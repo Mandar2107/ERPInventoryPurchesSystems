@@ -1,44 +1,50 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.GoodsReceiptNote
-
 @{
     ViewData["Title"] = "Create GRN";
-    var itemsWithStock = ViewBag.ItemsWithStock as List<dynamic>;
-    var itemsJson = Newtonsoft.Json.JsonConvert.SerializeObject(itemsWithStock);
+    var itemsJson = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ItemsWithStock);
 }
 
-<h2>Create GRN</h2>
+<h2>Create Goods Receipt Note</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" id="grnForm">
     <div class="form-group">
-        <label asp-for="POId">PO</label>
-        <select asp-for="POId" asp-items="ViewBag.POs" class="form-control"></select>
+        <label asp-for="POId">Purchase Order</label>
+        <select asp-for="POId" asp-items="ViewBag.POs" class="form-control" id="poSelect"></select>
         <span asp-validation-for="POId" class="text-danger"></span>
     </div>
+
+    <input type="hidden" asp-for="VendorCode" id="VendorCode" />
     <div class="form-group">
-        <label asp-for="VendorCode">Vendor</label>
-        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
-        <span asp-validation-for="VendorCode" class="text-danger"></span>
+        <label>Vendor</label>
+        <input type="text" id="VendorName" class="form-control" readonly />
     </div>
+
     <div class="form-group">
         <label asp-for="ReceivedByUserId">Received By</label>
         <select asp-for="ReceivedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
     </div>
+
+    <input type="hidden" asp-for="DepartmentCode" id="DepartmentCode" />
     <div class="form-group">
-        <label asp-for="DepartmentCode">Department</label>
-        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
+        <label>Department</label>
+        <input type="text" id="DepartmentName" class="form-control" readonly />
     </div>
+
     <div class="form-group">
         <label asp-for="DeliveryNoteNumber">Delivery Note Number</label>
         <input asp-for="DeliveryNoteNumber" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="TransporterName">Transporter Name</label>
         <input asp-for="TransporterName" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="VehicleNumber">Vehicle Number</label>
         <input asp-for="VehicleNumber" class="form-control" />
     </div>
+
     <div class="form-group">
         <label asp-for="InspectionStatus">Inspection Status</label>
         <select asp-for="InspectionStatus" class="form-control">
@@ -47,10 +53,12 @@
             <option value="Failed">Failed</option>
         </select>
     </div>
+
     <div class="form-group">
         <label asp-for="VerifiedByUserId">Verified By</label>
         <select asp-for="VerifiedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
     </div>
+
     <div class="form-group">
         <label asp-for="VerificationDate">Verification Date</label>
         <input asp-for="VerificationDate" type="date" class="form-control" />
@@ -65,7 +73,6 @@
                 <th>Received Qty</th>
                 <th>Unit</th>
                 <th>Condition</th>
-                <th>Inspection Status</th>
                 <th>Remarks</th>
                 <th>Stock</th>
                 <th>Action</th>
@@ -77,6 +84,7 @@
     <button type="button" class="btn btn-secondary" onclick="addGRNItem()">Add Item</button>
     <br /><br />
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
 </form>
 
 @section Scripts {
@@ -84,33 +92,21 @@
         let grnIndex = 0;
         const itemStockData = @Html.Raw(itemsJson);
 
-        function addGRNItem() {
+        function addGRNItem(itemData = null) {
             const row = document.createElement("tr");
-
             const options = itemStockData.map(item =>
                 `<option value="${item.ItemCode}">${item.ItemName}</option>`
             ).join("");
 
             row.innerHTML = `
-                <td>
-                    <select name="items[${grnIndex}].ItemCode" class="form-control" onchange="updateStockDisplay(this, ${grnIndex})">
-                        ${options}
-                    </select>
-                </td>
-                <td><input name="items[${grnIndex}].OrderedQuantity" type="number" class="form-control" /></td>
-                <td><input name="items[${grnIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
+                <td><select name="items[${grnIndex}].ItemCode" class="form-control" onchange="updateStockDisplay(this, ${grnIndex})">${options}</select></td>
+                <td><input name="items[${grnIndex}].OrderedQuantity" type="number" class="form-control ordered-qty" /></td>
+                <td><input name="items[${grnIndex}].ReceivedQuantity" type="number" class="form-control received-qty" /></td>
                 <td><input name="items[${grnIndex}].Unit" type="text" class="form-control" /></td>
                 <td>
                     <select name="items[${grnIndex}].Condition" class="form-control">
                         <option value="Good">Good</option>
                         <option value="Damaged">Damaged</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="items[${grnIndex}].InspectionStatus" class="form-control">
-                        <option value="Pending">Pending</option>
-                        <option value="Passed">Passed</option>
-                        <option value="Failed">Failed</option>
                     </select>
                 </td>
                 <td><input name="items[${grnIndex}].Remarks" type="text" class="form-control" /></td>
@@ -128,11 +124,52 @@
             display.textContent = item ? `Stock: ${item.QuantityInHand}` : "Stock: -";
         }
 
+        document.getElementById("poSelect").addEventListener("change", function () {
+            const poId = this.value;
+            fetch(`/GoodsReceiptNote/GetPOData?poId=${poId}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("VendorCode").value = data.vendorCode;
+                    document.getElementById("VendorName").value = data.vendorName;
+                    document.getElementById("DepartmentCode").value = data.departmentCode;
+                    document.getElementById("DepartmentName").value = data.departmentName;
+
+                    document.querySelector("#grnItemsTable tbody").innerHTML = "";
+                    grnIndex = 0;
+                    data.items.forEach(item => {
+                        addGRNItem();
+                        const lastRow = document.querySelector("#grnItemsTable tbody").lastElementChild;
+                        lastRow.querySelector("select").value = item.itemCode;
+                        lastRow.querySelector(".ordered-qty").value = item.orderedQuantity;
+                        lastRow.querySelector(".received-qty").value = item.orderedQuantity;
+                        lastRow.querySelector("input[name$='.Unit']").value = item.unit;
+                        updateStockDisplay(lastRow.querySelector("select"), grnIndex - 1);
+                    });
+                });
+        });
+
+        document.getElementById("grnForm").addEventListener("submit", function (e) {
+            let valid = true;
+            document.querySelectorAll("#grnItemsTable tbody tr").forEach(row => {
+                const ordered = parseInt(row.querySelector(".ordered-qty").value) || 0;
+                const received = parseInt(row.querySelector(".received-qty").value) || 0;
+                if (received <= 0 || received > ordered) {
+                    valid = false;
+                    row.querySelector(".received-qty").classList.add("is-invalid");
+                } else {
+                    row.querySelector(".received-qty").classList.remove("is-invalid");
+                }
+            });
+            if (!valid) {
+                alert("Please correct item quantities before submitting.");
+                e.preventDefault();
+            }
+        });
+
         window.onload = function () {
-            addGRNItem(); 
+            addGRNItem();
         };
     </script>
-
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

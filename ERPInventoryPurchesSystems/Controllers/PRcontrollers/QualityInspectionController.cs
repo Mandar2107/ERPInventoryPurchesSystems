@@ -39,17 +39,13 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View();
         }
 
+      
+
         [HttpPost]
         public async Task<IActionResult> Create(QualityInspection inspection, List<InspectionItem> items)
         {
             inspection.InspectionDate = DateTime.Now;
-
-            
             inspection.ActionTakenByUserId = inspection.InspectedByUserId;
-
-
-            inspection.InspectionMethod = "Visual";
-
 
             _context.QualityInspections.Add(inspection);
             await _context.SaveChangesAsync();
@@ -64,6 +60,34 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetGRNData(int grnId)
+        {
+            var grn = await _context.GoodsReceiptNotes
+                .Include(g => g.Department)
+                .Include(g => g.Items)
+                    .ThenInclude(i => i.Item)
+                .FirstOrDefaultAsync(g => g.GRNId == grnId);
+
+            if (grn == null) return NotFound();
+
+            var result = new
+            {
+                departmentCode = grn.DepartmentCode,
+                departmentName = grn.Department?.DepartmentName,
+                items = grn.Items.Select(i => new
+                {
+                    itemCode = i.ItemCode,
+                    itemName = i.Item.ItemName,
+                    receivedQuantity = i.ReceivedQuantity
+                })
+            };
+
+            return Json(result);
+        }
+
+
+     
         public async Task<IActionResult> Details(int id)
         {
             var inspection = await _context.QualityInspections

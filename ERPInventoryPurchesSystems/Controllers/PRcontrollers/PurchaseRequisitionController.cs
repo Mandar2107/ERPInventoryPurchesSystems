@@ -53,7 +53,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("PRList");
         }
 
         // View PR Details
@@ -82,27 +82,52 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         [HttpPost]
         public async Task<IActionResult> Edit(PurchesRequstiaon requisition)
         {
+
+            requisition.CreatedDate = DateTime.Now;
+            requisition.CreatedBy = "System";
+            requisition.Status = "Pending";
+
+            var existingRequisition = await _context.PurchaseRequisitions
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(r => r.PurchaseRequisitionID == requisition.PurchaseRequisitionID);
+
+            if (existingRequisition == null)
+            {
+                return NotFound();
+            }
+
+            requisition.PRNumber = existingRequisition.PRNumber; 
+
             _context.PurchaseRequisitions.Update(requisition);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("PRList");
         }
 
-        // Show Delete Confirmation
+       
         public async Task<IActionResult> Delete(int id)
         {
             var pr = await _context.PurchaseRequisitions.FindAsync(id);
             return View(pr);
         }
 
-        // Handle Delete POST
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var pr = await _context.PurchaseRequisitions.FindAsync(id);
+            if (pr == null)
+            {
+                return NotFound();
+            }
+
+            var items = _context.PRItems.Where(i => i.PurchaseRequisitionID == id);
+            _context.PRItems.RemoveRange(items);
             _context.PurchaseRequisitions.Remove(pr);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("PRList");
         }
+
 
         private string GeneratePRNumber()
         {

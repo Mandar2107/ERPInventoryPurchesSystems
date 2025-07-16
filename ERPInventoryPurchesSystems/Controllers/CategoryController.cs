@@ -61,15 +61,19 @@ public class CategoryController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditCategory(string id, Category category)
     {
-        
 
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", category.DepartmentCode);
-            return View("EditCategory", category);
-        }
 
+        //if (!ModelState.IsValid)
+        //{
+        //    ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", category.DepartmentCode);
+        //    return View("EditCategory", category);
+        //}
+        category.CreatedDate = DateTime.UtcNow;
         category.LastModifiedDate = DateTime.UtcNow;
+        category.CreatedBy = "System";
+        category.LastModifiedBy = "System";
+
+        category.AssociatedGLAccounts = "agashhss";
 
         _context.Categories.Update(category);
         await _context.SaveChangesAsync();

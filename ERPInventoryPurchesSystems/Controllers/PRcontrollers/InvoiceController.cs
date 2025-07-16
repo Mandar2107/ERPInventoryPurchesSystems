@@ -29,16 +29,24 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(invoices);
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int? grnId)
         {
             ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
             ViewBag.POs = new SelectList(_context.PurchaseOrders, "POId", "PONumber");
-            ViewBag.GRNs = new SelectList(_context.GoodsReceiptNotes, "GRNId", "GRNNumber");
+            ViewBag.GRNs = new SelectList(_context.GoodsReceiptNotes, "GRNId", "GRNNumber", grnId);
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
             ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
+
+            var grnItems = grnId.HasValue
+                ? _context.GRNItems.Include(i => i.Item).Where(i => i.GRNId == grnId).ToList()
+                : new List<GRNItem>();
+
+            ViewBag.GRNItems = grnItems;
+
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(Invoice invoice, List<InvoiceItem> items)
@@ -110,7 +118,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName", invoice.ProcessedByUserId);
             return View(invoice);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Edit(Invoice invoice)
         {
@@ -133,6 +141,32 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+
+        public async Task<JsonResult> GetGRNItems(int grnId)
+        {
+            var items = await _context.GRNItems
+                .Include(i => i.Item)
+                .Where(i => i.GRNId == grnId)
+                .Select(i => new {
+                    i.ItemCode,
+                    items = i.Item.ItemName,
+                    POItem = i.OrderedQuantity,
+                    GRNQuantity = i.ReceivedQuantity, 
+                    UnitPrice = i.Item.LastPurchasePrice 
+                })
+                .ToListAsync();
+
+            return Json(items);
+        }
+
+
+
     }
+
+
+
 
 }

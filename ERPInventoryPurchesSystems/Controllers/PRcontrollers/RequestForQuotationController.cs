@@ -24,13 +24,14 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(rfqs);
         }
 
+
         public IActionResult Create()
         {
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber");
-            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
             ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(RequestForQuotation rfq, List<RFQItem> items)
@@ -89,6 +90,27 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetPRItems(int prId)
+        {
+            var items = await _context.PRItems
+                .Where(i => i.PurchaseRequisitionID == prId)
+                .Include(i => i.Item)
+                .Select(i => new {
+                    ItemCode = i.ItemCode,
+                    ItemName = i.Item.ItemName,
+                    Quantity = i.Quantity,
+                    RequiredDate = i.RequiredDate,
+                    Justification = i.Justification
+                })
+                .ToListAsync();
+
+            return Json(items);
+        }
+
+
     }
 
 }

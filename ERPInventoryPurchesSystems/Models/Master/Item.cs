@@ -60,7 +60,7 @@ namespace ERPInventoryPurchesSystems.Models.Master
         [ForeignKey("PreferredVendorCode")]
         public Vendor? PreferredVendor { get; set; }
 
-        public string VendorItemCode { get; set; }
+        public string? VendorItemCode { get; set; }
 
         public int LeadTime { get; set; }
 
@@ -83,5 +83,7 @@ namespace ERPInventoryPurchesSystems.Models.Master
         public string LastModifiedBy { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
+        public ICollection<ItemVendor> ItemVendors { get; set; }
+
     }
 }

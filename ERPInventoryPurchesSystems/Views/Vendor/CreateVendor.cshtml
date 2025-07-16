@@ -3,10 +3,13 @@
 @{
     ViewData["Title"] = "Create Vendor";
 }
-
+<button onclick="window.history.back();" class="btn btn-secondary">Back</button>
 <h2>Create Vendor</h2>
 
 <form asp-action="AfterCreateVendor" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="row">
         <div class="col-md-6">
             <label asp-for="VendorCode"></label>
@@ -24,6 +27,7 @@
                 <option>Distributor</option>
                 <option>Service Provider</option>
             </select>
+            <span asp-validation-for="VendorType" class="text-danger"></span>
 
             <label asp-for="Status"></label>
             <select asp-for="Status" class="form-control">
@@ -31,41 +35,53 @@
                 <option>Active</option>
                 <option>Inactive</option>
             </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
 
             <label asp-for="ContactPersonName"></label>
             <input asp-for="ContactPersonName" class="form-control" />
+            <span asp-validation-for="ContactPersonName" class="text-danger"></span>
 
             <label asp-for="PhoneNumber"></label>
             <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
             <label asp-for="EmailAddress"></label>
             <input asp-for="EmailAddress" class="form-control" />
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
 
             <label asp-for="FaxNumber"></label>
             <input asp-for="FaxNumber" class="form-control" />
+            <span asp-validation-for="FaxNumber" class="text-danger"></span>
 
             <label asp-for="Website"></label>
             <input asp-for="Website" class="form-control" />
+            <span asp-validation-for="Website" class="text-danger"></span>
 
             <label asp-for="BillingAddress"></label>
             <textarea asp-for="BillingAddress" class="form-control"></textarea>
+            <span asp-validation-for="BillingAddress" class="text-danger"></span>
 
             <label asp-for="ShippingAddress"></label>
             <textarea asp-for="ShippingAddress" class="form-control"></textarea>
+            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
 
             <label asp-for="City"></label>
             <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
 
             <label asp-for="State"></label>
             <input asp-for="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
 
             <label asp-for="Country"></label>
             <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
 
             <label asp-for="PostalCode"></label>
             <input asp-for="PostalCode" class="form-control" />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
 
-            <label for="CategoryCode" class="control-label">Category</label>
+            <label asp-for="CategoryCode">Category</label>
             <select asp-for="CategoryCode" class="form-control" asp-items="ViewBag.Categories">
                 <option value="">-- Select Category --</option>
             </select>
@@ -75,54 +91,70 @@
         <div class="col-md-6">
             <label asp-for="Currency"></label>
             <input asp-for="Currency" class="form-control" />
+            <span asp-validation-for="Currency" class="text-danger"></span>
 
             <label asp-for="PaymentTerms"></label>
             <input asp-for="PaymentTerms" class="form-control" />
+            <span asp-validation-for="PaymentTerms" class="text-danger"></span>
 
             <label asp-for="CreditLimit"></label>
             <input asp-for="CreditLimit" class="form-control" />
+            <span asp-validation-for="CreditLimit" class="text-danger"></span>
 
             <label asp-for="BankAccountDetails"></label>
             <textarea asp-for="BankAccountDetails" class="form-control"></textarea>
+            <span asp-validation-for="BankAccountDetails" class="text-danger"></span>
 
             <label asp-for="TaxIdentificationNumber"></label>
             <input asp-for="TaxIdentificationNumber" class="form-control" />
+            <span asp-validation-for="TaxIdentificationNumber" class="text-danger"></span>
 
             <label asp-for="PANNumber"></label>
             <input asp-for="PANNumber" class="form-control" />
+            <span asp-validation-for="PANNumber" class="text-danger"></span>
 
             <label asp-for="GSTVATRegistration"></label>
             <input asp-for="GSTVATRegistration" class="form-control" />
+            <span asp-validation-for="GSTVATRegistration" class="text-danger"></span>
 
             <label asp-for="MSMECertificate"></label>
             <input asp-for="MSMECertificate" class="form-control" />
+            <span asp-validation-for="MSMECertificate" class="text-danger"></span>
 
             <label asp-for="ISOCertification"></label>
             <input asp-for="ISOCertification" class="form-control" />
+            <span asp-validation-for="ISOCertification" class="text-danger"></span>
 
             <label asp-for="ContractAgreement"></label>
             <input asp-for="ContractAgreement" class="form-control" />
+            <span asp-validation-for="ContractAgreement" class="text-danger"></span>
 
             <label asp-for="BlacklistStatus"></label>
             <select asp-for="BlacklistStatus" class="form-control">
                 <option value="false">No</option>
                 <option value="true">Yes</option>
             </select>
+            <span asp-validation-for="BlacklistStatus" class="text-danger"></span>
 
             <label asp-for="LastPurchaseDate"></label>
             <input asp-for="LastPurchaseDate" type="date" class="form-control" />
+            <span asp-validation-for="LastPurchaseDate" class="text-danger"></span>
 
             <label asp-for="TotalSpend"></label>
             <input asp-for="TotalSpend" class="form-control" />
+            <span asp-validation-for="TotalSpend" class="text-danger"></span>
 
             <label asp-for="AverageLeadTime"></label>
             <input asp-for="AverageLeadTime" class="form-control" />
+            <span asp-validation-for="AverageLeadTime" class="text-danger"></span>
 
             <label asp-for="DeliveryReliabilityScore"></label>
             <input asp-for="DeliveryReliabilityScore" class="form-control" />
+            <span asp-validation-for="DeliveryReliabilityScore" class="text-danger"></span>
 
             <label asp-for="QualityRating"></label>
             <input asp-for="QualityRating" class="form-control" />
+            <span asp-validation-for="QualityRating" class="text-danger"></span>
 
             <label asp-for="VendorItemCodes"></label>
             <input asp-for="VendorItemCodes" class="form-control" />
@@ -131,13 +163,18 @@
 
             <label asp-for="Remarks"></label>
             <textarea asp-for="Remarks" class="form-control"></textarea>
+            <span asp-validation-for="Remarks" class="text-danger"></span>
 
             <label asp-for="DocumentUploads"></label>
             <input asp-for="DocumentUploads" type="file" class="form-control" />
+            <span asp-validation-for="DocumentUploads" class="text-danger"></span>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-success mt-3">Save Vendor</button>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">Save Vendor</button>
+        <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+    </div>
 </form>
 
 @section Scripts {

@@ -22,24 +22,48 @@
     <tbody>
         @foreach (var pr in Model)
         {
-            <tr>
+            <tr id="row-@pr.PurchaseRequisitionID">
                 <td>@pr.PRNumber</td>
                 <td>@pr.PRDate.ToShortDateString()</td>
-                <td>@pr.Department?.DepartmentName </td>
+                <td>@pr.Department?.DepartmentName</td>
                 <td>@pr.Status</td>
-                <td>@pr.SubmittedBy?.FullName </td>
+                <td>@pr.SubmittedBy?.FullName</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-info btn-sm me-1">
-                        Details
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-warning btn-sm me-1">
-                        Edit
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-danger btn-sm">
-                        Delete
-                    </a>
+                    <a asp-action="Details" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-info btn-sm me-1">Details</a>
+                    <a asp-action="Edit" asp-route-id="@pr.PurchaseRequisitionID" class="btn btn-warning btn-sm me-1">Edit</a>
+                    <form asp-action="DeleteConfirmed" method="post" onsubmit="return confirm('Are you sure you want to delete this requisition?');">
+                        <input type="hidden" name="id" value="@pr.PurchaseRequisitionID" />
+                        <button type="submit" class="btn btn-danger btn-sm me-1">Delete</button>
+                    </form>
+
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+     
+    <script>
+        $(document).ready(function () {
+            $('.delete-btn').click(function () {
+                if (!confirm("Are you sure you want to delete this requisition?")) return;
+
+                var id = $(this).data('id');
+
+                $.ajax({
+                    url: '/PurchaseRequisition/DeleteConfirmed',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function () {
+                        $('#row-' + id).remove();
+                    },
+                    error: function () {
+                        alert('Error deleting requisition.');
+                    }
+                });
+            });
+        });
+    </script>
+}

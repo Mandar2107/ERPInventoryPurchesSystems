@@ -14,9 +14,15 @@ namespace ERPInventoryPurchesSystems.Models.PR
         [ForeignKey("PRId")]
         public PurchesRequstiaon PurchaseRequisition { get; set; }
 
-        public string VendorCode { get; set; }
+
+        public string? VendorCode { get; set; }
+
+
         [ForeignKey("VendorCode")]
-        public Vendor Vendor { get; set; }
+        public Vendor? Vendor
+        {
+            get; set;
+        }
 
         public ICollection<RFQItem> Items
         {

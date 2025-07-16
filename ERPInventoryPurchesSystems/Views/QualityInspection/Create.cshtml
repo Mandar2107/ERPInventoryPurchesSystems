@@ -1,25 +1,25 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.QualityInspection
-
 @{
     ViewData["Title"] = "Create Quality Inspection";
 }
 
-<h2 class="mb-4">Create Quality Inspection</h2>
+<h2>Create Quality Inspection</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" id="inspectionForm">
     <div class="form-group mb-3">
         <label asp-for="GRNId">GRN</label>
-        <select asp-for="GRNId" asp-items="ViewBag.GRNs" class="form-control"></select>
+        <select asp-for="GRNId" asp-items="ViewBag.GRNs" class="form-control" id="grnSelect"></select>
+    </div>
+
+    <input type="hidden" asp-for="DepartmentCode" id="DepartmentCode" />
+    <div class="form-group mb-3">
+        <label>Department</label>
+        <input type="text" id="DepartmentName" class="form-control" readonly />
     </div>
 
     <div class="form-group mb-3">
         <label asp-for="InspectedByUserId">Inspected By</label>
         <select asp-for="InspectedByUserId" asp-items="ViewBag.Users" class="form-control"></select>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="DepartmentCode">Department</label>
-        <select asp-for="DepartmentCode" asp-items="ViewBag.Departments" class="form-control"></select>
     </div>
 
     <div class="form-group mb-3">
@@ -66,31 +66,19 @@
     <button type="button" class="btn btn-secondary mb-3" onclick="addInspectionItem()">Add Item</button>
     <br />
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
 </form>
-
-<!-- Hidden template for item options -->
-<div id="itemOptionsTemplate" style="display:none;">
-    @if (ViewBag.Items != null)
-    {
-        foreach (SelectListItem item in ViewBag.Items)
-        {
-            <option value="@item.Value">@item.Text</option>
-        }
-    }
-</div>
 
 @section Scripts {
     <script>
         let inspIndex = 0;
 
-        function addInspectionItem() {
-            const itemOptions = document.getElementById("itemOptionsTemplate").innerHTML;
-
+        function addInspectionItem(itemData = null) {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td><select name="Items[${inspIndex}].ItemCode" class="form-control">${itemOptions}</select></td>
-                <td><input name="Items[${inspIndex}].ReceivedQuantity" type="number" class="form-control" /></td>
-                <td><input name="Items[${inspIndex}].InspectedQuantity" type="number" class="form-control" /></td>
+                <td><input name="Items[${inspIndex}].ItemCode" class="form-control" value="${itemData?.itemCode || ''}" readonly /></td>
+                <td><input name="Items[${inspIndex}].ReceivedQuantity" type="number" class="form-control received-qty" value="${itemData?.receivedQuantity || 0}" readonly /></td>
+                <td><input name="Items[${inspIndex}].InspectedQuantity" type="number" class="form-control inspected-qty" /></td>
                 <td>
                     <select name="Items[${inspIndex}].InspectionResult" class="form-control">
                         <option value="Pass">Pass</option>
@@ -104,5 +92,42 @@
             document.querySelector("#inspectionItemsTable tbody").appendChild(row);
             inspIndex++;
         }
+
+        document.getElementById("grnSelect").addEventListener("change", function () {
+            const grnId = this.value;
+            fetch(`/QualityInspection/GetGRNData?grnId=${grnId}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("DepartmentCode").value = data.departmentCode;
+                    document.getElementById("DepartmentName").value = data.departmentName;
+
+                    document.querySelector("#inspectionItemsTable tbody").innerHTML = "";
+                    inspIndex = 0;
+                    data.items.forEach(item => {
+                        addInspectionItem(item);
+                    });
+                });
+        });
+
+        document.getElementById("inspectionForm").addEventListener("submit", function (e) {
+            let valid = true;
+            document.querySelectorAll("#inspectionItemsTable tbody tr").forEach(row => {
+                const received = parseInt(row.querySelector(".received-qty").value) || 0;
+                const inspected = parseInt(row.querySelector(".inspected-qty").value) || 0;
+                if (inspected <= 0 || inspected > received) {
+                    valid = false;
+                    row.querySelector(".inspected-qty").classList.add("is-invalid");
+                } else {
+                    row.querySelector(".inspected-qty").classList.remove("is-invalid");
+                }
+            });
+            if (!valid) {
+                alert("Please correct inspection quantities before submitting.");
+                e.preventDefault();
+            }
+        });
     </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

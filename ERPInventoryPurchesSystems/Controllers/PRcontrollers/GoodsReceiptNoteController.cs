@@ -1,9 +1,10 @@
-﻿
-using ERPInventoryPurchesSystems.Models.PR;
+﻿using ERPInventoryPurchesSystems.Models.PR;
 using ERPInventoryPurchesSystems.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
 {
@@ -24,6 +25,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
                 .Include(g => g.Department)
                 .Include(g => g.ReceivedBy)
                 .ToListAsync();
+
             return View(grns);
         }
 
@@ -33,9 +35,15 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
-            ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
+
+            // For stock display
+            ViewBag.ItemsWithStock = _context.Items
+                .Select(i => new { i.ItemCode, i.ItemName, i.QuantityInHand })
+                .ToList();
+
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(GoodsReceiptNote grn, List<GRNItem> items)
         {
@@ -49,13 +57,13 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             if (invalidItems.Any())
             {
                 ModelState.AddModelError("", "One or more selected items are invalid.");
-
                 ViewBag.POs = new SelectList(_context.PurchaseOrders, "POId", "PONumber");
                 ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
                 ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
                 ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
-                ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
-
+                ViewBag.ItemsWithStock = _context.Items
+                    .Select(i => new { i.ItemCode, i.ItemName, i.QuantityInHand })
+                    .ToList();
                 return View(grn);
             }
 
@@ -90,6 +98,36 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return RedirectToAction("Index");
         }
 
+        // ✅ AJAX endpoint for autofill
+        [HttpGet]
+        public async Task<IActionResult> GetPOData(int poId)
+        {
+            var po = await _context.PurchaseOrders
+                .Include(p => p.Vendor)
+                .Include(p => p.Department)
+                .Include(p => p.Items)
+                    .ThenInclude(i => i.Item)
+                .FirstOrDefaultAsync(p => p.POId == poId);
+
+            if (po == null) return NotFound();
+
+            var result = new
+            {
+                vendorCode = po.VendorCode,
+                vendorName = po.Vendor?.VendorName,
+                departmentCode = po.DepartmentCode,
+                departmentName = po.Department?.DepartmentName,
+                items = po.Items.Select(i => new
+                {
+                    itemCode = i.ItemCode,
+                    itemName = i.Item.ItemName,
+                    orderedQuantity = i.Quantity,
+                    unit = i.Item.UOM
+                })
+            };
+
+            return Json(result);
+        }
 
         public async Task<IActionResult> Details(int id)
         {
@@ -99,8 +137,9 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
                 .Include(g => g.Department)
                 .Include(g => g.ReceivedBy)
                 .Include(g => g.Items)
-                .ThenInclude(i => i.Item)
+                    .ThenInclude(i => i.Item)
                 .FirstOrDefaultAsync(g => g.GRNId == id);
+
             return View(grn);
         }
 
@@ -128,7 +167,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(grn);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var grn = await _context.GoodsReceiptNotes.FindAsync(id);

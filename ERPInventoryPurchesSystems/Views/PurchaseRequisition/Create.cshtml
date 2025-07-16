@@ -1,4 +1,5 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.PurchesRequstiaon
+
 @{
     ViewData["Title"] = "Create Purchase Requisition";
     var items = ViewBag.Items as SelectList;
@@ -7,29 +8,29 @@
 <h2 class="mb-4">Create Purchase Requisition</h2>
 
 <form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="mb-3">
         <label asp-for="PRDate" class="form-label"></label>
-        <input asp-for="PRDate" class="form-control" type="date" />
+        <input asp-for="PRDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="PRDate" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="DepartmentCode" class="form-label">Department</label>
         <select asp-for="DepartmentCode" class="form-control" asp-items="ViewBag.Departments"></select>
+        <span asp-validation-for="DepartmentCode" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="SubmittedByUserID" class="form-label">Submitted By</label>
         <select asp-for="SubmittedByUserID" class="form-control" asp-items="ViewBag.Users"></select>
+        <span asp-validation-for="SubmittedByUserID" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label">Status</label>
-        <select asp-for="Status" class="form-control">
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-        </select>
-    </div>
+    <!-- Hidden Status Field -->
+    <input type="hidden" asp-for="Status" value="Pending" />
 
     <h4 class="mt-4">Items</h4>
     <table class="table table-bordered" id="itemTable">
@@ -48,6 +49,7 @@
     <button type="button" class="btn btn-secondary mb-3" onclick="addItemRow()">Add Item</button>
     <br />
     <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
 </form>
 
 <!-- Hidden Template for Item Row -->
@@ -60,15 +62,27 @@
                     {
                         foreach (var item in items)
                         {
-                            <option value="@item.Value">@item.Text</option>
+                            <option value="@item.Value">@item.Text - @item.Value</option>
                         }
                     }
                 </select>
+                <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].ItemCode" data-valmsg-replace="true"></span>
             </td>
-            <td><input type="number" class="form-control quantity-input" /></td>
-            <td><input type="date" class="form-control date-input" /></td>
-            <td><input type="text" class="form-control justification-input" /></td>
-            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+            <td>
+                <input type="number" class="form-control quantity-input" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input type="date" class="form-control date-input" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].RequiredDate" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input type="text" class="form-control justification-input" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Justification" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+            </td>
         </tr>
     </table>
 </div>
@@ -86,6 +100,12 @@
             row.querySelector(".date-input").setAttribute("name", `Items[${itemIndex}].RequiredDate`);
             row.querySelector(".justification-input").setAttribute("name", `Items[${itemIndex}].Justification`);
 
+            // Update validation spans
+            row.querySelector('[data-valmsg-for="Items[0].ItemCode"]').setAttribute("data-valmsg-for", `Items[${itemIndex}].ItemCode`);
+            row.querySelector('[data-valmsg-for="Items[0].Quantity"]').setAttribute("data-valmsg-for", `Items[${itemIndex}].Quantity`);
+            row.querySelector('[data-valmsg-for="Items[0].RequiredDate"]').setAttribute("data-valmsg-for", `Items[${itemIndex}].RequiredDate`);
+            row.querySelector('[data-valmsg-for="Items[0].Justification"]').setAttribute("data-valmsg-for", `Items[${itemIndex}].Justification`);
+
             document.querySelector("#itemTable tbody").appendChild(row);
             itemIndex++;
         }
@@ -95,4 +115,8 @@
             row.remove();
         }
     </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

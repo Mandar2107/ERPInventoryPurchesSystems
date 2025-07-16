@@ -1,4 +1,5 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.RequestForQuotation
+
 @{
     ViewData["Title"] = "Create RFQ";
 }
@@ -10,12 +11,7 @@
 
     <div class="mb-3">
         <label asp-for="PRId" class="form-label">PR Number</label>
-        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="VendorCode" class="form-label">Vendor</label>
-        <select asp-for="VendorCode" asp-items="ViewBag.Vendors" class="form-control"></select>
+        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control" id="prSelector"></select>
     </div>
 
     <h4 class="mt-4">RFQ Items</h4>
@@ -60,5 +56,36 @@
                 <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
             `;
         }
+
+        document.getElementById("prSelector").addEventListener("change", function () {
+            const prId = this.value;
+            fetch(`/RequestForQuotation/GetPRItems?prId=${prId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector("#rfqItemsTable tbody");
+                    tbody.innerHTML = "";
+
+                    const seenItems = new Set();
+
+                    data.forEach((item, index) => {
+                        if (seenItems.has(item.itemCode)) return;
+                        seenItems.add(item.itemCode);
+
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>
+                                <input type="hidden" name="Items[${index}].ItemCode" value="${item.itemCode}" />
+                                ${item.itemName}
+                            </td>
+                            <td><input name="Items[${index}].Quantity" value="${item.quantity}" class="form-control" /></td>
+                            <td><input name="Items[${index}].DeliveryDate" type="date" class="form-control" /></td>
+                            <td><input name="Items[${index}].QuotationAmount" type="number" step="0.01" class="form-control" /></td>
+                            <td><input name="Items[${index}].TermsAndConditions" class="form-control" /></td>
+                            <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button></td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+        });
     </script>
 }

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Create Item";
 }
 
+<button onclick="window.history.back();" class="btn btn-secondary">Back</button>
+
 <h2>Create Item</h2>
 
 <form asp-action="AfterCreateItem" method="post">
@@ -26,11 +28,16 @@
             </select>
             <span asp-validation-for="ItemCategoryCode" class="text-danger"></span>
 
-            <label asp-for="PreferredVendorCode">Vendor</label>
-            <select asp-for="PreferredVendorCode" class="form-control" asp-items="ViewBag.Vendors">
-                <option value="">--Select Vendor--</option>
-            </select>
-            <span asp-validation-for="PreferredVendorCode" class="text-danger"></span>
+            <div class="d-none">
+                <label asp-for="PreferredVendorCode">Vendor</label>
+                <select asp-for="PreferredVendorCode" class="form-control" asp-items="ViewBag.Vendors">
+                    <option value="">--Select Vendor--</option>
+                </select>
+                <span asp-validation-for="PreferredVendorCode" class="text-danger"></span>
+
+                <label asp-for="VendorItemCode"></label>
+                <input asp-for="VendorItemCode" class="form-control" />
+            </div>
 
             <label asp-for="UOM"></label>
             <select asp-for="UOM" class="form-control">
@@ -88,9 +95,6 @@
 
             <label asp-for="SerialNumberTracking"></label>
             <input asp-for="SerialNumberTracking" type="checkbox" class="form-check-input" />
-
-            <label asp-for="VendorItemCode"></label>
-            <input asp-for="VendorItemCode" class="form-control" />
 
             <label asp-for="LeadTime"></label>
             <input asp-for="LeadTime" class="form-control" />

@@ -46,7 +46,7 @@ public class DepartmentController : Controller
 
     public async Task<IActionResult> EditDepartment(string id)
     {
-        if (string.IsNullOrEmpty(id)) return BadRequest();
+
 
         var entity = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentCode == id);
         if (entity == null) return NotFound();
@@ -57,16 +57,12 @@ public class DepartmentController : Controller
     [HttpPost]
     public async Task<IActionResult> AfterEditDepartment(string id, Department entity)
     {
-        if (id != entity.DepartmentCode) return BadRequest();
 
-        if (!ModelState.IsValid)
-        {
-            return View("EditDepartment", entity);
-        }
 
         entity.LastModifiedDate = DateTime.UtcNow;
         entity.LastModifiedBy = User.Identity?.Name ?? "System";
-
+        entity.LastModifiedDate = DateTime.UtcNow;
+        entity.CreatedBy = "System";
         _context.Departments.Update(entity);
         await _context.SaveChangesAsync();
 
@@ -83,19 +79,27 @@ public class DepartmentController : Controller
         return View(entity);
     }
 
-    [HttpPost, ActionName("DeleteDepartment")]
+    [HttpPost]
     public async Task<IActionResult> DeleteDepartmentConfirmed(string id)
     {
-        if (string.IsNullOrEmpty(id)) return BadRequest();
-
         var entity = await _context.Departments.FirstOrDefaultAsync(d => d.DepartmentCode == id);
         if (entity == null) return NotFound();
 
-        _context.Departments.Remove(entity);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Departments.Remove(entity);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Department deleted successfully.";
+        }
+        catch (DbUpdateException ex)
+        {
+            // Log the error if needed: ex.InnerException?.Message
+            TempData["ErrorMessage"] = "Cannot delete this department because it is linked to other records.";
+        }
 
         return RedirectToAction(nameof(DepartmentList));
     }
+
 
     public async Task<IActionResult> DetailsDepartment(string id)
     {

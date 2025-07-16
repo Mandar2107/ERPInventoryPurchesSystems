@@ -4,6 +4,7 @@ using ERPInventoryPurchesSystems.Utility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ERPInventoryPurchesSystems.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250716113315_NewJu")]
+    partial class NewJu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1304,6 +1307,7 @@ namespace ERPInventoryPurchesSystems.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("VendorCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RFQId");
@@ -1915,7 +1919,9 @@ namespace ERPInventoryPurchesSystems.Migrations
 
                     b.HasOne("ERPInventoryPurchesSystems.Models.Master.Vendor", "Vendor")
                         .WithMany()
-                        .HasForeignKey("VendorCode");
+                        .HasForeignKey("VendorCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PurchaseRequisition");
 

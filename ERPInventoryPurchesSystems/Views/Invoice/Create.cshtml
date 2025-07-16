@@ -1,17 +1,22 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.Invoice
 @{
     ViewBag.Title = "Create Invoice";
-
-    var itemOptions = new System.Text.StringBuilder();
-    foreach (SelectListItem item in ViewBag.Items)
-    {
-        itemOptions.Append($"<option value='{item.Value}'>{item.Text}</option>");
-    }
 }
 
 <h2>Create Invoice</h2>
 
+<!-- GRN Selection Form -->
+<form method="get" asp-action="Create">
+    <div class="form-group">
+        <label>Select GRN</label>
+        <select name="grnId" asp-items="ViewBag.GRNs" class="form-control" onchange="this.form.submit()"></select>
+    </div>
+</form>
+
+<!-- Invoice Submission Form -->
 <form asp-action="Create" method="post">
+    <input type="hidden" asp-for="GRNId" />
+
     <div class="form-group">
         <label>Invoice Number</label>
         <input asp-for="InvoiceNumber" class="form-control" required />
@@ -38,7 +43,7 @@
     </div>
 
     <h4>Invoice Items</h4>
-    <table class="table" id="itemsTable">
+    <table class="table">
         <thead>
             <tr>
                 <th>Item</th>
@@ -47,12 +52,36 @@
                 <th>Invoice Qty</th>
                 <th>Unit Price</th>
                 <th>Total</th>
-                <th>Action</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+            @if (ViewBag.GRNItems != null)
+            {
+                int index = 0;
+                foreach (var item in ViewBag.GRNItems)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" name="items[@index].ItemCode" value="@item.ItemCode" />
+                            @item.Item.ItemName
+                        </td>
+                        <td><input name="items[@index].POQuantity" class="form-control" value="@item.OrderedQuantity" /></td>
+                        <td><input name="items[@index].GRNQuantity" class="form-control" value="@item.ReceivedQuantity" /></td>
+                        <td><input name="items[@index].InvoicedQuantity" class="form-control" value="@item.ReceivedQuantity" /></td>
+                        <td><input name="items[@index].UnitPrice" class="form-control" value="@item.Item.LastPurchasePrice" /></td>
+                        <td><input name="items[@index].TotalAmount" class="form-control" value="@(item.ReceivedQuantity * item.Item.LastPurchasePrice)" readonly /></td>
+
+
+                        <td>
+                            <input type="hidden" name="items[@index].MatchStatus" value="Matched" />
+                        </td>
+
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
     </table>
-    <button type="button" class="btn btn-secondary" onclick="addRow()">Add Item</button>
 
     <h4>Payment Details</h4>
     <div class="form-group">
@@ -90,43 +119,3 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-@section Scripts {
-    <script>
-        const itemDropdownHtml = `<select name="items[INDEX].ItemCode" class="form-control" required>
-        @Html.Raw(itemOptions.ToString())
-        </select>`;
-
-        function addRow() {
-            const table = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
-            const index = table.rows.length;
-            const row = table.insertRow();
-
-            row.innerHTML = `
-                <td>${itemDropdownHtml.replace(/INDEX/g, index)}</td>
-                <td><input name="items[${index}].POQuantity" class="form-control qty" required /></td>
-                <td><input name="items[${index}].GRNQuantity" class="form-control qty" required /></td>
-                <td><input name="items[${index}].InvoicedQuantity" class="form-control qty" required /></td>
-                <td><input name="items[${index}].UnitPrice" class="form-control price" required /></td>
-                <td><input name="items[${index}].TotalAmount" class="form-control total" readonly /></td>
-                <td>
-                    <input type="hidden" name="items[${index}].MatchStatus" value="Matched" />
-                    <button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Remove</button>
-                </td>
-            `;
-
-            attachCalculationEvents();
-        }
-
-        function attachCalculationEvents() {
-            document.querySelectorAll('.qty, .price').forEach(input => {
-                input.addEventListener('input', function () {
-                    const row = this.closest('tr');
-                    const qty = parseFloat(row.querySelector('.qty').value) || 0;
-                    const price = parseFloat(row.querySelector('.price').value) || 0;
-                    row.querySelector('.total').value = (qty * price).toFixed(2);
-                });
-            });
-        }
-    </script>
-}
