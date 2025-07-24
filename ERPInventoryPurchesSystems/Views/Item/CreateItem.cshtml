@@ -25,19 +25,14 @@
             <label asp-for="ItemCategoryCode">Category</label>
             <select asp-for="ItemCategoryCode" class="form-control" asp-items="ViewBag.Categories">
                 <option value="">--Select Category--</option>
+                @foreach (var category in ViewBag.CategoriesList as List<ERPInventoryPurchesSystems.Models.Master.Category>)
+                {
+                    <option value="@category.CategoryCode">
+                        @category.CategoryName (@category.CategoryCode)
+                    </option>
+                }
             </select>
             <span asp-validation-for="ItemCategoryCode" class="text-danger"></span>
-
-            <div class="d-none">
-                <label asp-for="PreferredVendorCode">Vendor</label>
-                <select asp-for="PreferredVendorCode" class="form-control" asp-items="ViewBag.Vendors">
-                    <option value="">--Select Vendor--</option>
-                </select>
-                <span asp-validation-for="PreferredVendorCode" class="text-danger"></span>
-
-                <label asp-for="VendorItemCode"></label>
-                <input asp-for="VendorItemCode" class="form-control" />
-            </div>
 
             <label asp-for="UOM"></label>
             <select asp-for="UOM" class="form-control">

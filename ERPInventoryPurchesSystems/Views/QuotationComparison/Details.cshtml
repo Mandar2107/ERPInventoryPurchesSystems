@@ -1,20 +1,19 @@
 ﻿@model ERPInventoryPurchesSystems.Models.PR.QuotationComparison
+
 @{
-    ViewData["Title"] = "Quotation Details";
+    ViewData["Title"] = "Quotation Comparison Details";
 }
 
-<h2 class="mb-4">Quotation Comparison Details</h2>
+<h2>Quotation Comparison Details</h2>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <p><strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber</p>
-        <p><strong>Department:</strong> @Model.Department?.DepartmentName</p>
-        <p><strong>Requested By:</strong> @Model.RequestedBy?.FullName</p>
-        <p><strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()</p>
-    </div>
+<div class="mb-3">
+    <strong>PR Number:</strong> @Model.PurchaseRequisition?.PRNumber<br />
+    <strong>Department:</strong> @Model.Department?.DepartmentName<br />
+    <strong>Requested By:</strong> @Model.RequestedBy?.FullName<br />
+    <strong>Date of Comparison:</strong> @Model.DateOfComparison.ToShortDateString()
 </div>
 
-<h4>Selected Vendor Quotations</h4>
+<h4>Vendor Quotations</h4>
 <table class="table table-bordered">
     <thead class="table-dark">
         <tr>
@@ -26,21 +25,25 @@
             <th>Delivery Time</th>
             <th>Rating</th>
             <th>Remarks</th>
+            <th>Selected</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items.Where(i => i.IsSelected))
+        @foreach (var item in Model.Items)
         {
             <tr>
-                <td>@item.Item.ItemName</td>
-                <td>@item.Vendor.VendorName</td>
+                <td>@item.Item?.ItemName</td>
+                <td>@item.Vendor?.VendorName</td>
                 <td>@item.QuotedQuantity</td>
                 <td>@item.UnitPrice</td>
                 <td>@item.TotalPrice</td>
                 <td>@item.DeliveryTime</td>
                 <td>@item.VendorRating</td>
                 <td>@item.Remarks</td>
+                <td>@(item.IsSelected ? "✔️" : "")</td>
             </tr>
         }
     </tbody>
 </table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

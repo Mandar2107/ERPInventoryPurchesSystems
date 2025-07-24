@@ -15,6 +15,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             _context = context;
         }
 
+        // List all comparisons
         public async Task<IActionResult> Index()
         {
             var comparisons = await _context.QuotationComparisons
@@ -22,45 +23,47 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
                 .Include(q => q.Department)
                 .Include(q => q.RequestedBy)
                 .ToListAsync();
+
             return View(comparisons);
         }
 
-
+        // Compare quotations for a specific comparison
         public async Task<IActionResult> Index1(int id)
         {
             var comparison = await _context.QuotationComparisons
                 .Include(q => q.Items)
-                .ThenInclude(i => i.Item)
+                    .ThenInclude(i => i.Item)
                 .Include(q => q.Items)
-                .ThenInclude(i => i.Vendor)
+                    .ThenInclude(i => i.Vendor)
                 .FirstOrDefaultAsync(q => q.ComparisonId == id);
 
             return View("Index1", comparison);
         }
 
-
+        // Confirm vendor selection
         [HttpPost]
-public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, string> SelectedVendor)
-{
-    foreach (var entry in SelectedVendor)
-    {
-        string itemCode = entry.Key;
-        string vendorCode = entry.Value;
-
-        var selectedItem = await _context.QuotationComparisonItems
-            .FirstOrDefaultAsync(i => i.ComparisonId == ComparisonId && i.ItemCode == itemCode && i.VendorCode == vendorCode);
-
-        if (selectedItem != null)
+        public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, string> SelectedVendor)
         {
-            selectedItem.IsSelected = true;
-            _context.QuotationComparisonItems.Update(selectedItem);
+            foreach (var entry in SelectedVendor)
+            {
+                string itemCode = entry.Key;
+                string vendorCode = entry.Value;
+
+                var selectedItem = await _context.QuotationComparisonItems
+                    .FirstOrDefaultAsync(i => i.ComparisonId == ComparisonId && i.ItemCode == itemCode && i.VendorCode == vendorCode);
+
+                if (selectedItem != null)
+                {
+                    selectedItem.IsSelected = true;
+                    _context.QuotationComparisonItems.Update(selectedItem);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index1", new { id = ComparisonId });
         }
-    }
 
-    await _context.SaveChangesAsync();
-    return RedirectToAction("Index1", new { id = ComparisonId });
-}
-
+        // Show form to create a new comparison
         public IActionResult Create()
         {
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber");
@@ -68,21 +71,23 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
             ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
             ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
+
             return View();
         }
 
+        // Save new comparison and items
         [HttpPost]
         public async Task<IActionResult> Create(QuotationComparison comparison, List<QuotationComparisonItem> items)
         {
             comparison.DateOfComparison = DateTime.Now;
-          
+
             _context.QuotationComparisons.Add(comparison);
             await _context.SaveChangesAsync();
 
             foreach (var item in items)
             {
-                item.IsSelected = true;
                 item.ComparisonId = comparison.ComparisonId;
+                item.IsSelected = false;
                 _context.QuotationComparisonItems.Add(item);
             }
 
@@ -90,6 +95,7 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
             return RedirectToAction("Index");
         }
 
+        // View details of a comparison
         public async Task<IActionResult> Details(int id)
         {
             var comparison = await _context.QuotationComparisons
@@ -105,13 +111,15 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
             return View(comparison);
         }
 
-
+        // Edit comparison
         public async Task<IActionResult> Edit(int id)
         {
             var comparison = await _context.QuotationComparisons.FindAsync(id);
+
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber", comparison.PRId);
             ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", comparison.DepartmentCode);
             ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName", comparison.RequestedByUserId);
+
             return View(comparison);
         }
 
@@ -123,10 +131,27 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
             return RedirectToAction("Index");
         }
 
+        // Delete comparison
         public async Task<IActionResult> Delete(int id)
         {
             var comparison = await _context.QuotationComparisons.FindAsync(id);
             return View(comparison);
+        }
+
+        // ✅ AJAX endpoint for PR-related items
+        [HttpGet]
+        [Route("QuotationComparison/GetItemsByPR")]
+        public JsonResult GetItemsByPR(int prId)
+        {
+            var items = _context.PRItems
+                .Where(pi => pi.PurchaseRequisitionID == prId)
+                .Include(pi => pi.Item)
+                .Select(pi => new {
+                    Value = pi.Item.ItemCode,
+                    Text = pi.Item.ItemName
+                }).Distinct().ToList();
+
+            return Json(items);
         }
 
         [HttpPost]
@@ -137,9 +162,5 @@ public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-
-
-
     }
 }

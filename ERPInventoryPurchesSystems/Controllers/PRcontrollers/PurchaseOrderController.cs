@@ -29,9 +29,6 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
         public IActionResult Create()
         {
             ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber");
-            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
-            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName");
-            ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName");
             ViewBag.Items = new SelectList(_context.Items, "ItemCode", "ItemName");
             return View();
         }
@@ -54,69 +51,49 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var order = await _context.PurchaseOrders
-                .Include(p => p.PurchaseRequisition)
-                .Include(p => p.Vendor)
-                .Include(p => p.Department)
-                .Include(p => p.RequestedBy)
-                .Include(p => p.Items)
-                .ThenInclude(i => i.Item)
-                .FirstOrDefaultAsync(p => p.POId == id);
-            return View(order);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var order = await _context.PurchaseOrders.FindAsync(id);
-            ViewBag.PRs = new SelectList(_context.PurchaseRequisitions, "PurchaseRequisitionID", "PRNumber", order.PRId);
-            ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName", order.VendorCode);
-            ViewBag.Departments = new SelectList(_context.Departments, "DepartmentCode", "DepartmentName", order.DepartmentCode);
-            ViewBag.Users = new SelectList(_context.Users, "UserID", "FullName", order.RequestedByUserId);
-            return View(order);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(PurchaseOrder order)
-        {
-            _context.PurchaseOrders.Update(order);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
         [HttpGet]
         public async Task<IActionResult> GetPRDetails(int prId)
         {
             var pr = await _context.PurchaseRequisitions
                 .Include(p => p.Department)
                 .Include(p => p.SubmittedBy)
-                .Include(p => p.Items)
-                    .ThenInclude(i => i.Item)
-                        .ThenInclude(it => it.PreferredVendor)
                 .FirstOrDefaultAsync(p => p.PurchaseRequisitionID == prId);
 
             if (pr == null)
                 return NotFound();
 
-            var preferredVendor = pr.Items.FirstOrDefault()?.Item?.PreferredVendor;
+            // Get selected vendors from quotation comparison
+            var selectedItems = await _context.QuotationComparisonItems
+                .Include(q => q.Item)
+                .Include(q => q.Vendor)
+                .Include(q => q.Comparison)
+                .Where(q => q.IsSelected && q.Comparison.PRId == prId)
+                .ToListAsync();
+
+            var firstVendor = selectedItems.Select(i => i.Vendor).FirstOrDefault();
+
+            var groupedItems = selectedItems
+                .GroupBy(i => i.ItemCode)
+                .Select(g => new {
+                    itemCode = g.Key,
+                    itemName = g.First().Item.ItemName,
+                    quantity = g.Sum(x => x.QuotedQuantity),
+                    unitPrice = g.First().UnitPrice
+                });
 
             var result = new
             {
-                vendorCode = preferredVendor?.VendorCode,
-                vendorContact = preferredVendor?.ContactPersonName,
+                vendorCode = firstVendor?.VendorCode,
+                vendorName = firstVendor?.VendorName,
+                vendorContact = firstVendor?.ContactPersonName,
                 departmentCode = pr.DepartmentCode,
                 requestedByUserId = pr.SubmittedByUserID,
-                items = pr.Items.Select(i => new {
-                    itemCode = i.ItemCode,
-                    itemName = i.Item.ItemName,
-                    quantity = i.Quantity,
-                    unitPrice = i.Item.LastPurchasePrice
-                })
+                requestedByName = pr.SubmittedBy.FullName,
+                items = groupedItems
             };
 
             return Json(result);
         }
-
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -133,5 +110,4 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return RedirectToAction("Index");
         }
     }
-
 }

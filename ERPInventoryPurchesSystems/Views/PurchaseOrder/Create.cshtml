@@ -12,12 +12,6 @@
         <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
     </div>
 
-    <input type="hidden" name="VendorCode" id="VendorCode" />
-    <div class="form-group mb-3">
-        <label>Vendor Contact</label>
-        <input type="text" name="VendorContact" id="VendorContact" class="form-control" readonly />
-    </div>
-
     <input type="hidden" name="DepartmentCode" id="DepartmentCode" />
     <input type="hidden" name="RequestedByUserId" id="RequestedByUserId" />
     <div class="form-group mb-3">
@@ -35,6 +29,7 @@
                 <th>Total Price</th>
                 <th>Delivery Date</th>
                 <th>Delivery Terms</th>
+                <th>Vendor</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -64,6 +59,10 @@
             <td><input type="number" class="form-control totalprice-input" readonly /></td>
             <td><input type="date" class="form-control date-input" /></td>
             <td><input type="text" class="form-control terms-input" /></td>
+            <td>
+                <input type="hidden" class="vendor-code-input" />
+                <input type="text" class="form-control vendor-name-input" readonly />
+            </td>
             <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
         </tr>
     </table>
@@ -83,12 +82,15 @@
             row.querySelector(".totalprice-input").setAttribute("name", `Items[${poIndex}].TotalPrice`);
             row.querySelector(".date-input").setAttribute("name", `Items[${poIndex}].DeliveryDate`);
             row.querySelector(".terms-input").setAttribute("name", `Items[${poIndex}].DeliveryTerms`);
+            row.querySelector(".vendor-code-input").setAttribute("name", `Items[${poIndex}].VendorCode`);
 
             if (itemData) {
                 row.querySelector(".item-select").value = itemData.itemCode;
                 row.querySelector(".qty-input").value = itemData.quantity;
                 row.querySelector(".unitprice-input").value = itemData.unitPrice;
                 row.querySelector(".totalprice-input").value = (itemData.quantity * itemData.unitPrice).toFixed(2);
+                row.querySelector(".vendor-code-input").value = itemData.vendorCode || "";
+                row.querySelector(".vendor-name-input").value = itemData.vendorName || "";
             }
 
             const qtyInput = row.querySelector(".qty-input");
@@ -118,8 +120,6 @@
             fetch(`/PurchaseOrder/GetPRDetails?prId=${prId}`)
                 .then(response => response.json())
                 .then(data => {
-                    document.querySelector('#VendorCode').value = data.vendorCode || "";
-                    document.querySelector('#VendorContact').value = data.vendorContact || "";
                     document.querySelector('#DepartmentCode').value = data.departmentCode || "";
                     document.querySelector('#RequestedByUserId').value = data.requestedByUserId || "";
                     document.querySelector('#RequestedByName').value = data.requestedByName || "";

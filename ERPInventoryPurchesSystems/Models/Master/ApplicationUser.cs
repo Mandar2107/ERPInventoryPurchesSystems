@@ -12,7 +12,7 @@ namespace ERPInventoryPurchesSystems.Models.Master
         [ForeignKey("DepartmentCode")]
         public Department Department { get; set; }
 
-        public string UserRole { get; set; } // "Admin", "User"
+        public string UserRole { get; set; } 
 
     }
 }

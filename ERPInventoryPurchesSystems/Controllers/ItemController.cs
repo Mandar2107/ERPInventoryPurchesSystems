@@ -30,6 +30,7 @@ public class ItemController : Controller
     public IActionResult CreateItem()
     {
         ViewBag.Categories = new SelectList(_context.Categories, "CategoryCode", "CategoryName");
+        ViewBag.CategoriesList = _context.Categories.ToList();
         ViewBag.Vendors = new SelectList(_context.Vendors, "VendorCode", "VendorName");
         return View();
     }

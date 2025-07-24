@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Create Quotation";
     var vendors = ViewBag.Vendors as SelectList;
-    var items = ViewBag.Items as SelectList;
 }
 
 <h2 class="mb-4">Create Quotation Comparison</h2>
@@ -11,7 +10,7 @@
 <form asp-action="Create" method="post">
     <div class="form-group mb-3">
         <label asp-for="PRId">PR</label>
-        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
+        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control" id="prSelect"></select>
     </div>
 
     <div class="form-group mb-3">
@@ -55,16 +54,13 @@
                 <select class="form-control vendor-select">
                     @foreach (var vendor in vendors)
                     {
-                        <option value="@vendor.Value">@vendor.Text</option>
+                        <option value="@vendor.Value">@vendor.Text - @vendor.Value</option>
                     }
                 </select>
             </td>
             <td>
                 <select class="form-control item-select">
-                    @foreach (var item in items)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
+                    <option value="">-- Select Item --</option>
                 </select>
             </td>
             <td><input type="number" class="form-control qty-input" /></td>
@@ -77,17 +73,48 @@
         </tr>
     </table>
 </div>
-
 @section Scripts {
     <script>
         let rowIndex = 0;
+        let prItems = [];
+
+        document.getElementById("prSelect").addEventListener("change", function () {
+            const prId = this.value;
+            fetch(`/QuotationComparison/GetItemsByPR?prId=${prId}`)
+                .then(response => response.json())
+                .then(data => {
+                    prItems = data;
+                    updateAllItemDropdowns();
+                });
+        });
+
+        function updateAllItemDropdowns() {
+            const itemSelects = document.querySelectorAll('.item-select');
+            itemSelects.forEach(select => {
+                updateItemDropdown(select);
+            });
+        }
+
+             function updateItemDropdown(select) {
+            select.innerHTML = '<option value="">-- Select Item --</option>';
+            prItems.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.value; // ✅ lowercase
+                option.text = `${item.text} - ${item.value}`; // ✅ lowercase
+                select.appendChild(option);
+            });
+        }
+
 
         function addQuotationRow() {
             const template = document.querySelector("#quotationRowTemplate table").cloneNode(true);
             const row = template.querySelector("tr");
 
             row.querySelector(".vendor-select").setAttribute("name", `Items[${rowIndex}].VendorCode`);
-            row.querySelector(".item-select").setAttribute("name", `Items[${rowIndex}].ItemCode`);
+            const itemSelect = row.querySelector(".item-select");
+            itemSelect.setAttribute("name", `Items[${rowIndex}].ItemCode`);
+            updateItemDropdown(itemSelect);
+
             row.querySelector(".qty-input").setAttribute("name", `Items[${rowIndex}].QuotedQuantity`);
             row.querySelector(".unitprice-input").setAttribute("name", `Items[${rowIndex}].UnitPrice`);
             row.querySelector(".totalprice-input").setAttribute("name", `Items[${rowIndex}].TotalPrice`);
@@ -105,4 +132,3 @@
         }
     </script>
 }
-
