@@ -15,7 +15,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             _context = context;
         }
 
-        // List all comparisons
+      
         public async Task<IActionResult> Index()
         {
             var comparisons = await _context.QuotationComparisons
@@ -27,7 +27,7 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View(comparisons);
         }
 
-        // Compare quotations for a specific comparison
+       
         public async Task<IActionResult> Index1(int id)
         {
             var comparison = await _context.QuotationComparisons
@@ -40,7 +40,6 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             return View("Index1", comparison);
         }
 
-        // Confirm vendor selection
         [HttpPost]
         public async Task<IActionResult> Selection(int ComparisonId, Dictionary<string, string> SelectedVendor)
         {
@@ -60,8 +59,16 @@ namespace ERPInventoryPurchesSystems.Controllers.PRcontrollers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index1", new { id = ComparisonId });
+
+            
+            var prId = await _context.QuotationComparisons
+                .Where(q => q.ComparisonId == ComparisonId)
+                .Select(q => q.PRId)
+                .FirstOrDefaultAsync();
+
+            return RedirectToAction("Create", "PurchaseOrder", new { prId });
         }
+
 
         // Show form to create a new comparison
         public IActionResult Create()

@@ -65,7 +65,7 @@
             </td>
             <td><input type="number" class="form-control qty-input" /></td>
             <td><input type="number" class="form-control unitprice-input" /></td>
-            <td><input type="number" class="form-control totalprice-input" /></td>
+            <td><input type="number" class="form-control totalprice-input" readonly /></td>
             <td><input type="text" class="form-control delivery-input" /></td>
             <td><input type="number" class="form-control rating-input" min="1" max="5" /></td>
             <td><input type="text" class="form-control remarks-input" /></td>
@@ -73,6 +73,7 @@
         </tr>
     </table>
 </div>
+
 @section Scripts {
     <script>
         let rowIndex = 0;
@@ -95,16 +96,22 @@
             });
         }
 
-             function updateItemDropdown(select) {
+        function updateItemDropdown(select) {
             select.innerHTML = '<option value="">-- Select Item --</option>';
             prItems.forEach(item => {
                 const option = document.createElement('option');
-                option.value = item.value; // ✅ lowercase
-                option.text = `${item.text} - ${item.value}`; // ✅ lowercase
+                option.value = item.value;
+                option.text = `${item.text} - ${item.value}`;
                 select.appendChild(option);
             });
         }
 
+        function calculateTotalPrice(row) {
+            const qty = parseFloat(row.querySelector(".qty-input").value) || 0;
+            const unitPrice = parseFloat(row.querySelector(".unitprice-input").value) || 0;
+            const totalPriceField = row.querySelector(".totalprice-input");
+            totalPriceField.value = (qty * unitPrice).toFixed(2);
+        }
 
         function addQuotationRow() {
             const template = document.querySelector("#quotationRowTemplate table").cloneNode(true);
@@ -115,9 +122,17 @@
             itemSelect.setAttribute("name", `Items[${rowIndex}].ItemCode`);
             updateItemDropdown(itemSelect);
 
-            row.querySelector(".qty-input").setAttribute("name", `Items[${rowIndex}].QuotedQuantity`);
-            row.querySelector(".unitprice-input").setAttribute("name", `Items[${rowIndex}].UnitPrice`);
-            row.querySelector(".totalprice-input").setAttribute("name", `Items[${rowIndex}].TotalPrice`);
+            const qtyInput = row.querySelector(".qty-input");
+            const unitPriceInput = row.querySelector(".unitprice-input");
+            const totalPriceInput = row.querySelector(".totalprice-input");
+
+            qtyInput.setAttribute("name", `Items[${rowIndex}].QuotedQuantity`);
+            unitPriceInput.setAttribute("name", `Items[${rowIndex}].UnitPrice`);
+            totalPriceInput.setAttribute("name", `Items[${rowIndex}].TotalPrice`);
+
+            qtyInput.addEventListener("input", () => calculateTotalPrice(row));
+            unitPriceInput.addEventListener("input", () => calculateTotalPrice(row));
+
             row.querySelector(".delivery-input").setAttribute("name", `Items[${rowIndex}].DeliveryTime`);
             row.querySelector(".rating-input").setAttribute("name", `Items[${rowIndex}].VendorRating`);
             row.querySelector(".remarks-input").setAttribute("name", `Items[${rowIndex}].Remarks`);

@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Create Purchase Order";
     var items = ViewBag.Items as SelectList;
+    var isReadOnly = ViewBag.IsReadOnly ?? false;
+    var disabled = isReadOnly ? "disabled" : null;
 }
 
 <h2 class="mb-4">Create Purchase Order</h2>
@@ -9,14 +11,15 @@
 <form asp-action="Create" method="post">
     <div class="form-group mb-3">
         <label asp-for="PRId">Purchase Requisition</label>
-        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control"></select>
+        <select asp-for="PRId" asp-items="ViewBag.PRs" class="form-control" disabled="@disabled"></select>
+        <input type="hidden" name="PRId" value="@Model.PRId" />
     </div>
 
-    <input type="hidden" name="DepartmentCode" id="DepartmentCode" />
-    <input type="hidden" name="RequestedByUserId" id="RequestedByUserId" />
+    <input type="hidden" name="DepartmentCode" id="DepartmentCode" value="@Model.DepartmentCode" />
+    <input type="hidden" name="RequestedByUserId" id="RequestedByUserId" value="@Model.RequestedByUserId" />
     <div class="form-group mb-3">
         <label>Requested By</label>
-        <input type="text" id="RequestedByName" class="form-control" readonly />
+        <input type="text" id="RequestedByName" class="form-control" value="@ViewBag.RequestedByName" readonly />
     </div>
 
     <h4>Items</h4>
@@ -30,15 +33,21 @@
                 <th>Delivery Date</th>
                 <th>Delivery Terms</th>
                 <th>Vendor</th>
-                <th>Action</th>
+                @if (!isReadOnly)
+                {
+                    <th>Action</th>
+                }
             </tr>
         </thead>
         <tbody></tbody>
     </table>
 
-    <button type="button" class="btn btn-secondary mb-3" onclick="addPOItem()">Add Item</button>
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
+    @if (!isReadOnly)
+    {
+        <button type="button" class="btn btn-secondary mb-3" onclick="addPOItem()">Add Item</button>
+        <br />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
     <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
 </form>
 
@@ -63,14 +72,17 @@
                 <input type="hidden" class="vendor-code-input" />
                 <input type="text" class="form-control vendor-name-input" readonly />
             </td>
-            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+            @if (!isReadOnly)
+            {
+                <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+            }
         </tr>
     </table>
 </div>
-
 @section Scripts {
     <script>
         let poIndex = 0;
+        const isReadOnly = @((ViewBag.IsReadOnly ?? false).ToString().ToLower());
 
         function addPOItem(itemData = null) {
             const template = document.querySelector("#poItemTemplate table").cloneNode(true);
@@ -91,46 +103,39 @@
                 row.querySelector(".totalprice-input").value = (itemData.quantity * itemData.unitPrice).toFixed(2);
                 row.querySelector(".vendor-code-input").value = itemData.vendorCode || "";
                 row.querySelector(".vendor-name-input").value = itemData.vendorName || "";
+                row.querySelector(".date-input").value = new Date().toISOString().split('T')[0];
+                row.querySelector(".terms-input").value = "Standard";
             }
 
-            const qtyInput = row.querySelector(".qty-input");
-            const unitPriceInput = row.querySelector(".unitprice-input");
-            const totalPriceInput = row.querySelector(".totalprice-input");
-
-            function calculateTotal() {
-                const qty = parseFloat(qtyInput.value) || 0;
-                const unitPrice = parseFloat(unitPriceInput.value) || 0;
-                totalPriceInput.value = (qty * unitPrice).toFixed(2);
+            if (isReadOnly) {
+                row.querySelectorAll("input, select").forEach(el => el.disabled = true);
+                const removeBtn = row.querySelector(".btn-danger");
+                if (removeBtn) removeBtn.style.display = "none";
             }
-
-            qtyInput.addEventListener("input", calculateTotal);
-            unitPriceInput.addEventListener("input", calculateTotal);
 
             document.querySelector("#poItemsTable tbody").appendChild(row);
             poIndex++;
         }
 
-        function removeRow(button) {
-            const row = button.closest("tr");
-            row.remove();
+        // Load items from model
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            foreach (var item in Model.Items)
+            {
+                <text>
+                            addPOItem({
+                                itemCode: "@item.ItemCode",
+                                quantity: @item.Quantity,
+                                unitPrice: @item.UnitPrice",
+                                vendorCode: "@item.VendorCode",
+                                vendorName: "@item.Vendor?.VendorName"
+                            });
+                </text>
+            }
         }
 
-        document.querySelector('[name="PRId"]').addEventListener('change', function () {
-            const prId = this.value;
-            fetch(`/PurchaseOrder/GetPRDetails?prId=${prId}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector('#DepartmentCode').value = data.departmentCode || "";
-                    document.querySelector('#RequestedByUserId').value = data.requestedByUserId || "";
-                    document.querySelector('#RequestedByName').value = data.requestedByName || "";
-
-                    document.querySelector("#poItemsTable tbody").innerHTML = "";
-                    poIndex = 0;
-
-                    data.items.forEach(item => {
-                        addPOItem(item);
-                    });
-                });
-        });
+        function removeRow(button) {
+            button.closest("tr").remove();
+        }
     </script>
 }

@@ -26,5 +26,11 @@ namespace ERPInventoryPurchesSystems.Models.PR
         public DateTime DeliveryDate { get; set; }
 
         public string DeliveryTerms { get; set; }
+
+        public string VendorCode { get; set; }
+
+        [ForeignKey("VendorCode")]
+        public Vendor Vendor { get; set; }
+
     }
 }

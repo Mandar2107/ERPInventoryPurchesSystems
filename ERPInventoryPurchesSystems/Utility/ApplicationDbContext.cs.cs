@@ -210,7 +210,14 @@ namespace ERPInventoryPurchesSystems.Utility
                 .HasOne(q => q.ActionTakenBy)
                 .WithMany()
                 .HasForeignKey(q => q.ActionTakenByUserId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<POItem>()
+    .HasOne(p => p.Vendor)
+    .WithMany()
+    .HasForeignKey(p => p.VendorCode)
+    .OnDelete(DeleteBehavior.Restrict);
+
 
         }
     }
